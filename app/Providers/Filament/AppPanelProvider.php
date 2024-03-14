@@ -65,7 +65,7 @@ class AppPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->plugins([
-                new LocalLogins(),
+                // new LocalLogins(), hide until it works in Laravel 11
                 BreezyCore::make()
                 ->myProfile(
                     shouldRegisterNavigation: true,
