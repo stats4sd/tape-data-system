@@ -1,3 +1,9 @@
 [submodule "packages/filament-odk-link"]
 	path = packages/filament-odk-link
 	url = git@github.com:stats4sd/filament-odk-link.git
+[submodule "scripts/tape-data-platform-test-data"]
+	path = scripts/tape-data-platform-test-data
+	url = git@github.com:stats4sd/tape-data-platform-test-data
+[submodule "scripts/tape-giz-analysis"]
+	path = scripts/tape-giz-analysis
+	url = git@github.com:stats4sd/tape-giz-analysis
