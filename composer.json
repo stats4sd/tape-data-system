@@ -74,10 +74,13 @@
     },
     "minimum-stability": "stable",
     "prefer-stable": true,
-    "repositories": [
-        {
+    "repositories": {
+        "stats4sd/filament-odk-link": {
             "type": "path",
-            "url": "packages/filament-odk-link"
+            "url": "./packages/filament-odk-link",
+            "options": {
+                "symlink": true
+            }
         }
-    ]
+    }
 }

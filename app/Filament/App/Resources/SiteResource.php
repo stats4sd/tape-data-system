@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\App\Resources;
 
 use App\Filament\Resources\SiteResource\Pages;
 use App\Filament\Resources\SiteResource\RelationManagers;
@@ -10,8 +10,6 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class SiteResource extends Resource
 {
@@ -61,15 +59,15 @@ class SiteResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\AgSystemsRelationManager::class,
+            \App\Filament\App\Resources\SiteResource\RelationManagers\AgSystemsRelationManager::class,
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListSites::route('/'),
-            'view' => Pages\ViewSite::route('/{record}')
+            'index' => \App\Filament\App\Resources\SiteResource\Pages\ListSites::route('/'),
+            'view' => \App\Filament\App\Resources\SiteResource\Pages\ViewSite::route('/{record}')
         ];
     }
 }

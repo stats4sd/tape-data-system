@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\AgSystemResource\Pages;
+namespace App\Filament\App\Resources\AgSystemResource\Pages;
 
-use App\Filament\Resources\AgSystemResource;
-use Filament\Actions;
+use App\Filament\App\Resources\AgSystemResource;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateAgSystem extends CreateRecord

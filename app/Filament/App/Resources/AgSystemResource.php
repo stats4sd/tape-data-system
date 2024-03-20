@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\App\Resources;
 
 use App\Filament\Resources\AgSystemResource\Pages;
 use App\Filament\Resources\AgSystemResource\RelationManagers;
 use App\Models\AgSystem;
-use App\Models\Dataset;
 use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -14,7 +13,6 @@ use Filament\Support\Enums\VerticalAlignment;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Str;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\DatasetVariable;
 
@@ -93,9 +91,9 @@ class AgSystemResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListAgSystems::route('/'),
-            'create' => Pages\CreateAgSystem::route('/create'),
-            'edit' => Pages\EditAgSystem::route('/{record}/edit'),
+            'index' => \App\Filament\App\Resources\AgSystemResource\Pages\ListAgSystems::route('/'),
+            'create' => \App\Filament\App\Resources\AgSystemResource\Pages\CreateAgSystem::route('/create'),
+            'edit' => \App\Filament\App\Resources\AgSystemResource\Pages\EditAgSystem::route('/{record}/edit'),
         ];
     }
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Pages;
+namespace App\Filament\App\Pages;
 
-use App\Filament\Widgets\TeamCounts;
+use App\Filament\App\Widgets\TeamCounts;
 use App\Models\Team;
 use Filament\Facades\Filament;
 use Filament\Pages\Page;

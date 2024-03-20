@@ -1,15 +1,13 @@
 <?php
 
-namespace App\Filament\Resources\SiteResource\RelationManagers;
+namespace App\Filament\App\Resources\SiteResource\RelationManagers;
 
-use App\Filament\Resources\AgSystemResource;
+use App\Filament\App\Resources\AgSystemResource;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class AgSystemsRelationManager extends RelationManager
 {

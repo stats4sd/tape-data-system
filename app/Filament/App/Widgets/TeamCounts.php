@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Widgets;
+namespace App\Filament\App\Widgets;
 
 use App\Models\Team;
 use Filament\Facades\Filament;

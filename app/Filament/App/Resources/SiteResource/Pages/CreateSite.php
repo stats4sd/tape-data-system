@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\SiteResource\Pages;
+namespace App\Filament\App\Resources\SiteResource\Pages;
 
-use App\Filament\Resources\SiteResource;
-use Filament\Actions;
+use App\Filament\App\Resources\SiteResource;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateSite extends CreateRecord
