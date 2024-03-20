@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
@@ -16,13 +17,10 @@ class CheckIfAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-//        ///dd(Role::all());
-//        // Check if the user is an admin
-//        if (! auth()->user()->isAdmin()) {
-//
-//
-//            abort(403, 'Only platform administrators can access this page');
-//        }
+        // Check if the user is an admin
+        if (! auth()->user()->isAdmin()) {
+            abort(403, 'Only platform administrators can access this page');
+        }
 
         return $next($request);
     }
