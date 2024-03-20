@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\App\Pages\AccountSettingsPage;
 use App\Filament\App\Pages\RegisterTeam;
 use App\Filament\App\Pages\TeamDashboard;
 use App\Filament\App\Resources\SiteResource;
@@ -65,12 +66,13 @@ class AppPanelProvider extends PanelProvider
             ->plugins([
                 // new LocalLogins(), hide until it works in Laravel 11
                 BreezyCore::make()
-                ->myProfile(
-                    shouldRegisterNavigation: true,
-                    hasAvatars: true,
-                )
+                    ->myProfile(
+                        shouldRegisterNavigation: true,
+                        hasAvatars: true,
+                    )
+                    ->customMyProfilePage(AccountSettingsPage::class),
             ])
-            ->navigation(function(NavigationBuilder $builder): NavigationBuilder {
+            ->navigation(function (NavigationBuilder $builder): NavigationBuilder {
                 return $builder->items([
 
                     // Top pages and dashboard
@@ -78,8 +80,8 @@ class AppPanelProvider extends PanelProvider
                     NavigationItem::make('Admin Panel')
                         ->url('/admin')
                         ->icon('heroicon-o-adjustments-horizontal')
-                        ->visible(fn() => auth()->user()?->can('access admin panel')),
-                    ... SiteResource::getNavigationItems(),
+                        ->visible(fn () => auth()->user()?->can('access admin panel')),
+                    ...SiteResource::getNavigationItems(),
                 ]);
             });
     }

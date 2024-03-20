@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Team;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class TestSeeder extends Seeder
@@ -20,6 +19,7 @@ class TestSeeder extends Seeder
         );
 
         $user->assignRole('admin');
+        $user->save();
 
         $user2 = User::updateOrCreate(
             ['email' => 'test@example.com'],
