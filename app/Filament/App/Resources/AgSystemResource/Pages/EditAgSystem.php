@@ -11,6 +11,9 @@ class EditAgSystem extends EditRecord
 {
     protected static string $resource = AgSystemResource::class;
 
+    protected ?string $heading = 'Step 0 - Agricultural System Information';
+    protected ?string $subheading = 'Add or edit information about the agricultural system. This will provide context for the survey data you collect.';
+
     protected function getHeaderActions(): array
     {
         return [

@@ -2,8 +2,6 @@
 
 namespace App\Filament\App\Resources;
 
-use App\Filament\Resources\AgSystemResource\Pages;
-use App\Filament\Resources\AgSystemResource\RelationManagers;
 use App\Models\AgSystem;
 use Filament\Facades\Filament;
 use Filament\Forms;
@@ -24,7 +22,6 @@ class AgSystemResource extends Resource
 
     protected static bool $isScopedToTenant = false;
 
-
     // custom tenancy scoping (AG Systems are not directly related to teams)
 
     public static function getEloquentQuery(): Builder
@@ -36,7 +33,6 @@ class AgSystemResource extends Resource
                 });
             });
     }
-
 
     public static function form(Form $form): Form
     {
@@ -54,11 +50,13 @@ class AgSystemResource extends Resource
                             ->label('Add a short, descriptive name for the system')
                             ->maxLength(255),
                         Forms\Components\Select::make('site_id')
+                            ->label('Geographic Site')
                             ->relationship('site', 'name')
                             ->disabled()
                             ->required(),
-                        ... $propertyFields,
                     ]),
+
+                ...$propertyFields,
             ]);
     }
 
@@ -102,8 +100,7 @@ class AgSystemResource extends Resource
         $name = $variable->name;
         $description = $variable->description;
 
-        $nameComplete = $name . '_complete';
-
+        $nameComplete = $name.'_complete';
 
         return Forms\Components\Section::make(Str::of($name)->title()->replace('_', ' '))
             ->schema([
@@ -112,23 +109,23 @@ class AgSystemResource extends Resource
                     ->rows(5)
                     ->maxLength(65535)
                     ->live(onBlur: true)
-                    ->afterStateUpdated(fn($state, AgSystem $record) => $record->updateProps([$name => $state]))
+                    ->afterStateUpdated(fn ($state, AgSystem $record) => $record->updateProps([$name => $state]))
                     ->columnSpanFull(),
                 Forms\Components\SpatieMediaLibraryFileUpload::make("{$name}_files")
-                    ->label("Please add any files to support the explanation above")
+                    ->label('Please add any files to support the explanation above')
                     ->collection($name),
                 Forms\Components\Actions::make([
-                    Forms\Components\Actions\Action::make($name . '_mark_as_complete')
-                        ->label(fn(AgSystem $record) => $record->properties[$nameComplete] ? 'Mark section as incomplete' : 'Mark section as complete')
-                        ->color(fn(AgSystem $record) => $record->$name ? 'info' : 'gray')
-                        ->disabled(fn(AgSystem $record) => !$record->$name)
-                        ->action(fn(AgSystem $record) => $record->updateProps([$nameComplete => !$record->properties[$nameComplete]])),
+                    Forms\Components\Actions\Action::make($name.'_mark_as_complete')
+                        ->label(fn (AgSystem $record) => $record->properties[$nameComplete] ? 'Mark section as incomplete' : 'Mark section as complete')
+                        ->color(fn (AgSystem $record) => $record->$name ? 'info' : 'gray')
+                        ->disabled(fn (AgSystem $record) => ! $record->$name)
+                        ->action(fn (AgSystem $record) => $record->updateProps([$nameComplete => ! $record->properties[$nameComplete]])),
                 ])->verticalAlignment(VerticalAlignment::Center)
                     ->alignCenter()
-                    ->hidden(fn(AgSystem $record) => !auth()->user()->hasRole('Country Team'))
+                    ->hidden(fn (AgSystem $record) => ! auth()->user()->hasRole('Country Team')),
             ])->columns(2)
-            ->icon(fn(AgSystem $record) => $record->properties[$nameComplete] ? 'heroicon-o-check-circle' : 'heroicon-o-exclamation-circle')
-            ->iconColor(fn($record) => $record->properties[$nameComplete] ? 'success' : 'warning')
+            ->icon(fn (AgSystem $record) => $record->properties[$nameComplete] ? 'heroicon-o-check-circle' : 'heroicon-o-exclamation-circle')
+            ->iconColor(fn ($record) => $record->properties[$nameComplete] ? 'success' : 'warning')
             ->headerActions([
             ])
             ->collapsible();

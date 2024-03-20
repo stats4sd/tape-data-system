@@ -10,10 +10,15 @@ class ListSites extends ListRecords
 {
     protected static string $resource = SiteResource::class;
 
+    protected ?string $heading = 'TAPE Survey Sites';
+
+    protected ?string $subheading = 'A list of all geographic survey sites for this project';
+
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->label('Add Site'),
         ];
     }
 }
