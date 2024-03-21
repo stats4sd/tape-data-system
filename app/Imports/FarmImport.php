@@ -14,7 +14,7 @@ use Maatwebsite\Excel\Events\AfterImport;
 /**
  * NOTE - here we use the WithMultipleSheets interface, *even though* we are only interested in one worksheet. This is to make sure we only retrieve data from a single worksheet, no matter how many are in the file. (Otherwise the import would fail if the file had more than one worksheet with different formats of data on different sheets).
  */
-class LocationImport implements ShouldQueue, WithBatchInserts, WithChunkReading, WithEvents, WithMultipleSheets
+class FarmImport implements ShouldQueue, WithBatchInserts, WithChunkReading, WithEvents, WithMultipleSheets
 {
     public function __construct(public array $data)
     {
@@ -23,7 +23,7 @@ class LocationImport implements ShouldQueue, WithBatchInserts, WithChunkReading,
     public function sheets(): array
     {
         return [
-            0 => new LocationSheetImport($this->data),
+            0 => new FarmSheetImport($this->data),
         ];
     }
 
@@ -42,7 +42,7 @@ class LocationImport implements ShouldQueue, WithBatchInserts, WithChunkReading,
         return [
             AfterImport::class => function (AfterImport $event) {
                 Notification::make()
-                    ->title('Import Complete')
+                    ->title('Import of Farm Data Complete')
                     ->success()
                     ->broadcast(User::find($this->data['user_id']));
             },
