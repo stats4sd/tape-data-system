@@ -2,12 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\Farm;
+use App\Models\SampleFrame\Farm;
 use App\Models\SurveyData\CaetAssessment;
 use App\Models\SurveyData\PerformanceAssessment;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\Team;
+use Illuminate\Database\Seeder;
 
 class TestDatasetSeeder extends Seeder
 {
@@ -20,8 +19,9 @@ class TestDatasetSeeder extends Seeder
         // check if the test-data is available at scripts/tape-data-platform-test-data/prosoils-dumps/
         $testDataPath = base_path('scripts/tape-data-platform-test-data/prosoils-dumps/');
 
-        if (!file_exists($testDataPath)) {
+        if (! file_exists($testDataPath)) {
             dump('It looks like you do not have the Test Data Package installed. Aborting');
+
             return;
         }
 
@@ -33,7 +33,7 @@ class TestDatasetSeeder extends Seeder
         ]);
 
         $teams[] = Team::updateOrCreate([
-            'name' => 'Ethiopia Team'
+            'name' => 'Ethiopia Team',
         ]);
 
         $teams[] = Team::updateOrCreate([
@@ -49,7 +49,7 @@ class TestDatasetSeeder extends Seeder
         }
 
         // import farms data from csv
-        $farmDataFile = fopen($testDataPath . 'farms.csv', 'r');
+        $farmDataFile = fopen($testDataPath.'farms.csv', 'r');
 
         $header = fgetcsv($farmDataFile);
 
@@ -61,9 +61,9 @@ class TestDatasetSeeder extends Seeder
                 'id' => $farmData['id'], // need to use the existing ID to properly link to CAET and performance assessment data.
                 'team_id' => $teams[$farmData['team_id'] - 1]->id, // handle case where there are already teams in the database.
                 'team_code' => $farmData['pro_soils_farm_code'],
-                'latitude' => $farmData['latitude'] !== "" ? $farmData['latitude'] : null,
-                'longitude' => $farmData['longitude'] !== "" ? $farmData['longitude'] : null,
-                'altitude' => $farmData['altitude'] !== "" ? $farmData['altitude'] : null,
+                'latitude' => $farmData['latitude'] !== '' ? $farmData['latitude'] : null,
+                'longitude' => $farmData['longitude'] !== '' ? $farmData['longitude'] : null,
+                'altitude' => $farmData['altitude'] !== '' ? $farmData['altitude'] : null,
                 'identifiers' => collect([
                     'name' => $farmData['name'] ?? null,
                     'hh_head_male_name' => $farmData['hh_head_male_name'] ?? null,
@@ -84,20 +84,17 @@ class TestDatasetSeeder extends Seeder
             ]);
         }
 
-
         // run all raw SQL files in the test-data directory
-        $files = glob($testDataPath . '*.sql');
+        $files = glob($testDataPath.'*.sql');
         foreach ($files as $file) {
 
-           // if ($file === $testDataPath . 'test.sql') {
-                $sql = file_get_contents($file);
+            // if ($file === $testDataPath . 'test.sql') {
+            $sql = file_get_contents($file);
 
-
-                \DB::unprepared($sql);
+            \DB::unprepared($sql);
 
             //}
         }
-
 
     }
 }

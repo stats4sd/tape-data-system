@@ -5,6 +5,8 @@ namespace App\Providers\Filament;
 use App\Filament\App\Pages\AccountSettingsPage;
 use App\Filament\App\Pages\RegisterTeam;
 use App\Filament\App\Pages\TeamDashboard;
+use App\Filament\App\Resources\FarmResource;
+use App\Filament\App\Resources\LocationLevelResource;
 use App\Filament\App\Resources\SiteResource;
 use App\Models\Team;
 use BetterFuturesStudio\FilamentLocalLogins\LocalLogins;
@@ -12,6 +14,7 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Navigation\NavigationBuilder;
+use Filament\Navigation\NavigationGroup;
 use Filament\Navigation\NavigationItem;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -71,18 +74,27 @@ class AppPanelProvider extends PanelProvider
                         hasAvatars: true,
                     )
                     ->customMyProfilePage(AccountSettingsPage::class),
+                new LocalLogins(),
             ])
             ->navigation(function (NavigationBuilder $builder): NavigationBuilder {
-                return $builder->items([
+                return $builder->groups([
+                    NavigationGroup::make('Sample Frame')
+                        ->icon('heroicon-o-map-pin')
+                        ->items([
+                            ...LocationLevelResource::getNavigationItems(),
+                            ...FarmResource::getNavigationItems(),
+                        ]),
+                ])
+                    ->items([
+                        ...TeamDashboard::getNavigationItems(),
+                        // Top pages and dashboard
+                        NavigationItem::make('Admin Panel')
+                            ->url('/admin')
+                            ->icon('heroicon-o-adjustments-horizontal')
+                            ->visible(fn () => auth()->user()?->can('access admin panel')),
+                        ...SiteResource::getNavigationItems(),
 
-                    // Top pages and dashboard
-                    ...TeamDashboard::getNavigationItems(),
-                    NavigationItem::make('Admin Panel')
-                        ->url('/admin')
-                        ->icon('heroicon-o-adjustments-horizontal')
-                        ->visible(fn () => auth()->user()?->can('access admin panel')),
-                    ...SiteResource::getNavigationItems(),
-                ]);
+                    ]);
             });
     }
 }

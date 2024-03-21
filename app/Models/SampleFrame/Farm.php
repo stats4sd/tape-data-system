@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\SampleFrame;
 
 use App\Models\SurveyData\CaetAssessment;
 use App\Models\SurveyData\PerformanceAssessment;
-use Illuminate\Database\Eloquent\Collection;
+use App\Models\Team;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;

@@ -3,11 +3,12 @@
 namespace App\Filament\Admin\Resources\DatasetResource\Pages;
 
 use App\Filament\Admin\Resources\DatasetResource;
-use App\Filament\Templates\CreateRecordWithRedirect;
-use Filament\Actions;
+use App\Filament\Traits\RedirectsToListAfterSave;
 use Filament\Resources\Pages\CreateRecord;
 
-class CreateDataset extends CreateRecordWithRedirect
+class CreateDataset extends CreateRecord
 {
+    use RedirectsToListAfterSave;
+
     protected static string $resource = DatasetResource::class;
 }

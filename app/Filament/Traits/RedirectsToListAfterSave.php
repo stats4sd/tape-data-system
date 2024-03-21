@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Filament\Templates;
+namespace App\Filament\Traits;
 
-use Filament\Resources\Pages\EditRecord;
+use Filament\Resources\Pages\CreateRecord;
 
-class EditRecordWithRedirect extends EditRecord
+trait RedirectsToListAfterSave
 {
 
     // redirect back to index unless that is impossible
