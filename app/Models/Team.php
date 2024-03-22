@@ -36,4 +36,9 @@ class Team extends \Stats4sd\FilamentOdkLink\Models\TeamManagement\Team
     {
         return $this->hasMany(Location::class);
     }
+
+    public function imports(): HasMany
+    {
+        return $this->hasMany(Import::class);
+    }
 }

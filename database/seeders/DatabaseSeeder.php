@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -18,6 +17,7 @@ class DatabaseSeeder extends Seeder
         // run test seeder in local
         if (app()->environment('local')) {
             $this->call(TestSeeder::class);
+            $this->call(TestLocationsSeeder::class);
         }
 
         $this->call(DatasetVariableSeeder::class);

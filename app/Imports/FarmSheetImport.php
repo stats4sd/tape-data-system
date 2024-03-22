@@ -14,9 +14,11 @@ use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 use Maatwebsite\Excel\Concerns\WithUpserts;
+use Maatwebsite\Excel\Concerns\WithValidation;
 
-class FarmSheetImport implements ShouldQueue, SkipsEmptyRows, ToModel, WithBatchInserts, WithCalculatedFormulas, WithChunkReading, WithHeadingRow, WithStrictNullComparison, WithUpserts
+class FarmSheetImport implements ShouldQueue, SkipsEmptyRows, ToModel, WithBatchInserts, WithCalculatedFormulas, WithChunkReading, WithHeadingRow, WithStrictNullComparison, WithUpserts, WithValidation
 {
+    // The $data array is the data that is passed from the ImportFarmsAction form
     public function __construct(public array $data)
     {
     }
@@ -31,7 +33,9 @@ class FarmSheetImport implements ShouldQueue, SkipsEmptyRows, ToModel, WithBatch
         $farmCodeColumn = $headers[$this->data['farm_code_column']];
         $farmNameColumn = $headers[$this->data['farm_name_column']];
 
-        $location = Location::firstWhere('code', $row[$locationCodeColumn]);
+        $location = Location::where('code', $row[$locationCodeColumn])
+            ->where('location_level_id', $locationLevel->id)
+            ->first();
 
         // TODO: handle Identifiers and Properties
 
@@ -40,6 +44,29 @@ class FarmSheetImport implements ShouldQueue, SkipsEmptyRows, ToModel, WithBatch
             'code' => $row[$farmCodeColumn],
             'name' => $row[$farmNameColumn],
         ]);
+    }
+
+    public function rules(): array
+    {
+        $headers = $this->data['header_columns'];
+        $locationCodeColumn = $headers[$this->data['location_code_column']];
+
+        return [
+            $locationCodeColumn => 'required|exists:locations,code',
+            'farm_code' => 'required',
+        ];
+    }
+
+    public function customValidationMessages(): array
+    {
+        $headers = $this->data['header_columns'];
+        $locationCodeColumn = $headers[$this->data['location_code_column']];
+
+        return [
+            "$locationCodeColumn.required" => "The $locationCodeColumn cannot be empty.",
+            "$locationCodeColumn.exists" => "The location with this code does not exist in the database.",
+            "farm_code.required" => "The farm code cannot be empty.",
+        ];
     }
 
     public function batchSize(): int

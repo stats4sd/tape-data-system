@@ -9,6 +9,7 @@ use Filament\Models\Contracts\HasTenants;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
@@ -19,9 +20,11 @@ use Stats4sd\FilamentOdkLink\Models\TeamManagement\Traits\HasTeamMemberships;
 
 class User extends Authenticatable implements FilamentUser, HasAvatar, HasTenants
 {
-    use HasApiTokens, HasFactory, Notifiable;
-    use HasTeamMemberships;
+    use HasApiTokens;
+    use HasFactory;
+    use Notifiable;
     use HasRoles;
+    use HasTeamMemberships;
 
     protected $hidden = [
         'password',
@@ -32,7 +35,6 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasTenant
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
-
 
     public function isAdmin(): bool
     {
@@ -51,7 +53,6 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasTenant
         return $this->avatar_url ? Storage::url($this->avatar_url) : null;
     }
 
-
     // ****** MULTI-TENANCY STUFF ******
 
     // Admin users can access all teams
@@ -63,5 +64,12 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasTenant
     public function getTenants(Panel $panel): array|Collection
     {
         return $this->can('view all teams') ? Team::all() : $this->teams;
+    }
+
+    // ******* RELATIONSHIPS
+
+    public function imports(): HasMany
+    {
+        return $this->hasMany(Import::class);
     }
 }

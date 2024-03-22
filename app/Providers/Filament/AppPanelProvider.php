@@ -6,6 +6,7 @@ use App\Filament\App\Pages\AccountSettingsPage;
 use App\Filament\App\Pages\RegisterTeam;
 use App\Filament\App\Pages\TeamDashboard;
 use App\Filament\App\Resources\FarmResource;
+use App\Filament\App\Resources\ImportResource;
 use App\Filament\App\Resources\LocationLevelResource;
 use App\Filament\App\Resources\SiteResource;
 use App\Models\Team;
@@ -93,6 +94,7 @@ class AppPanelProvider extends PanelProvider
                             ->icon('heroicon-o-adjustments-horizontal')
                             ->visible(fn () => auth()->user()?->can('access admin panel')),
                         ...SiteResource::getNavigationItems(),
+                        ...ImportResource::getNavigationItems(),
 
                     ]);
             });
