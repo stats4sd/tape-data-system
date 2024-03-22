@@ -45,8 +45,7 @@ class ImportResource extends Resource
                 ->extraAttributes(['class' => 'space-y-0'])
                 ->schema([
                     TextEntry::make('errors')->hiddenLabel()->columnSpanFull()
-                    ->formatStateUsing(fn($state): HtmlString => new HtmlString("<li class='list-disc list-inside'> {$state}</li>"))
-                        ->extraAttributes(['class' => 'y-0']),
+                        ->bulleted()
                 ])
                 ->columns(2)
 
