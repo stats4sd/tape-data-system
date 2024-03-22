@@ -44,6 +44,13 @@ class ImportResource extends Resource
                 ->contained(false)
                 ->extraAttributes(['class' => 'space-y-0'])
                 ->schema([
+                    TextEntry::make('location')
+                        ->label('Location')
+                        ->inlineLabel()
+                        ->formatStateUsing(function ($state) {
+                            $state = explode(",", $state);
+                            return new HtmlString("Row: {$state[0]}, Column: {$state[1]}");
+                        }),
                     TextEntry::make('errors')->hiddenLabel()->columnSpanFull()
                         ->bulleted()
                 ])
