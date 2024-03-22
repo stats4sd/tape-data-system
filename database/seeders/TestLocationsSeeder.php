@@ -13,9 +13,9 @@ class TestLocationsSeeder extends Seeder
      */
     public function run(): void
     {
-        LocationLevel::create(['name' => 'District', 'team_id' => Team::first()->id]);
-        LocationLevel::create(['name' => 'Sub-District','team_id' => Team::first()->id]);
-        LocationLevel::create(['name' => 'Village', 'team_id' => Team::first()->id, 'has_farms' => 1]);
+        $districtLevel = LocationLevel::create(['name' => 'District', 'team_id' => Team::first()->id]);
+        $subDistrictLevel = LocationLevel::create(['name' => 'Sub-District','team_id' => Team::first()->id, 'parent_id' => $districtLevel->id]);
+        $villageLevel = LocationLevel::create(['name' => 'Village', 'team_id' => Team::first()->id, 'has_farms' => 1, 'parent_id' => $subDistrictLevel->id]);
 
         $this->command->info('Location levels seeded');
     }

@@ -41,7 +41,6 @@ class ImportFarmsAction extends ExcelImportAction
             FileUpload::make('upload')
                 ->label(fn ($livewire) => str($livewire->getTable()->getPluralModelLabel())->title() . ' Excel Data')
                 ->helperText('Please make sure your data is in the first worksheet of the Excel file, and that the first row contains the column headers.')
-                ->default(1)
                 ->disk($this->getDisk())
                 ->columns()
                 ->required()
@@ -91,6 +90,9 @@ class ImportFarmsAction extends ExcelImportAction
                         ->label('Are there any additional columns that contain properties of the farm?')
                         ->helperText('These are not identifiers, but are properties of the farm that are useful for analysis. For example: size of the farm, year of first engagement, etc. These are columns that can potentially be shared outside the project for analysis purposes.')
                         ->options(fn (Get $get) => $get('header_columns')),
+
+                    Hidden::make('team_id')
+                        ->default(Filament::getTenant()->id)
 
                 ]),
 

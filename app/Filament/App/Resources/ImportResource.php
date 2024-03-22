@@ -3,9 +3,9 @@
 namespace App\Filament\App\Resources;
 
 use App\Filament\App\Resources\ImportResource\Pages;
+use App\Filament\Infolists\Components\ListRepeatableEntry;
 use App\Models\Import;
 use Filament\Infolists\Components\IconEntry;
-use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\Section;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\TextEntry;
@@ -40,16 +40,13 @@ class ImportResource extends Resource
                         ->url(fn ($record) => $record->getFirstMediaUrl()),
                     IconEntry::make('success')->label('Status:')->inlineLabel(),
                 ]),
-            RepeatableEntry::make('errors')
+            ListRepeatableEntry::make('errors')
+                ->contained(false)
+                ->extraAttributes(['class' => 'space-y-0'])
                 ->schema([
-                    TextEntry::make('location')->hiddenLabel()->columnSpanFull()
-                        ->formatStateUsing(
-                            function ($state): HtmlString {
-                                $state = explode(',', $state);
-                                return new HtmlString("<b>Location:</b> Row  {$state[0]}, <b>{$state[1]}</b>");
-                            },
-                        ),
-                    TextEntry::make('errors')->hiddenLabel()->columnSpanFull()->listWithLineBreaks(),
+                    TextEntry::make('errors')->hiddenLabel()->columnSpanFull()
+                    ->formatStateUsing(fn($state): HtmlString => new HtmlString("<li class='list-disc list-inside'> {$state}</li>"))
+                        ->extraAttributes(['class' => 'y-0']),
                 ])
                 ->columns(2)
 

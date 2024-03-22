@@ -82,7 +82,7 @@ class FarmImport implements ShouldQueue, WithBatchInserts, WithChunkReading, Wit
                     ->body(fn (): HtmlString => new HtmlString(
                         'The import of farm data failed with the following errors:<br/><br/>'
                         . $event->getException()->getMessage()
-                        . '<br/><br/>You can review this import in the <a href="' . ImportResource::getUrl('index') . '">Imports pages</a>.'
+                        . '<br/><br/>You can review this import in the <a href="' . ImportResource::getUrl('index', ['tenant' => $this->data['team_id']]) . '">Imports pages</a>.'
                     ))
                     ->danger()
                     ->broadcast(User::find($this->data['user_id']));

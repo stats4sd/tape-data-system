@@ -50,10 +50,11 @@ class FarmSheetImport implements ShouldQueue, SkipsEmptyRows, ToModel, WithBatch
     {
         $headers = $this->data['header_columns'];
         $locationCodeColumn = $headers[$this->data['location_code_column']];
+        $farmCodeColumn = $headers[$this->data['farm_code_column']];
 
         return [
             $locationCodeColumn => 'required|exists:locations,code',
-            'farm_code' => 'required',
+            $farmCodeColumn => 'required',
         ];
     }
 
@@ -61,11 +62,11 @@ class FarmSheetImport implements ShouldQueue, SkipsEmptyRows, ToModel, WithBatch
     {
         $headers = $this->data['header_columns'];
         $locationCodeColumn = $headers[$this->data['location_code_column']];
-
+        $farmCodeColumn = $headers[$this->data['farm_code_column']];
         return [
             "$locationCodeColumn.required" => "The $locationCodeColumn cannot be empty.",
             "$locationCodeColumn.exists" => "The location with this code does not exist in the database.",
-            "farm_code.required" => "The farm code cannot be empty.",
+            "$farmCodeColumn.required" => "The farm code cannot be empty.",
         ];
     }
 

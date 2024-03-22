@@ -44,14 +44,18 @@ class LocationSheetImport implements ShouldQueue, SkipsEmptyRows, ToModel, WithB
 
         $currentParent = null;
 
+        ray($row);
+        ray($this->data);
+
         // go through parents in order from highest to lowest. Ensure all parents exist in the database (and create them if they do not)
         foreach ($this->parentIds as $parentId) {
             Location::upsert(
                 values: [
-                    'code' => $row[$this->data["parent_{$parentId}_code"]],
-                    'name' => $row[$this->data["parent_{$parentId}_name"]],
-                    'location_level_id' => $locationLevel->id,
-                    'parent_id' => $currentParent ? $currentParent->id : null,
+                    'team_id' => $this->data['team_id'],
+                    'code' => $row[$this->data["parent_{$parentId}_code_column"]],
+                    'name' => $row[$this->data["parent_{$parentId}_name_column"]],
+                    'location_level_id' => $parentId,
+                    'parent_id' => $currentParent?->id,
                 ],
                 uniqueBy: 'code'
             );
@@ -61,6 +65,7 @@ class LocationSheetImport implements ShouldQueue, SkipsEmptyRows, ToModel, WithB
 
         // return the new (or updated) location Model for the current row.
         return new Location([
+            'team_id' => $this->data['team_id'],
             'location_level_id' => $locationLevel->id,
             'parent_id' => $currentParent?->id ?? null,
             'code' => $row[$this->data['code_column']],
