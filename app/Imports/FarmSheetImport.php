@@ -31,7 +31,6 @@ class FarmSheetImport implements ShouldQueue, SkipsEmptyRows, ToModel, WithBatch
 
         $locationCodeColumn = $headers[$this->data['location_code_column']];
         $farmCodeColumn = $headers[$this->data['farm_code_column']];
-        $farmNameColumn = $headers[$this->data['farm_name_column']];
 
         $location = Location::where('code', $row[$locationCodeColumn])
             ->where('location_level_id', $locationLevel->id)
@@ -42,7 +41,6 @@ class FarmSheetImport implements ShouldQueue, SkipsEmptyRows, ToModel, WithBatch
         return new Farm([
             'location_id' => $location->id,
             'code' => $row[$farmCodeColumn],
-            'name' => $row[$farmNameColumn],
         ]);
     }
 

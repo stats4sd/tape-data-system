@@ -3,7 +3,7 @@
 namespace App\Filament\App\Resources;
 
 use App\Filament\App\Resources\LocationResource\Pages;
-use App\Models\Location;
+use App\Models\SampleFrame\Location;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;

@@ -2,6 +2,8 @@
 
 namespace App\Filament\App\Pages;
 
+use App\Filament\App\Resources\FarmResource;
+use App\Filament\App\Resources\SiteResource;
 use App\Filament\App\Widgets\TeamCounts;
 use App\Models\Team;
 use Filament\Facades\Filament;
@@ -10,7 +12,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class TeamDashboard extends Page
 {
-
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
     protected ?string $maxContentWidth = '7xl';
@@ -64,13 +65,13 @@ class TeamDashboard extends Page
             [
                 'title' => 'Step 0 - Site & System',
                 'description' => 'Describe the geographical site(s) and agricultural systems in which the farms exist.',
-                'url' => '#',
+                'url' => SiteResource::getUrl('index'),
                 'button_text' => 'Review Sites',
             ],
             [
                 'title' => 'Prep: Sampling of Farms',
                 'description' => 'The Survey works best when you know in advance which farms you are visiting.',
-                'url' => '#',
+                'url' => FarmResource::getUrl('index'),
                 'button_text' => 'Upload / Manage Farm List',
             ],
             [

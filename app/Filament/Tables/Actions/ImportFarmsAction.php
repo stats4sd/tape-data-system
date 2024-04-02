@@ -83,13 +83,15 @@ class ImportFarmsAction extends ExcelImportAction
                         ->multiple()
                         ->label('Are there any additional columns that contain identifying information for the farm?')
                         ->helperText('For example: family name, farm name, telephone numbers, etc. These are columns that can be useful for enumerators or project team members to identify the farm, but that should not be shared outside the project for data protection purposes.')
-                        ->options(fn (Get $get) => $get('header_columns')),
+                        ->options(fn (Get $get) => $get('header_columns'))
+                    ->columnSpanFull(),
 
                     Select::make('farm_properties')
                         ->multiple()
                         ->label('Are there any additional columns that contain properties of the farm?')
                         ->helperText('These are not identifiers, but are properties of the farm that are useful for analysis. For example: size of the farm, year of first engagement, etc. These are columns that can potentially be shared outside the project for analysis purposes.')
-                        ->options(fn (Get $get) => $get('header_columns')),
+                        ->options(fn (Get $get) => $get('header_columns'))
+                    ->columnSpanFull(),
 
                     Hidden::make('team_id')
                         ->default(Filament::getTenant()->id)
