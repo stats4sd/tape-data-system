@@ -100,8 +100,6 @@ class AgSystemResource extends Resource
         $name = $variable->name;
         $description = $variable->description;
 
-        $nameComplete = $name.'_complete';
-
         return Forms\Components\Section::make(Str::of($name)->title()->replace('_', ' '))
             ->schema([
                 Forms\Components\Textarea::make($name)
@@ -116,16 +114,15 @@ class AgSystemResource extends Resource
                     ->collection($name),
                 Forms\Components\Actions::make([
                     Forms\Components\Actions\Action::make($name.'_mark_as_complete')
-                        ->label(fn (AgSystem $record) => $record->properties[$nameComplete] ? 'Mark section as incomplete' : 'Mark section as complete')
+                        ->label(fn (AgSystem $record) => $record->propertyIsCompleted($name) ? 'Mark section as incomplete' : 'Mark section as complete')
                         ->color(fn (AgSystem $record) => $record->$name ? 'info' : 'gray')
                         ->disabled(fn (AgSystem $record) => ! $record->$name)
-                        ->action(fn (AgSystem $record) => $record->updateProps([$nameComplete => ! $record->properties[$nameComplete]])),
+                        ->action(fn (AgSystem $record) => $record->updateProps([$name => ! $record->properties[$name]])),
                 ])->verticalAlignment(VerticalAlignment::Center)
-                    ->alignCenter()
-                    ->hidden(fn (AgSystem $record) => ! auth()->user()->hasRole('Country Team')),
+                    ->alignCenter(),
             ])->columns(2)
-            ->icon(fn (AgSystem $record) => $record->properties[$nameComplete] ? 'heroicon-o-check-circle' : 'heroicon-o-exclamation-circle')
-            ->iconColor(fn ($record) => $record->properties[$nameComplete] ? 'success' : 'warning')
+            ->icon(fn (AgSystem $record) => $record->propertyIsCompleted($name) ? 'heroicon-o-check-circle' : 'heroicon-o-exclamation-circle')
+            ->iconColor(fn ($record) => $record->propertyIsCompleted($name) ? 'success' : 'warning')
             ->headerActions([
             ])
             ->collapsible();

@@ -3,15 +3,17 @@
 namespace App\Filament\App\Resources\AgSystemResource\Pages;
 
 use App\Filament\App\Resources\AgSystemResource;
+use App\Models\AgSystem;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Model;
 
 class EditAgSystem extends EditRecord
 {
     protected static string $resource = AgSystemResource::class;
 
-    protected ?string $heading = 'Step 0 - Agricultural System Information';
+    // protected ?string $heading = 'Step 0 - Agricultural System Information';
     protected ?string $subheading = 'Add or edit information about the agricultural system. This will provide context for the survey data you collect.';
 
     protected function getHeaderActions(): array
@@ -21,7 +23,12 @@ class EditAgSystem extends EditRecord
         ];
     }
 
-    protected function handleRecordUpdate(Model $record, array $data): Model
+    public function getHeading(): string | Htmlable
+    {
+        return $this->getRecord()->productive_activities ?? 'hi';
+    }
+
+    protected function handleRecordUpdate(AgSystem|Model $record, array $data): AgSystem
     {
         // most fields are for the properties json
 
@@ -31,16 +38,9 @@ class EditAgSystem extends EditRecord
         unset($data['name']);
 
 
-        $props = $record->properties;
+        $record->updateProps($data);
 
-        foreach($data as $key => $value) {
-            $props[$key] = $value;
-        }
-
-        $record->update([
-            'name' => $name,
-            'properties' => $props,
-        ]);
+        return $record;
 
     }
 

@@ -10,14 +10,10 @@ return new class () extends Migration {
      */
     public function up(): void
     {
-        Schema::create('ag_systems', function (Blueprint $table) {
+        Schema::create('crops', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('site_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-
             $table->string('name');
-
-            $table->json('properties')->nullable();
-            $table->json('properties_complete')->nullable();
+            $table->string('label');
             $table->timestamps();
         });
     }
@@ -27,6 +23,6 @@ return new class () extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('ag_systems');
+        Schema::dropIfExists('crops');
     }
 };

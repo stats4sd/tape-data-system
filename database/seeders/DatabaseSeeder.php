@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
         if (app()->environment('local')) {
             $this->call(TestSeeder::class);
             $this->call(TestLocationsSeeder::class);
+            $this->call(TestSiteSeeder::class);
         }
 
         $this->call(AgSystemDatasetSeeder::class);

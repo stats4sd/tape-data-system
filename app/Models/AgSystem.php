@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Models\Traits\HasLinkedDataset;
 use App\Models\Traits\HasProperties;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\MediaLibrary\HasMedia;
@@ -15,6 +14,8 @@ class AgSystem extends Model implements HasMedia
     use HasLinkedDataset;
     use HasProperties;
     use InteractsWithMedia;
+
+    protected bool $propertiesAreCompletable = true;
 
     protected $casts = [
         'properties' => 'collection',
@@ -31,7 +32,7 @@ class AgSystem extends Model implements HasMedia
                 return;
             }
 
-            $updatedProps = $dataset->variables->mapWithKeys(function($variable) {
+            $updatedProps = $dataset->variables->mapWithKeys(function ($variable) {
                 return [$variable->name . '_complete' => false];
             });
 

@@ -2,14 +2,12 @@
 
 namespace App\Models\Traits;
 
-
 /**
  * For models that have a json 'properties' field for storing additional data.
  */
 trait HasProperties
 {
-
-    public function updateProps(array $updates): self
+    public function updateProperties(array $updates): self
     {
         $props = $this->properties ?? collect([]);
 
@@ -20,5 +18,21 @@ trait HasProperties
         $this->update(['properties' => $props]);
 
         return $this;
+    }
+
+    public function propertyIsCompleted(string $key): bool
+    {
+
+        // if the model has a separate 'properties_complete' field for manually stating the completion status, use that
+        if ($this->propertiesAreCompletable) {
+            return $this->properties_complete?->get($key, false) ?? false;
+        }
+
+        return $this->propertyHasValue($key);
+    }
+
+    public function propertyHasValue(string $key): bool
+    {
+        return $this->properties?->has($key) ?? false;
     }
 }
