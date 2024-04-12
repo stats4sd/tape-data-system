@@ -4,9 +4,7 @@ namespace App\Filament\App\Resources;
 
 use App\Filament\App\Resources\LocationLevelResource\Pages;
 use App\Filament\App\Resources\LocationLevelResource\RelationManagers\LocationsRelationManager;
-use App\Models\SampleFrame\Location;
 use App\Models\SampleFrame\LocationLevel;
-use Filament\Facades\Filament;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -33,15 +31,20 @@ class LocationLevelResource extends Resource
 
     public static function getNavigationItems(): array
     {
-        $original = parent::getNavigationItems();
+        // make sure the original nav item is only 'active' when the index page is active.
+        $original = collect(parent::getNavigationItems())
+            ->map(function ($item) {
+                return $item->isActiveWhen(fn () => request()->routeIs(static::getRouteBaseName() . '.index'));
+            })->toArray();
 
         $baseRoute = static::getUrl('index');
 
         $navItems = LocationLevel::all()
             ->map(function ($level) use ($baseRoute) {
                 return NavigationItem::make(Str::plural($level->name))
-                    ->url($baseRoute.'/'.$level->slug)
-                    ->group('Survey Sample Frame');
+                    ->url($baseRoute . '/' . $level->slug)
+                    ->group('Survey Sample Frame')
+                    ->isActiveWhen(fn () => request()->routeIs(static::getRouteBaseName() . '.view') && request()->route('record') === $level->slug);
             });
 
         return array_merge($original, $navItems->toArray());
