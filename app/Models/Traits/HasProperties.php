@@ -20,6 +20,29 @@ trait HasProperties
         return $this;
     }
 
+    public function togglePropertyCompleted(string $name): bool
+    {
+        $propsComplete = $this->properties_complete ?? collect([]);
+
+        // if the property hasn't been set before, set it to true (toggle)
+        if($propsComplete->keys()->doesntContain($name)) {
+            $propsComplete[$name] = true;
+        } else {
+            $propsComplete[$name] = !$propsComplete[$name];
+        }
+
+
+        $this->update(['properties_complete' => $propsComplete]);
+
+
+        ray(!$this->properties_complete->get($name, false));
+        ray($this->properties_complete->toArray());
+
+
+        return $this->propertyIsCompleted($name);
+    }
+
+
     public function propertyIsCompleted(string $key): bool
     {
 

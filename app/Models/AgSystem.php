@@ -19,6 +19,7 @@ class AgSystem extends Model implements HasMedia
 
     protected $casts = [
         'properties' => 'collection',
+        'properties_complete' => 'collection',
     ];
 
     protected static function booted()

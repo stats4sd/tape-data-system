@@ -102,12 +102,12 @@ class AgSystemResource extends Resource
 
         return Forms\Components\Section::make(Str::of($name)->title()->replace('_', ' '))
             ->schema([
-                Forms\Components\Textarea::make($name)
+                Forms\Components\Textarea::make('properties.'.$name)
                     ->label($description)
                     ->rows(5)
                     ->maxLength(65535)
                     ->live(onBlur: true)
-                    ->afterStateUpdated(fn ($state, AgSystem $record) => $record->updateProps([$name => $state]))
+                    ->afterStateUpdated(fn ($state, AgSystem $record) => $record->updateProperties([$name => $state]))
                     ->columnSpanFull(),
                 Forms\Components\SpatieMediaLibraryFileUpload::make("{$name}_files")
                     ->label('Please add any files to support the explanation above')
@@ -115,9 +115,9 @@ class AgSystemResource extends Resource
                 Forms\Components\Actions::make([
                     Forms\Components\Actions\Action::make($name.'_mark_as_complete')
                         ->label(fn (AgSystem $record) => $record->propertyIsCompleted($name) ? 'Mark section as incomplete' : 'Mark section as complete')
-                        ->color(fn (AgSystem $record) => $record->$name ? 'info' : 'gray')
-                        ->disabled(fn (AgSystem $record) => ! $record->$name)
-                        ->action(fn (AgSystem $record) => $record->updateProps([$name => ! $record->properties[$name]])),
+                        ->color(fn (AgSystem $record) => $record->propertyIsCompleted($name) ? 'grey' : 'info')
+                        ->disabled(fn (AgSystem $record) => ! $record->properties[$name])
+                        ->action(fn (AgSystem $record) => $record->togglePropertyCompleted($name)),
                 ])->verticalAlignment(VerticalAlignment::Center)
                     ->alignCenter(),
             ])->columns(2)
