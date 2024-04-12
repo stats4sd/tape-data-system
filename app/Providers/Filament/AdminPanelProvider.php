@@ -16,7 +16,6 @@ use Filament\Support\Colors\Color;
 use Filament\Widgets;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
@@ -32,6 +31,7 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->id('admin')
             ->path('admin')
+            ->viteTheme('resources/css/filament/app/theme.css')
             ->darkMode(false)
             ->colors([
                 'primary' => Color::Amber,
@@ -67,11 +67,11 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
                 CheckIfAdmin::class,
             ])
-            ->navigation(function(NavigationBuilder $builder): NavigationBuilder {
+            ->navigation(function (NavigationBuilder $builder): NavigationBuilder {
                 return $builder->items([
                     NavigationItem::make('Return to Front-end')
-                    ->url(url('/app'))
-                    ->icon('heroicon-o-arrow-left'),
+                        ->url(url('/app'))
+                        ->icon('heroicon-o-arrow-left'),
                     ... XlsformTemplateResource::getNavigationItems(),
                     ... TeamResource::getNavigationItems(),
                     ... DatasetResource::getNavigationItems(),

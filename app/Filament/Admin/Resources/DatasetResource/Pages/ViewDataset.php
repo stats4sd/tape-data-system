@@ -3,21 +3,19 @@
 namespace App\Filament\Admin\Resources\DatasetResource\Pages;
 
 use App\Filament\Admin\Resources\DatasetResource;
-use App\Filament\Traits\RedirectsToListAfterSave;
-use Filament\Actions;
-use Filament\Resources\Pages\EditRecord;
+use Filament\Actions\EditAction;
+use Filament\Resources\Pages\ViewRecord;
 
-class EditDataset extends EditRecord
+class ViewDataset extends ViewRecord
 {
-    use RedirectsToListAfterSave;
-
     protected static string $resource = DatasetResource::class;
+
 
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
-            Actions\ViewAction::make(),
+            EditAction::make(),
         ];
     }
+
 }

@@ -1,14 +1,13 @@
 <?php
 
-namespace Database\Seeders;
+namespace Database\Seeders\DatasetSeeders;
 
 use App\Models\AgSystem;
 use App\Models\Dataset;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\DatasetVariable;
 
-class DatasetVariableSeeder extends Seeder
+class AgSystemDatasetSeeder extends Seeder
 {
     /**
      * Run the database seeds.

@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Database\Seeders\DatasetSeeders\AgSystemDatasetSeeder;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             $this->call(TestLocationsSeeder::class);
         }
 
-        $this->call(DatasetVariableSeeder::class);
+        $this->call(AgSystemDatasetSeeder::class);
         $this->call(AeZoneSeeder::class);
 
     }

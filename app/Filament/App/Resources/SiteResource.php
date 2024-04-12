@@ -21,21 +21,22 @@ class SiteResource extends Resource
     {
         return $form
             ->schema([
+                Forms\Components\Section::make('Identifying Information')
+                    ->schema([
 
-                Forms\Components\TextInput::make('name')
-                    ->label('Enter an identifiable name for the site.')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\Textarea::make('location')
-                    ->label('Describe the geographic location of the survey site. (e.g., which administrative zone(s) does it cover, what are the boundaries, etc?)'),
-                Forms\Components\Select::make('ae_zone_id')
-                    ->searchable()
-                    ->preload()
-                    ->label('Using the FAO classification of Agroecological Zones, what is the dominant FAO AEZ of the site?')
-                    ->relationship('aeZone', 'name'),
-                Shout::make('ae-zone-info')
-                    ->content(fn (): HtmlString => new HtmlString(
-                        'To find out the dominant AEZ, you either need to know the GPS coordinates of the site, or be able to find it on a map.
+                        Forms\Components\TextInput::make('name')
+                            ->label('Enter an identifiable name for the site.')
+                            ->required()
+                            ->maxLength(255),
+                        Forms\Components\Textarea::make('location')
+                            ->label('Describe the geographic location of the survey site. (e.g., which administrative zone(s) does it cover, what are the boundaries, etc?)'),
+                    ]),
+                Forms\Components\Section::make('Agroecological Zone')
+                    ->schema([
+
+                        Shout::make('ae-zone-info')
+                            ->content(fn (): HtmlString => new HtmlString(
+                                'To find out the dominant AEZ, you either need to know the GPS coordinates of the site, or be able to find it on a map.
                         Click the link here to take you to an FAO tool that allows you to explore a map with the AE Zones shown. To use the map tool:
                         <br/>
                         <ul>
@@ -45,9 +46,15 @@ class SiteResource extends Resource
                         <li>When you click a point on the map, a box will appear with information about the AEZ.</li>
                         <li>Alternatively, if you know the GPS co-ordinates of the site, you can paste them into the box that says "Search for locations" in the top left of the page.</li>
                         </ul><br/>
-                        When you have found the dominant AE Zone for the site, select it from the dropdown below. You can type into the box to filter the list.
-                    '
-                    )),
+                        When you have found the dominant AE Zone for the site, select it from the dropdown below. You can type into the box to filter the list.'
+                            ))
+                        ->hiddenOn('view'),
+                        Forms\Components\Select::make('ae_zone_id')
+                            ->searchable()
+                            ->preload()
+                            ->label('Using the FAO classification of Agroecological Zones, what is the dominant FAO AEZ of the site?')
+                            ->relationship('aeZone', 'name'),
+                    ])
 
             ])->columns(1);
     }
@@ -64,6 +71,7 @@ class SiteResource extends Resource
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
