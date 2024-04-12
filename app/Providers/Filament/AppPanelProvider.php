@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\App\Clusters\LookupTables;
 use App\Filament\App\Pages\AccountSettingsPage;
 use App\Filament\App\Pages\RegisterTeam;
 use App\Filament\App\Pages\TeamDashboard;
@@ -49,6 +50,7 @@ class AppPanelProvider extends PanelProvider
                 'primary' => Color::Blue,
                 'grey' => Color::Gray,
             ])
+            ->discoverClusters(in: app_path('Filament/App/Clusters'), for: 'App\\Filament\\App\\Clusters')
             ->discoverResources(in: app_path('Filament/App/Resources'), for: 'App\\Filament\\App\\Resources')
             ->discoverPages(in: app_path('Filament/App/Pages'), for: 'App\\Filament\\App\\Pages')
             ->pages([
@@ -95,6 +97,7 @@ class AppPanelProvider extends PanelProvider
                             ->icon('heroicon-o-adjustments-horizontal')
                             ->visible(fn () => auth()->user()?->can('access admin panel')),
                         ...SiteResource::getNavigationItems(),
+                        ...LookupTables::getNavigationItems(),
                         ...ImportResource::getNavigationItems(),
 
                     ]);

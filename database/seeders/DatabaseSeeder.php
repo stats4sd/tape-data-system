@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Database\Seeders\DatasetSeeders\AgSystemDatasetSeeder;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -21,7 +20,16 @@ class DatabaseSeeder extends Seeder
             $this->call(TestSiteSeeder::class);
         }
 
-        $this->call(AgSystemDatasetSeeder::class);
+        // get all files inside DatasetSeeders and run them
+        $files = glob(database_path('seeders/DatasetSeeders/*.php'));
+        foreach ($files as $file) {
+            require_once $file;
+            $class = pathinfo($file, PATHINFO_FILENAME);
+            $this->call("Database\Seeders\DatasetSeeders\\$class");
+        }
+
+
+
         $this->call(AeZoneSeeder::class);
 
     }

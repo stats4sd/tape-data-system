@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class () extends Migration {
     public function up(): void
     {
         Schema::create('datasets', function (Blueprint $table) {
@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->text('description')->nullable();
             $table->string('entity_model')->nullable();
             $table->boolean('external_file')->default(false)->comment('Should the csv files generated be formatted to be used with "select_one_from_external" ODK fields?');
+            $table->boolean('lookup_table')->default(false)->comment('Is this dataset used as a lookup table for the survey?');
             $table->timestamps();
             $table->softDeletes();
         });

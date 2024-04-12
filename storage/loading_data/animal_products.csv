@@ -1,0 +1,24 @@
+﻿name,label_malagasy,label_french,label_english
+11,"Hena, omby","Viande, bovins","Meat, bovine"
+12,"Hena, kisoa","Viande, porc","Meat, pig"
+13,"Hena, ondry","Viande, moutons","Meat, sheep"
+14,"Hena, osy","Viande, chèvre","Meat, goat"
+15,"Hena, akoho amam-borona","Viande, volaille","Meat, poultry"
+16,"Hena, hafa","Viande, autres","Meat, other"
+17,Hena sitrana,Viande séchée,Cured meat
+18,matavy,Graisse,Fat
+19,menaka matavy,Huiles grasses,Fat oils
+20,tsinainy,Entrails,Entrails
+21,"Ronono, omby","Le lait, vache","Milk, cow"
+22,"Ronono, hafa","Lait, autres","Milk, other"
+23,fromazy,Fromage,Cheese
+24,Yaourt,Yaourt,Yogurt
+25,Dibera,Beurre,Butter
+26,atody,Oeufs,Eggs
+27,Tantely,Miel,Honey
+28,Savoka tantely,Cire d'abeille,Bee wax
+29,volonondry,Laine,Wool
+30,hoditra,Peaux,Skins
+31,Lady,Soie,Silk
+77,Hafa,Autres,Other
+-97,#NAME?,tsy misy,None

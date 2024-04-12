@@ -2,6 +2,10 @@
 
 namespace App\Models;
 
+use App\Models\LookupTables\Animal;
+use App\Models\LookupTables\AnimalProduct;
+use App\Models\LookupTables\Crop;
+use App\Models\LookupTables\CropProduct;
 use App\Models\SampleFrame\Farm;
 use App\Models\SampleFrame\Location;
 use App\Models\SampleFrame\LocationLevel;
@@ -41,4 +45,28 @@ class Team extends \Stats4sd\FilamentOdkLink\Models\TeamManagement\Team
     {
         return $this->hasMany(Import::class);
     }
+
+    // lookup tables
+
+    public function animals(): HasMany
+    {
+        return $this->hasMany(Animal::class);
+    }
+
+    public function animalProducts(): HasMany
+    {
+        return $this->hasMany(AnimalProduct::class);
+    }
+
+    public function crops(): HasMany
+    {
+        return $this->hasMany(Crop::class);
+    }
+
+    public function cropProducts(): HasMany
+    {
+        return $this->hasMany(CropProduct::class);
+    }
+
+
 }
