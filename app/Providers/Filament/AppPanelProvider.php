@@ -98,6 +98,7 @@ class AppPanelProvider extends PanelProvider
                         ...ImportResource::getNavigationItems(),
 
                     ]);
-            });
+            })
+            ->databaseNotifications();
     }
 }

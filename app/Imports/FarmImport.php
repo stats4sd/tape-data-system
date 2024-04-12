@@ -77,6 +77,9 @@ class FarmImport implements ShouldQueue, WithBatchInserts, WithChunkReading, Wit
                             ],
                         ]);
                 }
+
+                $recipient = User::find($this->data['user_id']);
+
                 Notification::make()
                     ->title('Import of Farm Data Failed')
                     ->body(fn (): HtmlString => new HtmlString(
@@ -85,13 +88,21 @@ class FarmImport implements ShouldQueue, WithBatchInserts, WithChunkReading, Wit
                         . '<br/><br/>You can review this import in the <a href="' . ImportResource::getUrl('index', ['tenant' => $this->data['team_id']]) . '">Imports pages</a>.'
                     ))
                     ->danger()
-                    ->broadcast(User::find($this->data['user_id']));
+                    ->sendToDatabase($recipient, isEventDispatched: true)
+                    ->broadcast($recipient);
+
             },
             AfterImport::class => function (AfterImport $event) {
+
+                $recipient = User::find($this->data['user_id']);
+
+                // send notification
                 Notification::make()
                     ->title('Import of Farm Data Complete')
                     ->success()
-                    ->broadcast(User::find($this->data['user_id']));
+                    ->sendToDatabase($recipient, isEventDispatched: true)
+                    ->broadcast($recipient);
+
             },
         ];
     }

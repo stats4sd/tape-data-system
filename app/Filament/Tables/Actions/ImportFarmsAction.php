@@ -8,6 +8,7 @@ use App\Models\SampleFrame\LocationLevel;
 use Closure;
 use EightyNine\ExcelImport\ExcelImportAction;
 use Filament\Facades\Filament;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Section;
@@ -45,6 +46,7 @@ class ImportFarmsAction extends ExcelImportAction
                 ->columns()
                 ->required()
                 ->live()
+                ->preserveFilenames()
                 ->afterStateUpdated(function (?TemporaryUploadedFile $state, Set $set) {
                     $headings = (new HeadingRowImport())->toArray($state?->getRealPath());
 
@@ -77,21 +79,32 @@ class ImportFarmsAction extends ExcelImportAction
                     Select::make('farm_code_column')
                         ->label('Which column contains the farm unique code?')
                         ->helperText('e.g. farm_id or farm_code')
+                        ->live()
                         ->options(fn (Get $get) => $get('header_columns')),
 
-                    Select::make('farm_identifiers')
-                        ->multiple()
-                        ->label('Are there any additional columns that contain identifying information for the farm?')
+                    CheckboxList::make('farm_identifiers')
+                        ->label('Are there any additional columns that contain identifiers for the farm? Tick all that apply.')
                         ->helperText('For example: family name, farm name, telephone numbers, etc. These are columns that can be useful for enumerators or project team members to identify the farm, but that should not be shared outside the project for data protection purposes.')
-                        ->options(fn (Get $get) => $get('header_columns'))
-                    ->columnSpanFull(),
+                        ->options(fn (Get $get): array => $get('header_columns'))
+                        ->disableOptionWhen(
+                            fn (string $value, Get $get): bool => $value === (string)$get('farm_code_column') ||
+                                collect($get('farm_properties'))->contains($value) ||
+                                $value === 'na'
+                        )
+                        ->live()
+                        ->columnSpanFull(),
 
-                    Select::make('farm_properties')
-                        ->multiple()
-                        ->label('Are there any additional columns that contain properties of the farm?')
+                    CheckboxList::make('farm_properties')
+                        ->label('Are there any additional columns that contain properties of the farm? Tick all that apply.')
                         ->helperText('These are not identifiers, but are properties of the farm that are useful for analysis. For example: size of the farm, year of first engagement, etc. These are columns that can potentially be shared outside the project for analysis purposes.')
                         ->options(fn (Get $get) => $get('header_columns'))
-                    ->columnSpanFull(),
+                        ->disableOptionWhen(
+                            fn (string $value, Get $get): bool => $value === (string)$get('farm_code_column') ||
+                                collect($get('farm_identifiers'))->contains($value) ||
+                                $value === 'na'
+                        )
+                        ->live()
+                        ->columnSpanFull(),
 
                     Hidden::make('team_id')
                         ->default(Filament::getTenant()->id)
