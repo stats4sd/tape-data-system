@@ -3,6 +3,7 @@
 namespace App\Models\SampleFrame;
 
 use App\Models\Team;
+use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -15,6 +16,12 @@ class LocationLevel extends Model
         static::saving(function (self $locationLevel) {
             $locationLevel->slug = $locationLevel->slug ?? Str::slug($locationLevel->name);
         });
+
+        if(Filament::hasTenancy()) {
+            static::addGlobalScope('team', function ($query) {
+                $query->where('team_id', Filament::getTenant()->id);
+            });
+        }
     }
 
     public function getRouteKeyName(): string
