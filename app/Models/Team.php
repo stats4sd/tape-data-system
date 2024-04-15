@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
-use App\Models\LookupTables\Animal;
-use App\Models\LookupTables\AnimalProduct;
-use App\Models\LookupTables\Crop;
-use App\Models\LookupTables\CropProduct;
+use App\Models\Traits\Animal;
+use App\Models\Traits\AnimalProduct;
+use App\Models\Traits\Crop;
+use App\Models\Traits\CropProduct;
 use App\Models\SampleFrame\Farm;
 use App\Models\SampleFrame\Location;
 use App\Models\SampleFrame\LocationLevel;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Team extends \Stats4sd\FilamentOdkLink\Models\TeamManagement\Team
@@ -68,5 +69,30 @@ class Team extends \Stats4sd\FilamentOdkLink\Models\TeamManagement\Team
         return $this->hasMany(CropProduct::class);
     }
 
+    public function lookupTables(): BelongsToMany
+    {
+        return $this->belongsToMany(Dataset::class, 'team_lookup_tables', 'team_id', 'lookup_table_id')
+            ->withPivot('is_complete')
+            ->where('lookup_table', true);
+    }
+
+    public function markLookupListAsComplete($lookupTable): ?bool
+    {
+        $dataset = $this->lookupTables()->sync([$lookupTable->id => ['is_complete' => 1]], detaching: false);
+
+        return $this->hasCompletedLookupList($lookupTable);
+    }
+
+    public function markLookupListAsInComplete($lookupTable): ?bool
+    {
+        $dataset = $this->lookupTables()->sync([$lookupTable->id => ['is_complete' => 0]], detaching: false);
+
+        return $this->hasCompletedLookupList($lookupTable);
+    }
+
+    public function hasCompletedLookupList($lookupTable): ?bool
+    {
+        return $this->lookupTables->where('id', $lookupTable->id)->first()?->pivot->is_complete;
+    }
 
 }

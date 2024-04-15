@@ -2,17 +2,13 @@
 
 namespace App\Models\LookupTables;
 
-use App\Models\Team;
+use App\Models\Interfaces\LookupListEntry;
 use App\Models\Traits\HasLinkedDataset;
+use App\Models\Traits\IsLookupList;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Animal extends Model
+class Animal extends Model implements LookupListEntry
 {
     use HasLinkedDataset;
-
-    public function team(): BelongsTo
-    {
-        return $this->belongsTo(Team::class);
-    }
+    use IsLookupList;
 }

@@ -6,7 +6,6 @@ use App\Filament\App\Clusters\LookupTables;
 use App\Filament\App\Clusters\LookupTables\Resources\AnimalProductResource\Pages;
 use App\Filament\Traits\IsLookupListResource;
 use App\Models\LookupTables\AnimalProduct;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 
 class AnimalProductResource extends Resource
@@ -17,17 +16,10 @@ class AnimalProductResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?int $navigationSort = 2;
+
     protected static ?string $cluster = LookupTables::class;
 
-
-
-    public static function form(Form $form): Form
-    {
-        return $form
-            ->schema([
-                //
-            ]);
-    }
 
     public static function getRelations(): array
     {
@@ -40,8 +32,6 @@ class AnimalProductResource extends Resource
     {
         return [
             'index' => Pages\ListAnimalProducts::route('/'),
-            'create' => Pages\CreateAnimalProduct::route('/create'),
-            'edit' => Pages\EditAnimalProduct::route('/{record}/edit'),
         ];
     }
 }

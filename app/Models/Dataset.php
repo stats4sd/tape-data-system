@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Collection;
 
 class Dataset extends \Stats4sd\FilamentOdkLink\Models\OdkLink\Dataset
@@ -40,5 +42,26 @@ class Dataset extends \Stats4sd\FilamentOdkLink\Models\OdkLink\Dataset
         return new Attribute(
             get: fn (): int => $this->entity_model::whereHas('team')->count(),
         );
+    }
+
+    // Relationship for lookup tables?
+    public function teamLookupTables(): BelongsToMany
+    {
+        return $this->belongsToMany(Team::class, 'team_lookup_tables', 'lookup_table_id', 'team_id')
+            ->withPivot('is_complete');
+    }
+
+    // calculates if the current team has completed the lookup table
+    public function lookupIsComplete(): Attribute
+    {
+        if(Filament::hasTenancy()) {
+            return new Attribute(
+                get: fn (): bool => $this->teamLookupTables->where('team_id', Filament::getTenant()->id)->first()->is_complete ?? false,
+            );
+        } else {
+            return new Attribute(
+                get: fn () => null,
+            );
+        }
     }
 }

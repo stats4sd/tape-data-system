@@ -3,7 +3,7 @@
 namespace Database\Seeders\DatasetSeeders;
 
 use App\Models\Dataset;
-use App\Models\LookupTables\AnimalProduct;
+use App\Models\Traits\AnimalProduct;
 use App\Services\HelperService;
 use Illuminate\Database\Seeder;
 

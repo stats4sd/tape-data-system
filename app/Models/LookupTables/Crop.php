@@ -2,15 +2,18 @@
 
 namespace App\Models\LookupTables;
 
+use App\Models\Interfaces\LookupListEntry;
 use App\Models\Team;
 use App\Models\Traits\HasLinkedDataset;
+use App\Models\Traits\IsLookupList;
 use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Crop extends Model
+class Crop extends Model implements LookupListEntry
 {
     use HasLinkedDataset;
+    use IsLookupList;
 
     protected static function booted()
     {
