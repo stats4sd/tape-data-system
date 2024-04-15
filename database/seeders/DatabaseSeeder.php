@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             $this->call(TestSeeder::class);
             $this->call(TestLocationsSeeder::class);
             $this->call(TestSiteSeeder::class);
+            $this->call(UnitTypeSeeder::class);
         }
 
         // get all files inside DatasetSeeders and run them

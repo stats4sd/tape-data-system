@@ -4,6 +4,8 @@ namespace App\Models\Interfaces;
 
 interface LookupListEntry
 {
+    public static function getLinkedDataset(): ?\App\Models\Dataset;
+
     public function isGlobalEntry(): \Illuminate\Database\Eloquent\Casts\Attribute;
 
     public function isGlobal(): bool;

@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Models\Team;
+use Filament\Facades\Filament;
 use Illuminate\Support\Collection;
 use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Model;
@@ -82,5 +84,16 @@ class HelperService
         return collect($lines)->map(function ($row) use ($header) {
             return $header->combine(str_getcsv($row));
         });
+    }
+
+    // helper function to return the currently selected team in a Filament panel.
+    // useful because it always returns a Team::class (or null), so you can use it in a type hint.
+    public static function getSelectedTeam(): Team|Model|null
+    {
+        if(Filament::hasTenancy() && Filament::getTenant() instanceof Team) {
+            return Filament::getTenant();
+        }
+
+        return null;
     }
 }

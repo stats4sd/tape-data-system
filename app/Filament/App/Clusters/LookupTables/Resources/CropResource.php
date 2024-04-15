@@ -15,6 +15,8 @@ class CropResource extends Resource
     protected static ?string $model = Crop::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationGroup = 'Optional Lists';
+
     protected static ?int $navigationSort = 3;
 
     protected static ?string $cluster = LookupTables::class;

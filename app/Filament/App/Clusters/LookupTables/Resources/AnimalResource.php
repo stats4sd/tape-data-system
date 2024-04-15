@@ -15,6 +15,9 @@ class AnimalResource extends Resource
     protected static ?string $model = Animal::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationGroup = 'Optional Lists';
+
+
     protected static ?int $navigationSort = 1;
 
     protected static ?string $cluster = LookupTables::class;

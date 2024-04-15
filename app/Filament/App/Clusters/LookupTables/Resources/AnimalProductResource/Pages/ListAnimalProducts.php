@@ -10,6 +10,8 @@ class ListAnimalProducts extends ListRecords
 {
     protected static string $resource = AnimalProductResource::class;
 
+    protected ?string $heading = 'Contextualise Survey: Animal Products';
+
     protected function getHeaderActions(): array
     {
         return [

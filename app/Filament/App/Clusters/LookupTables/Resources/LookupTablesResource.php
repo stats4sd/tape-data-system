@@ -54,6 +54,9 @@ class LookupTablesResource extends Resource
                 Tables\Columns\TextColumn::make('label'),
                 Tables\Columns\IconColumn::make('lookup_is_complete')
                     ->boolean(),
+                Tables\Columns\IconColumn::make('is_required')
+                ->boolean()
+                    ->getStateUsing(fn ($record) => $record->name === 'Units'),
             ])
             ->filters([
                 //
@@ -72,11 +75,11 @@ class LookupTablesResource extends Resource
     {
         return $infolist
             ->schema([
-                Section::make('Introduction')
+                Section::make('')
                     ->schema([
                         TextEntry::make('into1')
                             ->hiddenLabel()
-                            ->default('Hello world This page is designed to help you contextualise key response option lists within the TAPE survey. The list on the left shows all the response lists that can be customised.'),
+                            ->default('This page is designed to help you contextualise key response option lists within the TAPE survey. The table below shows all the response lists that can be customised. You must review the lists marked as "required" before publishing the survey. If you have time, we also recommend you review the other lists to ensure they are appropriate for your context. '),
                         TextEntry::make('intro2')
                             ->hiddenLabel()
                             ->default('For each list, there is a default list that all TAPE surveys include. You cannot edit or remove these items. However, you can add new items to the list, or edit or remove items that you have added.'),

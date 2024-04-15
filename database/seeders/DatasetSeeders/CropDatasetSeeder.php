@@ -3,7 +3,7 @@
 namespace Database\Seeders\DatasetSeeders;
 
 use App\Models\Dataset;
-use App\Models\Traits\Crop;
+use App\Models\LookupTables\Crop;
 use App\Services\HelperService;
 use Illuminate\Database\Seeder;
 

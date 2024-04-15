@@ -1,0 +1,7 @@
+﻿name,label,conversion_rate,unit_type_id
+ha,HA ,1,2
+acres,Acres (1 acre = 0.4 hectares),0.404686,2
+square_metres,Metres-Squared (1m2 = 0.0001 Hectares),0.001,2
+kg,KG,1,1
+lbs,lbs (1lb = 0.45KG),0.453592,1
+tonnes,tonnes (1 tonne = 1000 kg),1000,1

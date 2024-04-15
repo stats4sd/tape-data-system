@@ -10,6 +10,8 @@ class ListCropProducts extends ListRecords
 {
     protected static string $resource = CropProductResource::class;
 
+    protected ?string $heading = 'Contextualise Survey: Crop Products';
+
     protected function getHeaderActions(): array
     {
         return [
