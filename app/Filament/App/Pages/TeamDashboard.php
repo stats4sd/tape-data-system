@@ -2,6 +2,7 @@
 
 namespace App\Filament\App\Pages;
 
+use App\Filament\App\Clusters\LookupTables;
 use App\Filament\App\Resources\FarmResource;
 use App\Filament\App\Resources\SiteResource;
 use App\Filament\App\Widgets\TeamCounts;
@@ -77,7 +78,7 @@ class TeamDashboard extends Page
             [
                 'title' => 'Prep: Survey Context',
                 'description' => 'Add local units, crops, and locally relevant interpretations to the survey',
-                'url' => '#',
+                'url' => LookupTables::getUrl(),
                 'button_text' => 'Add Local Context',
             ],
             [

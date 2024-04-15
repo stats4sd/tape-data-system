@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Stats4sd\FilamentOdkLink\Database\Seeders\PlatformSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -19,6 +20,7 @@ class DatabaseSeeder extends Seeder
             $this->call(TestLocationsSeeder::class);
             $this->call(TestSiteSeeder::class);
             $this->call(UnitTypeSeeder::class);
+            $this->call(PlatformSeeder::class);
         }
 
         // get all files inside DatasetSeeders and run them
