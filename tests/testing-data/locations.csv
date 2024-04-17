@@ -1,0 +1,15 @@
+﻿id,location_level_id,code,name
+1,1,d1,District1
+2,1,d2,District2
+4,2,sd1.1,Sub1.1
+5,2,sd1.2,Sub1.2
+8,2,sd2.1,Sub2.1
+9,2,sd2.2,Sub2.2
+11,3,v1.1.1,Village1.1.1
+14,3,v1.1.2,Village1.1.2
+18,3,v1.2.1,Village1.2.1
+19,3,v1.2.2,Village1.2.2
+20,3,v2.1.1,Village2.1.1
+21,3,v2.1.2,Village2.1.2
+22,3,v2.2.1,Village2.2.1
+23,3,v2.2.2,Village2.2.2

@@ -48,7 +48,7 @@ class SiteResource extends Resource
                         </ul><br/>
                         When you have found the dominant AE Zone for the site, select it from the dropdown below. You can type into the box to filter the list.'
                             ))
-                        ->hiddenOn('view'),
+                            ->hiddenOn('view'),
                         Forms\Components\Select::make('ae_zone_id')
                             ->searchable()
                             ->preload()
@@ -73,12 +73,26 @@ class SiteResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('test-url')
+                    ->url(function (Site $record) {
+                        ray('url function is being called now!');
+
+                        return '#';
+                    }),
+                Tables\Actions\Action::make('test-action')
+                    ->action(function (Site $record) {
+                        ray('action function is being called now!');
+
+                        redirect('https://stats4sd.org');
+
+                    })
+
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+        Tables\Actions\BulkActionGroup::make([
+            Tables\Actions\DeleteBulkAction::make(),
+        ]),
+    ]);
     }
 
     public static function getRelations(): array

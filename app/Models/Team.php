@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use App\Models\Traits\Animal;
-use App\Models\Traits\AnimalProduct;
-use App\Models\Traits\Crop;
-use App\Models\Traits\CropProduct;
+use App\Models\LookupTables\Animal;
+use App\Models\LookupTables\AnimalProduct;
+use App\Models\LookupTables\Crop;
+use App\Models\LookupTables\CropProduct;
 use App\Models\SampleFrame\Farm;
 use App\Models\SampleFrame\Location;
 use App\Models\SampleFrame\LocationLevel;
