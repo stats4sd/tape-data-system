@@ -15,13 +15,14 @@ class DatabaseSeeder extends Seeder
         $this->call(RolesAndPermissionsSeeder::class);
 
         // run test seeder in local
-        if (app()->environment('local')) {
+        if (app()->environment('local') || app()->environment('staging')) {
             $this->call(TestSeeder::class);
             $this->call(TestLocationsSeeder::class);
             $this->call(TestSiteSeeder::class);
-            $this->call(UnitTypeSeeder::class);
-            $this->call(PlatformSeeder::class);
         }
+
+        $this->call(PlatformSeeder::class);
+        $this->call(UnitTypeSeeder::class);
 
         // get all files inside DatasetSeeders and run them
         $files = glob(database_path('seeders/DatasetSeeders/*.php'));
