@@ -73,20 +73,6 @@ class SiteResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\Action::make('test-url')
-                    ->url(function (Site $record) {
-                        ray('url function is being called now!');
-
-                        return '#';
-                    }),
-                Tables\Actions\Action::make('test-action')
-                    ->action(function (Site $record) {
-                        ray('action function is being called now!');
-
-                        redirect('https://stats4sd.org');
-
-                    })
-
             ])
             ->bulkActions([
         Tables\Actions\BulkActionGroup::make([
