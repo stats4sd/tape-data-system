@@ -12,6 +12,13 @@ class ListFarms extends ListRecords
 {
     protected static string $resource = FarmResource::class;
 
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            FarmResource\Widgets\FarmListHeaderWidget::class,
+        ];
+    }
+
     protected function getHeaderActions(): array
     {
         return [
