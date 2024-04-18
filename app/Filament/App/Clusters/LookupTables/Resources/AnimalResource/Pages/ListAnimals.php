@@ -19,7 +19,7 @@ class ListAnimals extends ListRecords
     {
         return [
             CreateLookupListEntryAction::make()
-            ->label('Add new animal list entry'),
+            ->label('Add Animal'),
 
             Actions\Action::make('Mark as Complete')
             ->requiresConfirmation()
