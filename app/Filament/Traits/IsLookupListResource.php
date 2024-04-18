@@ -4,6 +4,7 @@ namespace App\Filament\Traits;
 
 use App\Models\Interfaces\LookupListEntry;
 use App\Models\Team;
+use App\Services\HelperService;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -45,11 +46,11 @@ trait IsLookupListResource
                         'required' => 'Please enter a unique code',
                         'unique' => 'This code is already in use. Please enter a unique code.',
                     ])
-                ->helperText('If you are familiar with ODK Form development, this corresponds to the "name" attribute of the <item> element in the XForm.'),
+                    ->helperText('If you are familiar with ODK Form development, this corresponds to the "name" attribute of the <item> element in the XForm.'),
                 TextInput::make('label')
-                ->required()
-                ->label('Enter a label. This is what enumerators will see in the survey.')
-                ->helperText('At present, this platform only supports additional choice options in English. Multiple language support will come soon!'),
+                    ->required()
+                    ->label('Enter a label. This is what enumerators will see in the survey.')
+                    ->helperText('At present, this platform only supports additional choice options in English. Multiple language support will come soon!'),
             ]);
     }
 
@@ -60,22 +61,22 @@ trait IsLookupListResource
             ->columns([
                 TextColumn::make('name')
                     ->label('Unique Code')
-                ->sortable()
-                ->searchable(),
+                    ->sortable()
+                    ->searchable(),
                 TextColumn::make('label')
-                ->sortable()
-                ->searchable(),
+                    ->sortable()
+                    ->searchable(),
                 IconColumn::make('is_customised_entry')
                     ->label('Is custom entry?')
-                ->boolean(),
+                    ->boolean(),
             ])
             ->filters([
                 TernaryFilter::make('custom')
                     ->label('Show custom entries?')
-                ->queries(
-                    true: fn (Builder $query): Builder => $query->whereHasMorph('owner', Team::class),
-                    false: fn (Builder $query): Builder => $query->where('owner_id', null),
-                )
+                    ->queries(
+                        true: fn (Builder $query): Builder => $query->whereHasMorph('owner', Team::class),
+                        false: fn (Builder $query): Builder => $query->where('owner_id', null),
+                    )
             ])
             ->actions([
                 EditAction::make()->hidden(fn (LookupListEntry $record): bool => $record->isGlobal()),
@@ -83,6 +84,33 @@ trait IsLookupListResource
             ])
             ->defaultPaginationPageOption('all')
             ->defaultSort('label', 'asc');
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        $team = HelperService::getSelectedTeam();
+
+        ray(static::class);
+
+        if ($team?->hasCompletedLookupList(self::getModel()::getLinkedDataset())) {
+            ray('Complete');
+            return 'Complete';
+        }
+
+        ray('In Progress');
+        return 'In Progress';
+
+    }
+
+    public static function getNavigationBadgeColor(): string|array|null
+    {
+        $team = HelperService::getSelectedTeam();
+
+        if ($team?->hasCompletedLookupList(self::getModel()::getLinkedDataset())) {
+            return 'success';
+        }
+
+        return 'info';
     }
 
 }

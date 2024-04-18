@@ -19,8 +19,6 @@ use Illuminate\Support\Str;
 
 class LookupTablesResource extends Resource
 {
-    use isLookupListResource;
-
     protected static ?string $model = Dataset::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-document';
