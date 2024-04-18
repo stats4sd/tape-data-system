@@ -2,9 +2,8 @@
 
 namespace App\Models\Traits;
 
-use App\Models\Team;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 trait IsLookupList
 {
@@ -18,7 +17,7 @@ trait IsLookupList
 
     public function isGlobal(): bool
     {
-        return $this->team_id === null;
+        return $this->owner_id === null;
     }
 
     public function isCustomisedEntry(): Attribute
@@ -30,11 +29,11 @@ trait IsLookupList
 
     public function isCustomised(): bool
     {
-        return $this->team_id !== null;
+        return $this->owner_id !== null;
     }
 
-    public function team(): BelongsTo
+    public function owner(): MorphTo
     {
-        return $this->belongsTo(Team::class);
+        return $this->morphTo();
     }
 }

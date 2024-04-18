@@ -12,7 +12,7 @@ return new class () extends Migration {
     {
         Schema::create('crop_products', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('team_id')->nullable()->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->nullableMorphs('owner');
             $table->string('name');
             $table->string('label');
             $table->timestamps();

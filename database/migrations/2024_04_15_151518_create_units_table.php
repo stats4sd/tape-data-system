@@ -13,7 +13,7 @@ return new class () extends Migration {
         Schema::create('units', function (Blueprint $table) {
             $table->id();
             $table->foreignId('unit_type_id');
-            $table->foreignId('team_id')->nullable()->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->nullableMorphs('owner');
             $table->string('name');
             $table->string('label');
             $table->decimal('conversion_rate', 20, 10);

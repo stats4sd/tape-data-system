@@ -2,11 +2,11 @@
 
 namespace App\Filament\App\Clusters\LookupTables\Resources\AnimalResource\Pages;
 
+use App\Filament\Actions\CreateLookupListEntryAction;
 use App\Filament\App\Clusters\LookupTables\Resources\AnimalResource;
 use App\Models\LookupTables\Animal;
 use App\Services\HelperService;
 use Filament\Actions;
-use Filament\Facades\Filament;
 use Filament\Resources\Pages\ListRecords;
 
 class ListAnimals extends ListRecords
@@ -18,9 +18,8 @@ class ListAnimals extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make()
-            ->label('Add new animal list entry')
-                ->mutateFormDataUsing(fn (array $data): array => collect($data)->put('team_id', Filament::getTenant()->id)->toArray()),
+            CreateLookupListEntryAction::make()
+            ->label('Add new animal list entry'),
 
             Actions\Action::make('Mark as Complete')
             ->requiresConfirmation()

@@ -14,6 +14,6 @@ interface LookupListEntry
 
     public function isCustomised(): bool;
 
-    public function team(): \Illuminate\Database\Eloquent\Relations\BelongsTo;
+    public function owner(): \Illuminate\Database\Eloquent\Relations\MorphTo;
 
 }

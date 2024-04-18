@@ -3,6 +3,7 @@
 namespace App\Filament\Traits;
 
 use App\Models\Interfaces\LookupListEntry;
+use App\Models\Team;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -27,8 +28,8 @@ trait IsLookupListResource
     {
         return parent::getEloquentQuery()
             ->where(function (Builder $query) {
-                $query->whereDoesntHave('team')
-                    ->orWhere('team_id', Filament::getTenant()->id);
+                $query->where('owner_id', null)
+                    ->orWhereHasMorph('owner', Team::class, fn (Builder $query): Builder => $query->whereKey(Filament::getTenant()->id));
             });
     }
 
@@ -70,9 +71,10 @@ trait IsLookupListResource
             ])
             ->filters([
                 TernaryFilter::make('custom')
+                    ->label('Show custom entries?')
                 ->queries(
-                    true: fn (Builder $query): Builder => $query->whereHas('team'),
-                    false: fn (Builder $query): Builder => $query->whereDoesntHave('team')
+                    true: fn (Builder $query): Builder => $query->whereHasMorph('owner', Team::class),
+                    false: fn (Builder $query): Builder => $query->where('owner_id', null),
                 )
             ])
             ->actions([

@@ -11,6 +11,7 @@ use App\Models\SampleFrame\Location;
 use App\Models\SampleFrame\LocationLevel;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Team extends \Stats4sd\FilamentOdkLink\Models\TeamManagement\Team
 {
@@ -49,24 +50,24 @@ class Team extends \Stats4sd\FilamentOdkLink\Models\TeamManagement\Team
 
     // lookup tables
 
-    public function animals(): HasMany
+    public function animals(): MorphMany
     {
-        return $this->hasMany(Animal::class);
+        return $this->morphMany(Animal::class, 'owner');
     }
 
-    public function animalProducts(): HasMany
+    public function animalProducts(): MorphMany
     {
-        return $this->hasMany(AnimalProduct::class);
+        return $this->morphMany(AnimalProduct::class, 'owner');
     }
 
-    public function crops(): HasMany
+    public function crops(): MorphMany
     {
-        return $this->hasMany(Crop::class);
+        return $this->morphMany(Crop::class, 'owner');
     }
 
-    public function cropProducts(): HasMany
+    public function cropProducts(): MorphMany
     {
-        return $this->hasMany(CropProduct::class);
+        return $this->morphMany(CropProduct::class, 'owner');
     }
 
     public function lookupTables(): BelongsToMany
