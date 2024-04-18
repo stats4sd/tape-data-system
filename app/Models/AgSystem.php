@@ -33,11 +33,13 @@ class AgSystem extends Model implements HasMedia
                 return;
             }
 
-            $updatedProps = $dataset->variables->mapWithKeys(function ($variable) {
-                return [$variable->name . '_complete' => false];
+            $props = $dataset->variables->mapWithKeys(function ($variable) {
+                return [$variable->name => ''];
             });
 
-            $agSystem->updateProps($updatedProps->toArray());
+            $agSystem->updateProperties($props->toArray());
+
+
         });
     }
 

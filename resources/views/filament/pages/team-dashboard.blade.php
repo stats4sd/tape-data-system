@@ -9,11 +9,10 @@ $record = $this->getRecord();
 
     <div class="flex mx-10 gap-x-10">
         <x-progress-header-entry :percent="25" :step-name="'Step 0'" :status="'In Progress'"/>
-        <x-progress-header-entry :percent="50" :step-name="'Prep'" :status="'In Progress'"/>
+        <x-progress-header-entry :percent="50" :step-name="'Preparation'" :status="'In Progress'"/>
         <x-progress-header-entry :percent="0" :step-name="'Step 1'" :status="'Not Started'"/>
         <x-progress-header-entry :percent="0" :step-name="'Step 2'" :status="'Not Started'"/>
         <x-progress-header-entry :percent="0" :step-name="'Step 3'" :status="'Not Started'"/>
-
     </div>
 
     @if ($headerWidgets = $this->getSummaryWidgets())

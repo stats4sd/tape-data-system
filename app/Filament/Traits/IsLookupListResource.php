@@ -89,15 +89,10 @@ trait IsLookupListResource
     public static function getNavigationBadge(): ?string
     {
         $team = HelperService::getSelectedTeam();
-
-        ray(static::class);
-
         if ($team?->hasCompletedLookupList(self::getModel()::getLinkedDataset())) {
-            ray('Complete');
             return 'Complete';
         }
 
-        ray('In Progress');
         return 'In Progress';
 
     }

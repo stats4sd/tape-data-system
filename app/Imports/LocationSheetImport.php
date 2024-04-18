@@ -44,8 +44,6 @@ class LocationSheetImport implements ShouldQueue, SkipsEmptyRows, ToModel, WithB
 
         $currentParent = null;
 
-        ray($row);
-        ray($this->data);
 
         // go through parents in order from highest to lowest. Ensure all parents exist in the database (and create them if they do not)
         foreach ($this->parentIds as $parentId) {

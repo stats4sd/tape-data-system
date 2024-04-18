@@ -38,7 +38,7 @@ class EditAgSystem extends EditRecord
         unset($data['name']);
 
 
-        $record->updateProps($data);
+        $record->updateProperties($data);
 
         return $record;
 

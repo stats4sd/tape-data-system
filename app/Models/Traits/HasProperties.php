@@ -34,11 +34,6 @@ trait HasProperties
 
         $this->update(['properties_complete' => $propsComplete]);
 
-
-        ray(!$this->properties_complete->get($name, false));
-        ray($this->properties_complete->toArray());
-
-
         return $this->propertyIsCompleted($name);
     }
 

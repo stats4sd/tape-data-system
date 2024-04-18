@@ -44,7 +44,6 @@ class LocationImport implements ShouldQueue, WithBatchInserts, WithChunkReading,
         return [
             ImportFailed::class => function (ImportFailed $event) {
 
-                ray('IMPORT FAILED!!');
 
                 Import::find($this->data['import_id'])
                     ->update([

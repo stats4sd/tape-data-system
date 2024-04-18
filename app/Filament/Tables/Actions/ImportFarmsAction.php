@@ -137,8 +137,6 @@ class ImportFarmsAction extends ExcelImportAction
                 'model_type' => Farm::class,
             ]);
 
-            ray($data);
-
             $import->addMedia(Storage::path($data['upload']))->toMediaCollection();
 
             $data['import_id'] = $import->id;

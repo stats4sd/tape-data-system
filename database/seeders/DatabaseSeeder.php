@@ -14,13 +14,6 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(RolesAndPermissionsSeeder::class);
 
-        // run test seeder in local
-        if (app()->environment('local') || app()->environment('staging')) {
-            $this->call(TestSeeder::class);
-            $this->call(TestLocationsSeeder::class);
-            $this->call(TestSiteSeeder::class);
-        }
-
         $this->call(PlatformSeeder::class);
         $this->call(UnitTypeSeeder::class);
 
@@ -35,6 +28,14 @@ class DatabaseSeeder extends Seeder
 
 
         $this->call(AeZoneSeeder::class);
+
+        // run test seeder in local
+        if (app()->environment('local') || app()->environment('staging')) {
+            $this->call(TestSeeder::class);
+            $this->call(TestLocationsSeeder::class);
+            $this->call(TestSiteSeeder::class);
+        }
+
 
     }
 }

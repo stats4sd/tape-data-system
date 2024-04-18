@@ -51,7 +51,6 @@ class FarmImport implements ShouldQueue, WithBatchInserts, WithChunkReading, Wit
                 if ($event->getException() instanceof ValidationException) {
                     $failures = collect($event->getException()->failures());
 
-                    ray($failures);
                     Import::find($this->data['import_id'])
                         ->update([
                             'errors' => $failures->map(function ($failure) {

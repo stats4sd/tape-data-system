@@ -12,7 +12,7 @@ class ListLookupTables extends ListRecords
 
     protected static string $view = 'filament.pages.list-records';
 
-    protected ?string $heading = 'Contextualise Survey: Choice Option Lists';
+    protected ?string $heading = 'Contextualise Survey';
 
     protected Infolist $tableInfoList;
 

@@ -7,29 +7,24 @@ use App\Filament\App\Resources\FarmResource;
 use App\Filament\App\Resources\SiteResource;
 use App\Filament\App\Widgets\TeamCounts;
 use App\Models\Team;
-use Filament\Facades\Filament;
+use App\Services\HelperService;
 use Filament\Pages\Page;
-use Illuminate\Database\Eloquent\Model;
 
 class TeamDashboard extends Page
 {
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
-
     protected ?string $maxContentWidth = '7xl';
+    protected static string $view = 'filament.pages.team-dashboard';
 
-    /**
-     * @return Team
-     */
-    public function getRecord(): Model
+    public function getRecord(): Team
     {
-        return Filament::getTenant();
+        return HelperService::getSelectedTeam();
     }
 
     public function getHeading(): string|\Illuminate\Contracts\Support\Htmlable
     {
         return $this->getRecord()->name . ' - Summary Page';
     }
-
 
     protected function getSummaryWidgets(): array
     {
@@ -43,22 +38,12 @@ class TeamDashboard extends Page
 
         $step = $this->getRecord()->currentStep();
 
-        switch ($step) {
-            case 0:
-                return $this->getPreSurveyActions();
-                break;
-
-            case 1:
-                return $this->getMidSurveyActions();
-                break;
-
-            case 3:
-                return $this->getPostSurveyActions();
-
-        }
+        return match ($step) {
+            1 => $this->getMidSurveyActions(),
+            2, 3 => $this->getPostSurveyActions(),
+            default => $this->getPreSurveyActions(),
+        };
     }
-
-    protected static string $view = 'filament.pages.team-dashboard';
 
     private function getPreSurveyActions(): array
     {

@@ -4,7 +4,6 @@ namespace App\Filament\App\Clusters\LookupTables\Resources;
 
 use App\Filament\App\Clusters\LookupTables;
 use App\Filament\App\Clusters\LookupTables\Resources\LookupTablesResource\Pages;
-use App\Filament\Traits\IsLookupListResource;
 use App\Models\Dataset;
 use Filament\Facades\Filament;
 use Filament\Forms\Form;
@@ -54,7 +53,7 @@ class LookupTablesResource extends Resource
                     ->boolean(),
                 Tables\Columns\IconColumn::make('is_required')
                 ->boolean()
-                    ->getStateUsing(fn ($record) => $record->name === 'Units'),
+                    ->getStateUsing(fn ($record) => $record->name === 'Units' || $record->name === 'Enumerators'),
             ])
             ->filters([
                 //

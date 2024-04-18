@@ -6,7 +6,6 @@ use App\Filament\App\Clusters\LookupTables;
 use App\Filament\App\Clusters\LookupTables\Resources\UnitResource\Pages;
 use App\Filament\Traits\IsLookupListResource;
 use App\Models\LookupTables\Unit;
-use App\Services\HelperService;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -20,7 +19,7 @@ class UnitResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?int $navigationSort = 0;
-    protected static ?string $navigationGroup = 'Required Tables';
+    protected static ?string $navigationGroup = 'Required Lists';
 
     protected static ?string $cluster = LookupTables::class;
 
