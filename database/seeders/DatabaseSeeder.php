@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
 
 
         $this->call(AeZoneSeeder::class);
+        $this->call(CaetSeeder::class);
 
         // run test seeder in local
         if (app()->environment('local') || app()->environment('staging')) {

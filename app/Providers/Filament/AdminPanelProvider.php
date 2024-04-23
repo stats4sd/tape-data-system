@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Admin\Resources\CaetScaleResource;
 use App\Filament\Admin\Resources\DatasetResource;
 use App\Http\Middleware\CheckIfAdmin;
 use Filament\Http\Middleware\Authenticate;
@@ -75,6 +76,7 @@ class AdminPanelProvider extends PanelProvider
                     ... XlsformTemplateResource::getNavigationItems(),
                     ... TeamResource::getNavigationItems(),
                     ... DatasetResource::getNavigationItems(),
+                    ... CaetScaleResource::getNavigationItems(),
                 ]);
             });
     }

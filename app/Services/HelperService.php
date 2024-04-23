@@ -73,7 +73,6 @@ class HelperService
         // remove \u{FEFF} within cells
         $csvFileContent = str_replace("\u{FEFF}", "", $csvFileContent);
 
-
         // Split by new line. Use the PHP_EOL constant for cross-platform compatibility.
         $lines = explode(PHP_EOL, $csvFileContent);
 
