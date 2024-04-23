@@ -13,6 +13,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\HtmlString;
+use Illuminate\Support\Str;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\Dataset;
 
 class DatasetResource extends Resource
@@ -40,7 +41,7 @@ class DatasetResource extends Resource
                     ->label('Which Database table does this dataset represent?')
                     ->options($models),
                 Forms\Components\Textarea::make('description')
-                    ->label('Description1')
+                    ->label('Enter a brief description of the dataset')
                     ->rows(3)
                     ->columnSpanFull(),
                 Forms\Components\Hidden::make('primary_key')
@@ -52,12 +53,15 @@ class DatasetResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->heading(new HtmlString('
-                    <p class="text-gray-500">Defined TAPE datasets - these datasets are collected or generated as part of the main TAPE process. Each team gets access to all their own data from each dataset. Global users (e.g. FAO) gets data from all teams who have enabled data sharing.</p>
-            '))
             ->columns([
                 Tables\Columns\TextColumn::make('name'),
-                Tables\Columns\TextColumn::make('database_table')
+                Tables\Columns\TextColumn::make('entity_model')
+                    ->label('Database Table')
+                ->formatStateUsing(fn ($state) => Str::of(collect(Str::ucsplit($state, '/'))->last())->lower()->plural()),
+                Tables\Columns\TextColumn::make('variables_count')
+                    ->label('# of Variables defined')
+                    ->counts('variables'),
+
             ])
             ->filters([
                 //
@@ -86,8 +90,6 @@ class DatasetResource extends Resource
     {
         return [
             'index' => Pages\ListDatasets::route('/'),
-            'create' => Pages\CreateDataset::route('/create'),
-            'edit' => Pages\EditDataset::route('/{record}/edit'),
             'view' => Pages\ViewDataset::route('/{record}'),
         ];
     }

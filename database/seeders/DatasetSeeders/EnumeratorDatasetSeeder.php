@@ -22,13 +22,25 @@ class EnumeratorDatasetSeeder extends Seeder
             'lookup_table' => true,
         ]);
 
-        $animalsForImport = HelperService::importCsvFileToCollection(storage_path('loading_data/enumerators.csv'));
+        $dataset->variables()
+            ->createMany([
+                [
+                    'name' => 'name',
+                    'label' => 'Enumerator Name',
+                ],
+                [
+                    'name' => 'label',
+                    'label' => 'The enumerator label as it will appear in the ODK form',
+                ],
+            ]);
 
-        foreach ($animalsForImport as $animalForImport) {
+        $enumeratorsForImport = HelperService::importCsvFileToCollection(storage_path('loading_data/enumerators.csv'));
 
-            $animal = Enumerator::create([
-                'name' => $animalForImport['name'],
-                'label' => $animalForImport['label']
+        foreach ($enumeratorsForImport as $enumeratorForImport) {
+
+            $enumerator = Enumerator::create([
+                'name' => $enumeratorForImport['name'],
+                'label' => $enumeratorForImport['label']
             ]);
         }
     }
