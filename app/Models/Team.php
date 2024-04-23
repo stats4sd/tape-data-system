@@ -12,9 +12,46 @@ use App\Models\SampleFrame\LocationLevel;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Stats4sd\FilamentOdkLink\Services\OdkLinkService;
 
 class Team extends \Stats4sd\FilamentOdkLink\Models\TeamManagement\Team
 {
+    // TODO: I think this overrides the booted method on HasXlsForms - ideally we wouldn't need to copy the package stuff here...
+    protected static function booted(): void
+    {
+        // check if we are in local-only (no-ODK link) mode
+        if (config('filament-odk-link.odk.url') === null || config('filament-odk-link.odk.url') == '') {
+            return;
+        }
+
+        $odkLinkService = app()->make(OdkLinkService::class);
+
+        // when the model is created; automatically create an associated project on ODK Central;
+        static::created(static function ($owner) use ($odkLinkService) {
+
+            // check if we are in local-only (no-ODK link) mode
+            if (config('filament-odk-link.odk.url') !== null && config('filament-odk-link.odk.url') !== '') {
+                $owner->createLinkedOdkProject($odkLinkService, $owner);
+            }
+
+            // create empty interpretation entries for the team:
+            // TODO: this probably is not great, and we should not require a bunch of empty entries!
+
+            $interpretations = CaetIndex::all()->map(fn ($index) => [
+                'team_id' => $owner->id,
+                'caet_index_id' => $index->id,
+                'interpretation' => '',
+            ])->toArray();
+
+            $owner->caetInterpretations()->createMany($interpretations);
+
+
+        });
+
+
+    }
+
+
     // Get the current step of the survey process for a team:
     public function currentStep(): int
     {
@@ -46,6 +83,11 @@ class Team extends \Stats4sd\FilamentOdkLink\Models\TeamManagement\Team
     public function imports(): HasMany
     {
         return $this->hasMany(Import::class);
+    }
+
+    public function caetInterpretations(): HasMany
+    {
+        return $this->hasMany(CaetInterpretation::class);
     }
 
     // lookup tables

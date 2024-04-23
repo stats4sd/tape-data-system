@@ -67,10 +67,10 @@ class TeamDashboard extends Page
                 'button_text' => 'Add Local Context',
             ],
             [
-                'title' => 'Prep: Test Survey',
-                'description' => 'Test the survey in full before starting the live data collection',
-                'url' => '#',
-                'button_text' => 'Test Survey',
+                'title' => 'Prep: CAET Interpretations',
+                'description' => 'Review the CAET Scales with local implimenting partners and decide if any clarifying text should be added for enumerators',
+                'url' => \App\Filament\App\Resources\CaetInterpretationResource::getUrl('index'),
+                'button_text' => 'Review CAET',
             ],
         ];
     }
