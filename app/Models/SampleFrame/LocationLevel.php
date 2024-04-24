@@ -2,15 +2,21 @@
 
 namespace App\Models\SampleFrame;
 
+use App\Models\Interfaces\LookupListEntry;
 use App\Models\Team;
+use App\Models\Traits\HasLinkedDataset;
+use App\Models\Traits\IsLookupList;
 use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
-class LocationLevel extends Model
+class LocationLevel extends Model implements LookupListEntry
 {
+    use HasLinkedDataset;
+    use IsLookupList;
+
     protected static function booted(): void
     {
         static::saving(function (self $locationLevel) {
@@ -19,7 +25,7 @@ class LocationLevel extends Model
 
         if(Filament::hasTenancy()) {
             static::addGlobalScope('team', function ($query) {
-                $query->where('team_id', Filament::getTenant()->id);
+                $query->where('owner_id', Filament::getTenant()->id);
             });
         }
     }
@@ -27,11 +33,6 @@ class LocationLevel extends Model
     public function getRouteKeyName(): string
     {
         return 'slug';
-    }
-
-    public function team(): BelongsTo
-    {
-        return $this->belongsTo(Team::class);
     }
 
     public function parent(): BelongsTo
@@ -47,5 +48,34 @@ class LocationLevel extends Model
     public function locations(): HasMany
     {
         return $this->hasMany(Location::class);
+    }
+
+    // the position of the location level in the hierarchy based on the owning team.
+    // This is used to find the correct location level to use in the ODK form's repeat group for locations. (NOTE - this assumes that there is a single hierarchy of location levels. Currently untested with more complex setups!)
+    public function pos()
+    {
+
+        $position = 1;
+        $level = $this;
+
+        while ($level->parent_id) {
+            $level = $level->parent;
+            $position++;
+        }
+
+        return $position;
+
+
+
+    }
+
+    public function getCsvContentsForOdk(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'pos' => $this->pos,
+            'has_farms' => $this->has_farms,
+        ];
     }
 }

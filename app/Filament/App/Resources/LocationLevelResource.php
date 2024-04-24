@@ -4,6 +4,7 @@ namespace App\Filament\App\Resources;
 
 use App\Filament\App\Resources\LocationLevelResource\Pages;
 use App\Filament\App\Resources\LocationLevelResource\RelationManagers\LocationsRelationManager;
+use App\Filament\Traits\IsLookupListResource;
 use App\Models\SampleFrame\LocationLevel;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -20,6 +21,8 @@ use Illuminate\Support\Str;
 
 class LocationLevelResource extends Resource
 {
+    use IsLookupListResource;
+
     protected static ?string $model = LocationLevel::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
@@ -28,7 +31,6 @@ class LocationLevelResource extends Resource
     {
         return null;
     }
-
     public static function getNavigationItems(): array
     {
         // make sure the original nav item is only 'active' when the index page is active.
@@ -48,6 +50,16 @@ class LocationLevelResource extends Resource
             });
 
         return array_merge($original, $navItems->toArray());
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return null;
+    }
+
+    public static function getNavigationBadgeColor(): string|array|null
+    {
+        return null;
     }
 
     public static function form(Form $form): Form

@@ -2,6 +2,7 @@
 
 namespace App\Models\Interfaces;
 
+// The required methods for a model to be used as a source for a csv file that will be published to ODK as a media attachment.
 interface LookupListEntry
 {
     public static function getLinkedDataset(): ?\App\Models\Dataset;
@@ -15,5 +16,8 @@ interface LookupListEntry
     public function isCustomised(): bool;
 
     public function owner(): \Illuminate\Database\Eloquent\Relations\MorphTo;
+
+    // Defines what goes into the csv file that will be published to ODK
+    public function getCsvContentsForOdk(): array;
 
 }

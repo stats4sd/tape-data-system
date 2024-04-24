@@ -19,4 +19,15 @@ class Unit extends Model implements LookupListEntry
         return $this->belongsTo(UnitType::class);
     }
 
+    public function getCsvContentsForOdk(): array
+    {
+        return [
+            'id'  => $this->id,
+            'unit_type_id' => $this->unitType->id,
+            'unit_type_name' => $this->unitType->name,
+            'name' => $this->name,
+            'label' => $this->label,
+            'conversion_rate' => $this->conversion_rate,
+        ];
+    }
 }

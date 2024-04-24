@@ -85,9 +85,9 @@ class Team extends \Stats4sd\FilamentOdkLink\Models\TeamManagement\Team
         return $this->hasMany(Import::class);
     }
 
-    public function caetInterpretations(): HasMany
+    public function caetInterpretations(): MorphMany
     {
-        return $this->hasMany(CaetInterpretation::class);
+        return $this->morphMany(CaetInterpretation::class, 'owner');
     }
 
     // lookup tables

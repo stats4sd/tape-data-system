@@ -12,7 +12,7 @@ return new class () extends Migration {
     {
         Schema::create('caet_interpretations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('team_id')->constrained();
+            $table->nullableMorphs('owner');
             $table->foreignId('caet_index_id')->constrained();
             $table->text('interpretation')->nullable();
             $table->timestamps();

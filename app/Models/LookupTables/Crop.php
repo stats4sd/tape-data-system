@@ -32,4 +32,13 @@ class Crop extends Model implements LookupListEntry
     {
         return $this->belongsTo(Team::class);
     }
+
+    public function getCsvContentsForOdk(): array
+    {
+        return [
+            'id'  => $this->id,
+            'name' => $this->name,
+            'label' => $this->label,
+        ];
+    }
 }

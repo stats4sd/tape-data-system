@@ -11,4 +11,13 @@ class Animal extends Model implements LookupListEntry
 {
     use HasLinkedDataset;
     use IsLookupList;
+
+    public function getCsvContentsForOdk(): array
+    {
+        return [
+            'id'  => $this->id,
+            'name' => $this->name,
+            'label' => $this->label,
+        ];
+    }
 }

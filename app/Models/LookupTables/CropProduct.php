@@ -18,4 +18,9 @@ class CropProduct extends Model implements LookupListEntry
     {
         return $this->belongsTo(Team::class);
     }
+
+    public function getCsvContentsForOdk(): array
+    {
+        // TODO: Implement getCsvContentsForOdk() method.
+    }
 }

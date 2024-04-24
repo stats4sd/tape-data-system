@@ -2,14 +2,20 @@
 
 namespace App\Models\SampleFrame;
 
+use App\Models\Interfaces\LookupListEntry;
 use App\Models\Team;
+use App\Models\Traits\HasLinkedDataset;
+use App\Models\Traits\IsLookupList;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Cache;
 
-class Location extends Model
+class Location extends Model implements LookupListEntry
 {
+    use HasLinkedDataset;
+    use IsLookupList;
+
     protected $casts = [
         'properties' => 'collection',
     ];
@@ -76,5 +82,19 @@ class Location extends Model
             $this->getKey(),
             $this->updated_at->timestamp
         );
+    }
+
+    public function getCsvContentsForOdk(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'location_level_id' => $this->location_level_id,
+            'location_level_name' => $this->locationLevel->name,
+            'parent_id' => $this->parent_id,
+            'parent_name' => $this->parent?->name,
+            'has_farms' => $this->locationLevel->has_farms,
+            'farms_all_count' => $this->farmsAllCount,
+        ];
     }
 }

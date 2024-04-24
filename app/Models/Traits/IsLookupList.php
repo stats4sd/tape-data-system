@@ -36,4 +36,11 @@ trait IsLookupList
     {
         return $this->morphTo();
     }
+
+    // get the column names for the ODK csv file (use the keys from the getCsvContentsForOdk method)
+    public static function getColumnsForOdk(): array
+    {
+        return collect((new static())->getCsvContentsForOdk())->keys()->toArray();
+    }
+
 }
