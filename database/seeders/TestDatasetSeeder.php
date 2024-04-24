@@ -59,7 +59,7 @@ class TestDatasetSeeder extends Seeder
 
             Farm::create([
                 'id' => $farmData['id'], // need to use the existing ID to properly link to CAET and performance assessment data.
-                'team_id' => $teams[$farmData['team_id'] - 1]->id, // handle case where there are already teams in the database.
+                'owner_id' => $teams[$farmData['team_id'] - 1]->id, // handle case where there are already teams in the database.
                 'team_code' => $farmData['pro_soils_farm_code'],
                 'latitude' => $farmData['latitude'] !== '' ? $farmData['latitude'] : null,
                 'longitude' => $farmData['longitude'] !== '' ? $farmData['longitude'] : null,

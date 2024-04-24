@@ -42,9 +42,10 @@ class CaetInterpretation extends Model implements LookupListEntry
 
     public function getCsvContentsForOdk(): array
     {
+
         return [
             'id'  => $this->id,
-            'xlsform_name' => $this->caetIndex->xlsform_name,
+            'xlsform_name' => $this->caetIndex?->xlsform_name,
             'interpretation' => $this->interpretation,
         ];
     }

@@ -7,6 +7,7 @@ use App\Models\Team;
 use App\Models\Traits\HasLinkedDataset;
 use App\Models\Traits\IsLookupList;
 use Filament\Facades\Filament;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -52,7 +53,7 @@ class LocationLevel extends Model implements LookupListEntry
 
     // the position of the location level in the hierarchy based on the owning team.
     // This is used to find the correct location level to use in the ODK form's repeat group for locations. (NOTE - this assumes that there is a single hierarchy of location levels. Currently untested with more complex setups!)
-    public function pos()
+    public function getPos(): int
     {
 
         $position = 1;
@@ -65,8 +66,13 @@ class LocationLevel extends Model implements LookupListEntry
 
         return $position;
 
+    }
 
-
+    public function pos(): Attribute
+    {
+        return new Attribute(
+            get: fn () => $this->getPos(),
+        );
     }
 
     public function getCsvContentsForOdk(): array

@@ -26,14 +26,14 @@ class CaetInterpretationResource extends Resource
         return $form
             ->schema([
                 Shout::make('info')
-                    ->content(fn(CaetInterpretation $record) => "Add a contextualised interpretation for the index {$record->caetIndex->name} of the element {$record->caetIndex->caetElement->name}."),
+                    ->content(fn (CaetInterpretation $record) => "Add a contextualised interpretation for the index {$record->caetIndex->name} of the element {$record->caetIndex->caetElement->name}."),
                 Shout::make('scale')
                     ->color('secondary')
                     ->icon('')
-                    ->content(fn(CaetInterpretation $record) => new HtmlString("
+                    ->content(fn (CaetInterpretation $record) => new HtmlString("
                         <h5 class='text-lg font-bold'>Rubric for scoring the index</h5>
                         <ul>
-                            {$record->caetIndex->caetScales->filter(fn($scale): bool => ($scale->score*2) % 2 === 0)->map(fn($scale): string => "<li>{$scale->definition}</li>")->join('')}
+                            {$record->caetIndex->caetScales->filter(fn ($scale): bool => ($scale->score * 2) % 2 === 0)->map(fn ($scale): string => "<li>{$scale->definition}</li>")->join('')}
                         </ul>
 ")),
                 Textarea::make('interpretation')
@@ -56,7 +56,7 @@ class CaetInterpretationResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make()
-                    ->modalHeading(fn(CaetInterpretation $record) => "CAET: {$record->caetIndex->caetElement->name} - {$record->caetIndex->name}"),
+                    ->modalHeading(fn (CaetInterpretation $record) => "CAET: {$record->caetIndex->caetElement->name} - {$record->caetIndex->name}"),
             ])
             ->bulkActions([
             ]);

@@ -12,7 +12,7 @@ return new class () extends Migration {
     {
         Schema::create('farms', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('team_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->nullableMorphs('owner');
             $table->foreignId('site_id')->nullable()->constrained()->nullOnDelete()->cascadeOnUpdate();
             $table->foreignId('location_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('team_code'); // should be unique per team

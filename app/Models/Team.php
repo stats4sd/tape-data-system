@@ -19,17 +19,12 @@ class Team extends \Stats4sd\FilamentOdkLink\Models\TeamManagement\Team
     // TODO: I think this overrides the booted method on HasXlsForms - ideally we wouldn't need to copy the package stuff here...
     protected static function booted(): void
     {
-        // check if we are in local-only (no-ODK link) mode
-        if (config('filament-odk-link.odk.url') === null || config('filament-odk-link.odk.url') == '') {
-            return;
-        }
-
-        $odkLinkService = app()->make(OdkLinkService::class);
 
         // when the model is created; automatically create an associated project on ODK Central;
-        static::created(static function ($owner) use ($odkLinkService) {
+        static::created(static function ($owner) {
 
             // check if we are in local-only (no-ODK link) mode
+            $odkLinkService = app()->make(OdkLinkService::class);
             if (config('filament-odk-link.odk.url') !== null && config('filament-odk-link.odk.url') !== '') {
                 $owner->createLinkedOdkProject($odkLinkService, $owner);
             }
@@ -38,7 +33,8 @@ class Team extends \Stats4sd\FilamentOdkLink\Models\TeamManagement\Team
             // TODO: this probably is not great, and we should not require a bunch of empty entries!
 
             $interpretations = CaetIndex::all()->map(fn ($index) => [
-                'team_id' => $owner->id,
+                'owner_id' => $owner->id,
+                'owner_type' => static::class,
                 'caet_index_id' => $index->id,
                 'interpretation' => '',
             ])->toArray();
@@ -60,9 +56,9 @@ class Team extends \Stats4sd\FilamentOdkLink\Models\TeamManagement\Team
 
     }
 
-    public function farms(): HasMany
+    public function farms(): MorphMany
     {
-        return $this->hasMany(Farm::class);
+        return $this->morphMany(Farm::class, 'owner');
     }
 
     public function sites(): HasMany
@@ -75,9 +71,9 @@ class Team extends \Stats4sd\FilamentOdkLink\Models\TeamManagement\Team
         return $this->hasMany(LocationLevel::class);
     }
 
-    public function locations(): HasMany
+    public function locations(): MorphMany
     {
-        return $this->hasMany(Location::class);
+        return $this->morphMany(Location::class, 'owner');
     }
 
     public function imports(): HasMany

@@ -72,6 +72,12 @@ class TeamDashboard extends Page
                 'url' => \App\Filament\App\Resources\CaetInterpretationResource::getUrl('index'),
                 'button_text' => 'Review CAET',
             ],
+            [
+                'title' => 'Preview Survey',
+                'description' => 'Preview the survey using ODK Collect. This is a good way to check that the survey is working as expected.',
+                'url' => '#',
+                'button_text' => 'Preview Survey',
+            ]
         ];
     }
 

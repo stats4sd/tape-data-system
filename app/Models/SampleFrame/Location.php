@@ -80,7 +80,7 @@ class Location extends Model implements LookupListEntry
             '%s/%s-%s',
             $this->getTable(),
             $this->getKey(),
-            $this->updated_at->timestamp
+            $this->updated_at,
         );
     }
 
@@ -90,10 +90,10 @@ class Location extends Model implements LookupListEntry
             'id' => $this->id,
             'name' => $this->name,
             'location_level_id' => $this->location_level_id,
-            'location_level_name' => $this->locationLevel->name,
+            'location_level_name' => $this->locationLevel?->name,
             'parent_id' => $this->parent_id,
             'parent_name' => $this->parent?->name,
-            'has_farms' => $this->locationLevel->has_farms,
+            'has_farms' => $this->locationLevel?->has_farms,
             'farms_all_count' => $this->farmsAllCount,
         ];
     }

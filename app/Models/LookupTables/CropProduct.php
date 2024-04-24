@@ -21,6 +21,10 @@ class CropProduct extends Model implements LookupListEntry
 
     public function getCsvContentsForOdk(): array
     {
-        // TODO: Implement getCsvContentsForOdk() method.
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'label' => $this->label,
+        ];
     }
 }

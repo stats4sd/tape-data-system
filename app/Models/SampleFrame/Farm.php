@@ -42,7 +42,7 @@ class Farm extends Model implements LookupListEntry
         return [
             'id'  => $this->id,
             'location_id' => $this->location_id,
-            'location_name' => $this->location->name,
+            'location_name' => $this->location?->name,
             'team_code' => $this->team_code,
             'label' => $this->label,
         ];

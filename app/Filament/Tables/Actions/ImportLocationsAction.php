@@ -127,7 +127,7 @@ class ImportLocationsAction extends ExcelImportAction
         return function (array $data, $livewire): bool {
 
             if($data['override'] === 'yes') {
-                Location::where('team_id', Filament::getTenant()->id)->delete();
+                Location::where('owner_id', Filament::getTenant()->id)->delete();
             }
 
 
