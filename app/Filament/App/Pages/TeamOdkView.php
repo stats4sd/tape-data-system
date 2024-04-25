@@ -20,6 +20,7 @@ use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\HtmlString;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\Xlsform;
 use Stats4sd\FilamentOdkLink\Services\OdkLinkService;
 
@@ -72,7 +73,27 @@ class TeamOdkView extends Page implements HasTable, HasInfolists
             ->columns([
                 TextColumn::make('title')
                     ->grow(false),
-                TextColumn::make('status'),
+                TextColumn::make('status')
+                    ->color(fn($state) => match ($state) {
+                        'UPDATES AVAILABLE' => 'danger',
+                        'LIVE' => 'success',
+                        'DRAFT' => 'info',
+                        default => 'light',
+                    })
+                    ->iconColor(fn($state) => match ($state) {
+                        'UPDATES AVAILABLE' => 'danger',
+                        'LIVE' => 'success',
+                        'DRAFT' => 'info',
+                        default => 'light',
+                    })
+                    ->icon(fn($state) => match ($state) {
+                        'UPDATES AVAILABLE' => 'heroicon-o-exclamation-circle',
+                        'LIVE' => 'heroicon-o-check',
+                        'DRAFT' => 'heroicon-o-pencil',
+                        default => 'heroicon-o-unknown',
+                    })
+                    ->label('Status'),
+
                 TextColumn::make('live_submissions_count')
                     ->label('No. of Submissions'),
             ])
@@ -114,21 +135,12 @@ class TeamOdkView extends Page implements HasTable, HasInfolists
                         // call API to publish form in ODK central
                         $odkLinkService->publishForm($record);
                     }),
-//
-//                // add Pull Submissions button
-//                Action::make('pull_submissions')
-//                    ->label('Pull Submissions')
-//                    ->icon('heroicon-m-arrow-down-tray')
-//                    ->action(function (Xlsform $record) {
-//                        $odkLinkService = app()->make(OdkLinkService::class);
-//
-//                        // call API to pull submissions from ODK central
-//                        $odkLinkService->getSubmissions($record);
-//                    }),
-//
+
                 TableAction::make('update_published_version')
                     ->visible(fn(Xlsform $record) => !$record->has_latest_template)
                     ->label('Deploy Updates')
+                    ->requiresConfirmation()
+                    ->modalDescription('This will update the form to the latest version of the xlsform template uploaded to the platform. Are you sure you want to proceed? (NOTE: if this form is live, you may need to tell your enumerators to re-download the form to get the latest version)')
                     ->action(function (Xlsform $record) {
 
                         $record->syncWithTemplate();
@@ -143,6 +155,8 @@ class TeamOdkView extends Page implements HasTable, HasInfolists
 
                 TableAction::make('update_team_data')
                     ->label('Publish Latest Lookup Data')
+                    ->requiresConfirmation()
+                    ->modalDescription(new HtmlString('This will publish the latest team data from the platform to be used in the form. Are you sure you want to proceed? <br/><br/><b>NOTE</b>: if this form is live, you may need to tell your enumerators to re-download the form to get the latest version'))
                     ->visible(fn(Xlsform $record) => !$record->has_latest_media)
                 ->action(function (Xlsform $record) {
                     $record->publishForm(app()->make(OdkLinkService::class));

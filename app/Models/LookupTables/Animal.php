@@ -4,14 +4,10 @@ namespace App\Models\LookupTables;
 
 class Animal extends LookupEntry
 {
-    protected static function booted(): void
-    {
-        parent::booted();
-
-        static::saved(static function (Animal $animal) {
-            ray('RUNNING ON ANIMAL MODEL - Saved entry for animal - ' . $animal->id);
-        });
-    }
+//    protected static function booted(): void
+//    {
+//        parent::booted();
+//    }
 
     public function getCsvContentsForOdk(): array
     {
