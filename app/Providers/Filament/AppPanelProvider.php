@@ -6,6 +6,7 @@ use App\Filament\App\Clusters\LookupTables;
 use App\Filament\App\Pages\AccountSettingsPage;
 use App\Filament\App\Pages\RegisterTeam;
 use App\Filament\App\Pages\TeamDashboard;
+use App\Filament\App\Pages\TeamOdkView;
 use App\Filament\App\Resources\FarmResource;
 use App\Filament\App\Resources\ImportResource;
 use App\Filament\App\Resources\LocationLevelResource;
@@ -99,6 +100,7 @@ class AppPanelProvider extends PanelProvider
                         ...SiteResource::getNavigationItems(),
                         ...LookupTables::getNavigationItems(),
                         ...ImportResource::getNavigationItems(),
+                        ...TeamOdkView::getNavigationItems(),
 
                     ]);
             })
