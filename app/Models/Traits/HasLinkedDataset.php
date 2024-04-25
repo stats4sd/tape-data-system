@@ -11,9 +11,10 @@ trait HasLinkedDataset
 {
     public static function getLinkedDataset(): ?Dataset
     {
-        return Dataset::where('entity_model', self::class)
-            ->orWhere('entity_model', '\\' . self::class)
+        return Dataset::where('entity_model', static::class)
+            ->orWhere('entity_model', '\\' . static::class)
             ->first();
     }
+
 
 }

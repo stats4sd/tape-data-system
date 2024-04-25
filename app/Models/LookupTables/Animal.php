@@ -2,15 +2,16 @@
 
 namespace App\Models\LookupTables;
 
-use App\Models\Interfaces\LookupListEntry;
-use App\Models\Traits\HasLinkedDataset;
-use App\Models\Traits\IsLookupList;
-use Illuminate\Database\Eloquent\Model;
-
-class Animal extends Model implements LookupListEntry
+class Animal extends LookupEntry
 {
-    use HasLinkedDataset;
-    use IsLookupList;
+    protected static function booted(): void
+    {
+        parent::booted();
+
+        static::saved(static function (Animal $animal) {
+            ray('RUNNING ON ANIMAL MODEL - Saved entry for animal - ' . $animal->id);
+        });
+    }
 
     public function getCsvContentsForOdk(): array
     {

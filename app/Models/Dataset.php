@@ -6,6 +6,7 @@ use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Collection;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\RequiredMedia;
 
 class Dataset extends \Stats4sd\FilamentOdkLink\Models\OdkLink\Dataset
 {
@@ -63,5 +64,20 @@ class Dataset extends \Stats4sd\FilamentOdkLink\Models\OdkLink\Dataset
                 get: fn () => null,
             );
         }
+    }
+
+    public function markLiveXlsformsWithMediaUpdate()
+    {
+        ray('running mark live');
+
+        $this->requiredMedia
+            ->each(function (RequiredMedia $media) {
+
+                ray('found media ', $media);
+
+                $media->xlsformTemplate->xlsforms()
+                    ->where('is_active', true)
+                    ->update(['has_latest_media' => false]);
+            });
     }
 }

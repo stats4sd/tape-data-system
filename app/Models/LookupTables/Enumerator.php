@@ -7,11 +7,8 @@ use App\Models\Traits\HasLinkedDataset;
 use App\Models\Traits\IsLookupList;
 use Illuminate\Database\Eloquent\Model;
 
-class Enumerator extends Model implements LookupListEntry
+class Enumerator extends LookupEntry
 {
-    use HasLinkedDataset;
-    use IsLookupList;
-
     public function getCsvContentsForOdk(): array
     {
         return [
