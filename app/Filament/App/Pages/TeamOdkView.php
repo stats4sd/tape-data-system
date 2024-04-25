@@ -2,10 +2,12 @@
 
 namespace App\Filament\App\Pages;
 
+use App\Filament\App\Resources\XlsformResource;
 use App\Models\Team;
 use App\Services\HelperService;
 use Awcodes\Shout\Components\Shout;
 use Filament\Actions\Action;
+use Filament\Actions\ViewAction;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Infolists\Components\ViewEntry;
 use Filament\Infolists\Concerns\InteractsWithInfolists;
@@ -117,6 +119,11 @@ class TeamOdkView extends Page implements HasTable, HasInfolists
             ])
             ->actions([
 
+                TableAction::make('show submissions')
+                    ->url(fn(Xlsform $record) => XlsformResource::getUrl('view', ['record' => $record]))
+                    ->label('Show Submissions'),
+
+
                 // add Publish button
                 TableAction::make('publish')
                     ->label('Publish')
@@ -144,6 +151,7 @@ class TeamOdkView extends Page implements HasTable, HasInfolists
                     ->action(function (Xlsform $record) {
 
                         $record->syncWithTemplate();
+                        $record->publishForm(app()->make(OdkLinkService::class));
                         $record->refresh();
 
                         Notification::make('update_success')
@@ -160,6 +168,8 @@ class TeamOdkView extends Page implements HasTable, HasInfolists
                     ->visible(fn(Xlsform $record) => !$record->has_latest_media)
                 ->action(function (Xlsform $record) {
                     $record->publishForm(app()->make(OdkLinkService::class));
+
+                    $record->refresh();
 
                     Notification::make('update_success')
                         ->title('Success!')
