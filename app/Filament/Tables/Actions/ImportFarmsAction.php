@@ -106,8 +106,10 @@ class ImportFarmsAction extends ExcelImportAction
                         ->live()
                         ->columnSpanFull(),
 
-                    Hidden::make('team_id')
-                        ->default(Filament::getTenant()->id)
+                    Hidden::make('owner_id')
+                        ->default(Filament::getTenant()->id),
+                    Hidden::make('owner_type')
+                        ->default('App\Models\Team'),
 
                 ]),
 

@@ -22,7 +22,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use Stats4sd\FilamentOdkLink\Filament\Resources\TeamResource;
+use App\Filament\Admin\Resources\TeamResource;
 use Stats4sd\FilamentOdkLink\Filament\Resources\XlsformTemplateResource;
 
 class AdminPanelProvider extends PanelProvider

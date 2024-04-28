@@ -49,7 +49,8 @@ class LocationSheetImport implements ShouldQueue, SkipsEmptyRows, ToModel, WithB
         foreach ($this->parentIds as $parentId) {
             Location::upsert(
                 values: [
-                    'team_id' => $this->data['team_id'],
+                    'owner_id' => $this->data['team_id'],
+                    'owner_type' => $this->data['owner_type'],
                     'code' => $row[$this->data["parent_{$parentId}_code_column"]],
                     'name' => $row[$this->data["parent_{$parentId}_name_column"]],
                     'location_level_id' => $parentId,

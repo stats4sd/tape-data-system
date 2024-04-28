@@ -66,9 +66,9 @@ class Team extends \Stats4sd\FilamentOdkLink\Models\TeamManagement\Team
         return $this->hasMany(Site::class);
     }
 
-    public function locationLevels(): HasMany
+    public function locationLevels(): MorphMany
     {
-        return $this->hasMany(LocationLevel::class);
+        return $this->morphMany(LocationLevel::class, 'owner');
     }
 
     public function locations(): MorphMany

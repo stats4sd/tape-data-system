@@ -6,6 +6,8 @@ use App\Filament\App\Resources\LocationLevelResource\Pages;
 use App\Filament\App\Resources\LocationLevelResource\RelationManagers\LocationsRelationManager;
 use App\Filament\Traits\IsLookupListResource;
 use App\Models\SampleFrame\LocationLevel;
+use App\Services\HelperService;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -72,10 +74,15 @@ class LocationLevelResource extends Resource
                     ->placeholder('None')
                     ->relationship('parent', 'name'),
                 TextInput::make('name')
+                    ->required()
                     ->maxLength(255),
                 Toggle::make('has_farms')
                     ->label('Are there farms at this level?')
                     ->helperText('Only say yes if there are farms directly at this location level, not in a lower location level. E.g. "Village" may have farms, but "District" may not.'),
+                Hidden::make('owner_id')
+                ->default(fn () => HelperService::getSelectedTeam()->id),
+                Hidden::make('owner_type')
+                ->default('App\Models\Team'),
             ])->columns(1);
     }
 

@@ -106,8 +106,10 @@ class ImportLocationsAction extends ExcelImportAction
                 ->default(fn ($livewire) => $livewire->getRecord()),
             Hidden::make('user_id')
                 ->default(fn () => auth()->id()),
-            Hidden::make('team_id')
+            Hidden::make('owner_id')
                 ->default(Filament::getTenant()->id),
+            Hidden::make('owner_type')
+            ->default('App\Models\Team'),
         ];
     }
 

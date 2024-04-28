@@ -12,8 +12,9 @@ use Filament\Tables\Table;
 class FarmResource extends Resource
 {
     protected static ?string $model = Farm::class;
-
     protected static ?string $navigationIcon = null;
+
+    protected static ?string $tenantOwnershipRelationshipName = 'owner';
 
     public static function form(Form $form): Form
     {
@@ -26,7 +27,7 @@ class FarmResource extends Resource
     public static function table(Table $table): Table
     {
 
-        $identifiers = Farm::all()->map(fn ($farm) => $farm->identifiers->keys())
+        $identifiers = Farm::all()->map(fn (Farm $farm) => $farm->identifiers->keys())
             ->flatten()->unique()->values();
 
         $idColumns = $identifiers->map(fn ($identifier) => Tables\Columns\TextColumn::make("identifiers.{$identifier}")->label(ucfirst($identifier)));

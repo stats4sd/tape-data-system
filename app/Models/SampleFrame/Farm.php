@@ -5,12 +5,11 @@ namespace App\Models\SampleFrame;
 use App\Models\Interfaces\LookupListEntry;
 use App\Models\SurveyData\CaetAssessment;
 use App\Models\SurveyData\PerformanceAssessment;
-use App\Models\Team;
 use App\Models\Traits\HasLinkedDataset;
 use App\Models\Traits\IsLookupList;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Farm extends Model implements LookupListEntry
 {
@@ -22,9 +21,9 @@ class Farm extends Model implements LookupListEntry
         'properties' => 'collection',
     ];
 
-    public function team(): BelongsTo
+    public function owner(): MorphTo
     {
-        return $this->belongsTo(Team::class);
+        return $this->morphTo('owner');
     }
 
     public function caetAssessments(): HasMany
