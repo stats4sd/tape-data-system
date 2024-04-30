@@ -89,7 +89,7 @@ class TeamOdkView extends Page implements HasTable, HasInfolists
                         'UPDATES AVAILABLE' => 'heroicon-o-exclamation-circle',
                         'LIVE' => 'heroicon-o-check',
                         'DRAFT' => 'heroicon-o-pencil',
-                        default => 'heroicon-o-unknown',
+                        default => 'heroicon-o-information-circle',
                     })
                     ->label('Status'),
 
