@@ -9,11 +9,8 @@ use App\Models\UnitType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Unit extends Model implements LookupListEntry
+class Unit extends LookupEntry
 {
-    use HasLinkedDataset;
-    use IsLookupList;
-
     public function unitType(): BelongsTo
     {
         return $this->belongsTo(UnitType::class);
