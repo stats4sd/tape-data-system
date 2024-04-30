@@ -41,9 +41,6 @@ class TeamOdkView extends Page implements HasTable, HasInfolists
     protected function getHeaderActions(): array
     {
         return [
-            Action::make('Do Something!')
-                ->action(fn () => Notification::make('You did something!')
-                    ->title('You did something!')->sendToDatabase(Auth::user())->success()->broadcast(Auth::user())),
         ];
     }
 

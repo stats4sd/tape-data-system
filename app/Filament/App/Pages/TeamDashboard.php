@@ -75,7 +75,7 @@ class TeamDashboard extends Page
             [
                 'title' => 'Preview Survey',
                 'description' => 'Preview the survey using ODK Collect. This is a good way to check that the survey is working as expected.',
-                'url' => '#',
+                'url' => TeamOdkView::getUrl(),
                 'button_text' => 'Preview Survey',
             ]
         ];
