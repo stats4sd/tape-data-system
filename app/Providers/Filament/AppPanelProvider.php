@@ -38,6 +38,7 @@ class AppPanelProvider extends PanelProvider
         // test
         return $panel
             ->default()
+            ->registration()
             ->id('app')
             ->path('app')
             ->viteTheme('resources/css/filament/app/theme.css')
