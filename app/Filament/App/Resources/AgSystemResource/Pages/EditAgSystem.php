@@ -25,7 +25,7 @@ class EditAgSystem extends EditRecord
 
     public function getHeading(): string | Htmlable
     {
-        return $this->getRecord()->productive_activities ?? 'hi';
+        return $this->getRecord()->name;
     }
 
     protected function handleRecordUpdate(AgSystem|Model $record, array $data): AgSystem
