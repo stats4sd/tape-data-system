@@ -25,6 +25,8 @@ class DatabaseSeeder extends Seeder
             $this->call("Database\Seeders\DatasetSeeders\\$class");
         }
 
+        $this->call(TapeDatasetSeeders::class);
+
 
 
         $this->call(AeZoneSeeder::class);
