@@ -64,7 +64,6 @@ class FarmImport implements ShouldQueue, WithBatchInserts, WithChunkReading, Wit
                             })->toArray(),
                         ]);
                 } else {
-                    ray('OH NO! ANyway...');
                     Import::find($this->data['import_id'])
                         ->update([
                             'errors' => [
