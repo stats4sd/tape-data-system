@@ -35,8 +35,11 @@ class TestRemoveSub extends Command
         EntityValue::destroy(EntityValue::all()->pluck('id')->toArray());
         Entity::destroy(Entity::all()->pluck('id')->toArray());
 
-        // not sure why it does not delete records in submissions table...
-        Submission::destroy(Submission::all()->pluck('id')->toArray());
+        // It seems that we cannot use soft delete here, because column odk_id is unique.
+        // We must physically delete the previously created submission record before storing it again in submission table
+
+        // Submission::destroy(Submission::all()->pluck('id')->toArray());
+        Submission::truncate();
 
         Cache::flush();
     }

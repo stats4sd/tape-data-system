@@ -11,6 +11,6 @@ class SubmissionController extends Controller
     public static function process(Submission $submission): void
     {
         // application specific business logic goes here
-        logger('SubmissionController.process()...');
+        // logger('SubmissionController.process()...');
     }
 }
