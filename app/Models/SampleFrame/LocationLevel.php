@@ -24,7 +24,7 @@ class LocationLevel extends Model implements LookupListEntry
             $locationLevel->slug = $locationLevel->slug ?? Str::slug($locationLevel->name);
         });
 
-        if(Filament::hasTenancy()) {
+        if(Filament::hasTenancy() && Filament::getTenant() instanceof Team) {
             static::addGlobalScope('team', function ($query) {
                 $query->where('owner_id', Filament::getTenant()->id);
             });
