@@ -37,6 +37,7 @@ class FarmResource extends Resource
                 Tables\Columns\TextColumn::make('site.name'),
                 Tables\Columns\TextColumn::make('location.name'),
                 Tables\Columns\TextColumn::make('team_code')->label('Unique Code'),
+                Tables\Columns\TextColumn::make('farmGroups.name')->listWithLineBreaks()->badge(),
                 ...$idColumns,
 
             ])

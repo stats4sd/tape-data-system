@@ -2,23 +2,24 @@
 
 namespace App\Filament\Tables\Actions;
 
-use App\Models\Import;
-use App\Models\SampleFrame\Farm;
-use App\Models\SampleFrame\LocationLevel;
 use Closure;
-use EightyNine\ExcelImport\ExcelImportAction;
-use Filament\Facades\Filament;
-use Filament\Forms\Components\CheckboxList;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Hidden;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Select;
+use App\Models\Import;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
-use Illuminate\Support\Facades\Storage;
-use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
+use Filament\Facades\Filament;
+use App\Models\SampleFrame\Farm;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Models\SampleFrame\FarmGroup;
+use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Section;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\HeadingRowImport;
+use App\Models\SampleFrame\LocationLevel;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\CheckboxList;
+use EightyNine\ExcelImport\ExcelImportAction;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 /**
  * Custom action to import farms from an Excel file.
@@ -32,12 +33,14 @@ class ImportFarmsAction extends ExcelImportAction
 
         $this
             ->modalWidth('3xl')
-            ->modalDescription('Import Farms from an Excel file. The first worksheet of the Excel file should contain the data to import. The first row of the worksheet should contain the column headings. You must have already created or imported the locations that the farms will be associated with.');
+            ->modalDescription('Import Farms from an Excel file. The first worksheet of the Excel file should contain the data to import. The first row of the worksheet should contain the column headings. You must have already created or imported the locations and groups that the farms will be associated with.');
 
     }
 
     protected function getDefaultForm(): array
     {
+        $groups= FarmGroup::all()->pluck('name', 'id')->toArray();
+
         return [
             FileUpload::make('upload')
                 ->label(fn ($livewire) => str($livewire->getTable()->getPluralModelLabel())->title() . ' Excel Data')
@@ -72,6 +75,15 @@ class ImportFarmsAction extends ExcelImportAction
             Select::make('location_code_column')
                 ->options(fn (Get $get) => $get('header_columns'))
                 ->label(fn (Get $get) => 'Which column contains the ' . (LocationLevel::find($get('location_level_id'))?->name ?? 'location') . ' unique code?'),
+
+            Section::make('Farm Groups')
+                ->schema([
+                    ...array_map(function ($name, $id) {
+                        return Select::make('group_columns')
+                            ->label("Which column indicates the farm grouping $name?")
+                            ->options(fn (Get $get) => $get('header_columns'));
+                    }, array_values($groups), array_keys($groups)),
+                ]),
 
             Section::make('Farm Information')
                 ->columns(2)

@@ -89,8 +89,8 @@ class AppPanelProvider extends PanelProvider
                         ->icon('heroicon-o-map-pin')
                         ->items([
                             ...LocationLevelResource::getNavigationItems(),
-                            ...FarmResource::getNavigationItems(),
                             ...FarmGroupResource::getNavigationItems(),
+                            ...FarmResource::getNavigationItems(),
                         ]),
                 ])
                     ->items([

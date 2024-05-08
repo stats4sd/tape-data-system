@@ -24,8 +24,11 @@ class FarmGroupResource extends Resource
     {
         return $form
             ->schema([
-                //
-            ]);
+                Forms\Components\TextInput::make('name'),
+                Forms\Components\TextArea::make('description')
+                    ->label('Add a short description for the farm group')
+                    ->maxLength(255),
+            ])->columns(1);
     }
 
     public static function table(Table $table): Table
@@ -33,9 +36,10 @@ class FarmGroupResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name'),
+                Tables\Columns\TextColumn::make('description')->wrap(),
                 Tables\Columns\TextColumn::make('farms_count')
                                     ->counts('farms')
-                                    ->label('# Farms')
+                                    ->label('# of Farms')
                                     ->sortable(),
             ])
             ->filters([
