@@ -36,11 +36,28 @@ class FarmSheetImport implements ShouldQueue, SkipsEmptyRows, ToModel, WithBatch
             ->where('location_level_id', $locationLevel->id)
             ->first();
 
-        // TODO: handle Identifiers and Properties
+        ray($this->data);
+
+        // Find the identifier columns;
+        $identifierColumns = collect($this->data['farm_identifiers'])->map(fn ($identifier) => $headers[$identifier]);
+
+        // Get the data from those columns;
+        $identifierData = $identifierColumns->mapWithKeys(fn ($column) => [$column => $row[$column]]);
+
+        // Find the property columns;
+        $propertyColumns = collect($this->data['farm_properties'])->map(fn ($property) => $headers[$property]);
+
+        // Get the data from those columns;
+        $propertyData = $propertyColumns->mapWithKeys(fn ($column) => [$column => $row[$column]]);
+
 
         return new Farm([
+            'owner_id' => $this->data['owner_id'],
+            'owner_type' => $this->data['owner_type'],
             'location_id' => $location->id,
-            'code' => $row[$farmCodeColumn],
+            'team_code' => $row[$farmCodeColumn],
+            'identifiers' => $identifierData,
+            'properties' => $propertyData,
         ]);
     }
 
