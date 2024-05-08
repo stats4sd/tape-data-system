@@ -2,16 +2,11 @@
 
 namespace App\Models\LookupTables;
 
-use App\Models\Interfaces\LookupListEntry;
-use App\Models\Team;
-use App\Models\Traits\HasLinkedDataset;
-use App\Models\Traits\IsLookupList;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\Traits\CanBeHiddenFromContext;
 
 class CropProduct extends LookupEntry
 {
-
+    use CanBeHiddenFromContext;
 
     public function getCsvContentsForOdk(): array
     {

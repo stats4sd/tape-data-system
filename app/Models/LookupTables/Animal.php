@@ -2,12 +2,11 @@
 
 namespace App\Models\LookupTables;
 
+use App\Models\Traits\CanBeHiddenFromContext;
+
 class Animal extends LookupEntry
 {
-//    protected static function booted(): void
-//    {
-//        parent::booted();
-//    }
+    use CanBeHiddenFromContext;
 
     public function getCsvContentsForOdk(): array
     {

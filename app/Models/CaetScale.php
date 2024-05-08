@@ -2,17 +2,11 @@
 
 namespace App\Models;
 
-use App\Models\Interfaces\LookupListEntry;
-use App\Models\Traits\HasLinkedDataset;
-use App\Models\Traits\IsLookupList;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\LookupTables\LookupEntry;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class CaetScale extends Model implements LookupListEntry
+class CaetScale extends LookupEntry
 {
-    use HasLinkedDataset;
-    use IsLookupList;
-
     public function caetIndex(): BelongsTo
     {
         return $this->belongsTo(CaetIndex::class);

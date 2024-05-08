@@ -26,6 +26,12 @@ class LookupEntry extends Model implements LookupListEntry
         });
     }
 
+    // Set default. This is overwritten by the CanBeHiddenFromContext trait in some cases.
+    public static function canBeHiddenFromContext(): bool
+    {
+        return false;
+    }
+
     // Generic CSV content. Should be overwritten by specific classes when the csv file contents needs to be specific.
     public function getCsvContentsForOdk(): array
     {
