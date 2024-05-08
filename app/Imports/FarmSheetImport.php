@@ -36,8 +36,6 @@ class FarmSheetImport implements ShouldQueue, SkipsEmptyRows, ToModel, WithBatch
             ->where('location_level_id', $locationLevel->id)
             ->first();
 
-        ray($this->data);
-
         // Find the identifier columns;
         $identifierColumns = collect($this->data['farm_identifiers'])->map(fn ($identifier) => $headers[$identifier]);
 
