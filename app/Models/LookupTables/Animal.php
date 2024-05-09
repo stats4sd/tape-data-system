@@ -12,7 +12,6 @@ class Animal extends LookupEntry
     public function getCsvContentsForOdk(?WithXlsforms $team = null): array
     {
         if ($team) {
-            ray('team', $team->id);
             $isRelevant = $this->isRemoved($team) ? 0 : 1;
         } else {
             $isRelevant = null;
