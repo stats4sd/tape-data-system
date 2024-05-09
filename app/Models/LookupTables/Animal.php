@@ -21,7 +21,7 @@ class Animal extends LookupEntry
             'id'  => $this->id,
             'name' => $this->name,
             'label' => $this->label,
-            'relevant_to_context' => $isRelevant,
+            'is_in_context' => $isRelevant,
         ];
     }
 }
