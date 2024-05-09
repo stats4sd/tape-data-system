@@ -5,10 +5,12 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
+use Filament\Models\Contracts\HasDefaultTenant;
 use Filament\Models\Contracts\HasTenants;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -18,7 +20,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Stats4sd\FilamentOdkLink\Models\TeamManagement\Traits\HasTeamMemberships;
 
-class User extends Authenticatable implements FilamentUser, HasAvatar, HasTenants
+class User extends Authenticatable implements FilamentUser, HasAvatar, HasTenants, HasDefaultTenant
 {
     use HasApiTokens;
     use HasFactory;
@@ -66,10 +68,23 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasTenant
         return $this->can('view all teams') ? Team::all() : $this->teams;
     }
 
+    // The last team the user was on.
+    public function latestTeam(): BelongsTo
+    {
+        return $this->belongsTo(Team::class, 'latest_team_id');
+    }
+
+
+    public function getDefaultTenant(Panel $panel): ?Model
+    {
+        return $this->latestTeam;
+    }
+
     // ******* RELATIONSHIPS
 
     public function imports(): HasMany
     {
         return $this->hasMany(Import::class);
     }
+
 }
