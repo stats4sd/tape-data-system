@@ -105,6 +105,11 @@ class Team extends \Stats4sd\FilamentOdkLink\Models\TeamManagement\Team
         return $this->morphMany(Animal::class, 'owner');
     }
 
+    public function animalsRemoved(): BelongsToMany
+    {
+        return $this->belongsToMany(Animal::class, 'animal_team_removed');
+    }
+
     public function animalProducts(): MorphMany
     {
         return $this->morphMany(AnimalProduct::class, 'owner');

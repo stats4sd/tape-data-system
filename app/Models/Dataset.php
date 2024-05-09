@@ -68,12 +68,8 @@ class Dataset extends \Stats4sd\FilamentOdkLink\Models\OdkLink\Dataset
 
     public function markLiveXlsformsWithMediaUpdate()
     {
-        ray('running mark live');
-
         $this->requiredMedia
             ->each(function (RequiredMedia $media) {
-
-                ray('found media ', $media);
 
                 $media->xlsformTemplate->xlsforms()
                     ->where('is_active', true)
