@@ -5,7 +5,9 @@ namespace App\Filament\App\Resources\XlsformResource\Pages;
 use Filament\Resources\Pages\Page;
 use App\Filament\App\Resources\XlsformResource;
 use App\Http\Controllers\SurveyMonitoringController;
+use Stats4sd\FilamentOdkLink\Services\OdkLinkService;
 use Filament\Resources\Pages\Concerns\InteractsWithRecord;
+use Filament\Actions\Action;
 
 class MonitorXlsform extends Page
 {
@@ -14,6 +16,13 @@ class MonitorXlsform extends Page
     protected static string $resource = XlsformResource::class;
 
     protected static string $view = 'filament.app.resources.xlsform-resource.pages.monitor-xlsform';
+
+    protected static ?string $title = 'Survey Monitoring';
+
+    public function getHeading(): string
+    {
+        return $this->record->title . ': Survey Monitoring';
+    }
 
     public function mount(int | string $record): void
     {
@@ -28,5 +37,21 @@ class MonitorXlsform extends Page
         $summary = $surveyMonitoringController->getSubmissionSummary($this->record->owner, false);
 
         return $summary;
+    }
+
+    public function exportAsExcelFile()
+    {
+        $odkLinkService = app()->make(OdkLinkService::class);
+
+        return $odkLinkService->exportAsExcelFile($this->record);
+    }
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            Action::make('download raw survey data')
+                ->label('Download Raw Survey Data')
+                ->action(fn () => $this->exportAsExcelFile()),
+        ];
     }
 }
