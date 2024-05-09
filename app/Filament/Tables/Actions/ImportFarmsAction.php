@@ -83,14 +83,12 @@ class ImportFarmsAction extends ExcelImportAction
                 ]),
 
             Section::make('Groups')
-                ->schema([
-                    ...array_map(function ($name, $id) {
-                        return Select::make('group_columns')
-                            ->label("Which column indicates the farm grouping $name?")
-                            ->placeholder('Select a column')
-                            ->options(fn (Get $get) => $get('header_columns'));
-                    }, array_values($groups), array_keys($groups)),
-                ]),
+                ->schema(array_map(function ($name, $id) {
+                    return Select::make("grouping_{$id}_column")
+                                ->label("Which column indicates the farm grouping $name?")
+                                ->placeholder('Select a column')
+                                ->options(fn (Get $get) => $get('header_columns'));
+                        }, array_values($groups), array_keys($groups))),
 
             Section::make('Farm Information')
                 ->columns(2)
