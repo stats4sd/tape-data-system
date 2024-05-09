@@ -39,6 +39,12 @@ class SurveyMonitoringController extends Controller
             ->sort(fn ($submission) => $submission['createdAt'])
             ->last();
 
+        if($count === 0) {
+            return [
+                'count' => 0,
+                'latestSubmissionDate' => null,
+            ];
+        }
 
         return [
             'count' => $count,
