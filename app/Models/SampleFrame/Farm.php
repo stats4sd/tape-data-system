@@ -40,6 +40,7 @@ class Farm extends LookupEntry
             'location_id' => $this->location_id,
             'location_name' => $this->location?->name,
             'team_code' => $this->team_code,
+            'team_code_name' => $this->identifiers ? $this->identifiers['name'] . '(No. ' . $this->team_code . ')' : 'No. ' . $this->team_code,
             'name' => $this->identifiers ? $this->identifiers['name'] : '',
             'sex' => $this->properties ? $this->properties['sex'] : '',
             'year' => $this->properties ? $this->properties['year'] : '',
