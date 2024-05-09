@@ -2,22 +2,17 @@
 
 namespace App\Models\SampleFrame;
 
-use App\Models\Interfaces\LookupListEntry;
+use App\Models\LookupTables\LookupEntry;
 use App\Models\Site;
 use App\Models\SurveyData\CaetAssessment;
 use App\Models\SurveyData\PerformanceAssessment;
-use App\Models\Traits\HasLinkedDataset;
-use App\Models\Traits\IsLookupList;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\Interfaces\WithXlsforms;
 
-class Farm extends Model implements LookupListEntry
+class Farm extends LookupEntry
 {
-    use HasLinkedDataset;
-    use IsLookupList;
-
     protected $casts = [
         'identifiers' => 'collection',
         'properties' => 'collection',
@@ -38,14 +33,17 @@ class Farm extends Model implements LookupListEntry
         return $this->hasMany(PerformanceAssessment::class);
     }
 
-    public function getCsvContentsForOdk(): array
+    public function getCsvContentsForOdk(?WithXlsforms $team = null): array
     {
         return [
             'id'  => $this->id,
             'location_id' => $this->location_id,
             'location_name' => $this->location?->name,
             'team_code' => $this->team_code,
-            'label' => $this->label,
+            'team_code_name' => $this->identifiers ? $this->identifiers['name'] . '(No. ' . $this->team_code . ')' : 'No. ' . $this->team_code,
+            'name' => $this->identifiers ? $this->identifiers['name'] : '',
+            'sex' => $this->properties ? $this->properties['sex'] : '',
+            'year' => $this->properties ? $this->properties['year'] : '',
         ];
     }
 

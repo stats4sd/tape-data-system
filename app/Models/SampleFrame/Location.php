@@ -2,20 +2,16 @@
 
 namespace App\Models\SampleFrame;
 
-use App\Models\Interfaces\LookupListEntry;
-use App\Models\Traits\HasLinkedDataset;
-use App\Models\Traits\IsLookupList;
+use App\Models\LookupTables\LookupEntry;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Facades\Cache;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\Interfaces\WithXlsforms;
 
-class Location extends Model implements LookupListEntry
+class Location extends LookupEntry
 {
-    use HasLinkedDataset;
-    use IsLookupList;
-
     protected $casts = [
         'properties' => 'collection',
     ];
@@ -84,7 +80,7 @@ class Location extends Model implements LookupListEntry
         );
     }
 
-    public function getCsvContentsForOdk(): array
+    public function getCsvContentsForOdk(?WithXlsforms $team = null): array
     {
         return [
             'id' => $this->id,

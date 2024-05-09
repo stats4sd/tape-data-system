@@ -2,18 +2,13 @@
 
 namespace App\Models;
 
-use App\Models\Interfaces\LookupListEntry;
-use App\Models\Traits\HasLinkedDataset;
-use App\Models\Traits\IsLookupList;
+use App\Models\LookupTables\LookupEntry;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\Interfaces\WithXlsforms;
 
-class CaetInterpretation extends Model implements LookupListEntry
+class CaetInterpretation extends LookupEntry
 {
-    use HasLinkedDataset;
-    use IsLookupList;
-
     public function hasContextualisedInterpretation(): Attribute
     {
         return new Attribute(
@@ -40,7 +35,7 @@ class CaetInterpretation extends Model implements LookupListEntry
         return true;
     }
 
-    public function getCsvContentsForOdk(): array
+    public function getCsvContentsForOdk(?WithXlsforms $team = null): array
     {
 
         return [
