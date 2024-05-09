@@ -65,23 +65,29 @@ class ImportFarmsAction extends ExcelImportAction
                 ->default(['na' => '~~upload a file to see the column headers~~'])
                 ->live(),
 
-            Select::make('location_level_id')
-                ->label('Which location level are the farms linked to?')
-                ->options(
-                    LocationLevel::where('has_farms', true)->get()->pluck('name', 'id')
-                )
-                ->helperText('For many sampling strategies, this will be obvious (the lowest level. It may be less obvious when there are different hierarchies of locations in different places.')
-                ->live(),
+            Section::make('Location')
+                ->schema([
+                    Select::make('location_level_id')
+                        ->label('Which location level are the farms linked to?')
+                        ->options(
+                            LocationLevel::where('has_farms', true)->get()->pluck('name', 'id')
+                        )
+                        ->placeholder('Select a location level')
+                        ->helperText('For many sampling strategies, this will be obvious (the lowest level. It may be less obvious when there are different hierarchies of locations in different places.')
+                        ->live(),
 
-            Select::make('location_code_column')
-                ->options(fn (Get $get) => $get('header_columns'))
-                ->label(fn (Get $get) => 'Which column contains the ' . (LocationLevel::find($get('location_level_id'))?->name ?? 'location') . ' unique code?'),
+                    Select::make('location_code_column')
+                        ->options(fn (Get $get) => $get('header_columns'))
+                        ->label(fn (Get $get) => 'Which column contains the ' . (LocationLevel::find($get('location_level_id'))?->name ?? 'location') . ' unique code?')
+                        ->placeholder('Select a column'),
+                ]),
 
-            Section::make('Farm Groups')
+            Section::make('Groups')
                 ->schema([
                     ...array_map(function ($name, $id) {
                         return Select::make('group_columns')
                             ->label("Which column indicates the farm grouping $name?")
+                            ->placeholder('Select a column')
                             ->options(fn (Get $get) => $get('header_columns'));
                     }, array_values($groups), array_keys($groups)),
                 ]),
@@ -91,6 +97,7 @@ class ImportFarmsAction extends ExcelImportAction
                 ->schema([
                     Select::make('farm_code_column')
                         ->label('Which column contains the farm unique code?')
+                        ->placeholder('Select a column')
                         ->helperText('e.g. farm_id or farm_code')
                         ->live()
                         ->options(fn (Get $get) => $get('header_columns')),
