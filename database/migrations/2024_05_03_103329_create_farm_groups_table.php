@@ -16,7 +16,7 @@ return new class extends Migration
             $table->nullableMorphs('owner');
             $table->foreignId('farm_grouping_id')->constrained('farm_groupings')->cascadeOnDelete();
             $table->string('name');
-            $table->string('group_code');
+            $table->string('code');
             $table->string('description')->nullable();
             $table->timestamps();
         });

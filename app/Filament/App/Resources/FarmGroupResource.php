@@ -40,7 +40,7 @@ class FarmGroupResource extends Resource
                 Forms\Components\TextInput::make('name')
                                     ->label('Group name')
                                     ->required(),
-                Forms\Components\TextInput::make('group_code')
+                Forms\Components\TextInput::make('code')
                                     ->label('Enter the code that will be used to identify this group')
                                     ->required(),
                 Forms\Components\TextArea::make('description')
@@ -55,6 +55,7 @@ class FarmGroupResource extends Resource
             ->defaultGroup('farmGrouping.name')
             ->columns([
                 Tables\Columns\TextColumn::make('name'),
+                Tables\Columns\TextColumn::make('code'),
                 Tables\Columns\TextColumn::make('description')->wrap(),
                 Tables\Columns\TextColumn::make('farms_count')
                                     ->counts('farms')
