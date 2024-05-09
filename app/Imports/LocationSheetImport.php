@@ -49,7 +49,7 @@ class LocationSheetImport implements ShouldQueue, SkipsEmptyRows, ToModel, WithB
         foreach ($this->parentIds as $parentId) {
             Location::upsert(
                 values: [
-                    'owner_id' => $this->data['team_id'],
+                    'owner_id' => $this->data['owner_id'],
                     'owner_type' => $this->data['owner_type'],
                     'code' => $row[$this->data["parent_{$parentId}_code_column"]],
                     'name' => $row[$this->data["parent_{$parentId}_name_column"]],
@@ -64,7 +64,8 @@ class LocationSheetImport implements ShouldQueue, SkipsEmptyRows, ToModel, WithB
 
         // return the new (or updated) location Model for the current row.
         return new Location([
-            'team_id' => $this->data['team_id'],
+            'owner_id' => $this->data['owner_id'],
+            'owner_type' => $this->data['owner_type'],
             'location_level_id' => $locationLevel->id,
             'parent_id' => $currentParent?->id ?? null,
             'code' => $row[$this->data['code_column']],
