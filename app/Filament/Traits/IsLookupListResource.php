@@ -8,6 +8,7 @@ use App\Services\HelperService;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
@@ -57,6 +58,18 @@ trait IsLookupListResource
     // standard table
     public static function table(Table $table): Table
     {
+        $actions = [
+            EditAction::make()->hidden(fn (LookupListEntry $record): bool => $record->isGlobal()),
+            DeleteAction::make()->hidden(fn (LookupListEntry $record): bool => $record->isGlobal()),
+        ];
+
+        if (static::getModel()::canBeHiddenFromContext()) {
+            $actions[] = Action::make('Toggle Removed')
+                ->visible(fn (LookupListEntry $record): bool => $record->isGlobal())
+                ->label(fn (LookupListEntry $record): string => $record->isRemoved(HelperService::getSelectedTeam()) ? 'Restore to Context' : 'Remove from Context')
+                ->action(fn (LookupListEntry $record) => $record->toggleRemoved(HelperService::getSelectedTeam()));
+        }
+
         return $table
             ->columns([
                 TextColumn::make('name')
@@ -78,10 +91,7 @@ trait IsLookupListResource
                         false: fn (Builder $query): Builder => $query->where('owner_id', null),
                     )
             ])
-            ->actions([
-                EditAction::make()->hidden(fn (LookupListEntry $record): bool => $record->isGlobal()),
-                DeleteAction::make()->hidden(fn (LookupListEntry $record): bool => $record->isGLobal()),
-            ])
+            ->actions($actions)
             ->defaultPaginationPageOption('all')
             ->defaultSort('label', 'asc');
     }
