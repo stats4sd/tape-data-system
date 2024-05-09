@@ -9,6 +9,7 @@ use App\Models\SurveyData\PerformanceAssessment;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\Interfaces\WithXlsforms;
 
 class Farm extends LookupEntry
 {
@@ -32,14 +33,16 @@ class Farm extends LookupEntry
         return $this->hasMany(PerformanceAssessment::class);
     }
 
-    public function getCsvContentsForOdk(): array
+    public function getCsvContentsForOdk(?WithXlsforms $team = null): array
     {
         return [
             'id'  => $this->id,
             'location_id' => $this->location_id,
             'location_name' => $this->location?->name,
             'team_code' => $this->team_code,
-            'label' => $this->label,
+            'name' => $this->identifiers ? $this->identifiers['name'] : '',
+            'sex' => $this->properties ? $this->properties['sex'] : '',
+            'year' => $this->properties ? $this->properties['year'] : '',
         ];
     }
 

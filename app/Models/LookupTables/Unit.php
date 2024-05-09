@@ -2,12 +2,9 @@
 
 namespace App\Models\LookupTables;
 
-use App\Models\Interfaces\LookupListEntry;
-use App\Models\Traits\HasLinkedDataset;
-use App\Models\Traits\IsLookupList;
 use App\Models\UnitType;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\Interfaces\WithXlsforms;
 
 class Unit extends LookupEntry
 {
@@ -16,7 +13,7 @@ class Unit extends LookupEntry
         return $this->belongsTo(UnitType::class);
     }
 
-    public function getCsvContentsForOdk(): array
+    public function getCsvContentsForOdk(?WithXlsforms $team = null): array
     {
         return [
             'id'  => $this->id,

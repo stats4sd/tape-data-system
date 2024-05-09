@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\LookupTables\LookupEntry;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\Interfaces\WithXlsforms;
 
 class CaetInterpretation extends LookupEntry
 {
@@ -34,7 +35,7 @@ class CaetInterpretation extends LookupEntry
         return true;
     }
 
-    public function getCsvContentsForOdk(): array
+    public function getCsvContentsForOdk(?WithXlsforms $team = null): array
     {
 
         return [

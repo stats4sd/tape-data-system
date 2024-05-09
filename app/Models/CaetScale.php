@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\LookupTables\LookupEntry;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\Interfaces\WithXlsforms;
 
 class CaetScale extends LookupEntry
 {
@@ -12,7 +13,7 @@ class CaetScale extends LookupEntry
         return $this->belongsTo(CaetIndex::class);
     }
 
-    public function getCsvContentsForOdk(): array
+    public function getCsvContentsForOdk(?WithXlsforms $team = null): array
     {
         return [
             'id' => $this->id,

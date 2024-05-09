@@ -6,6 +6,7 @@ use App\Models\Interfaces\LookupListEntry;
 use App\Models\Traits\HasLinkedDataset;
 use App\Models\Traits\IsLookupList;
 use Illuminate\Database\Eloquent\Model;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\Interfaces\WithXlsforms;
 
 // Generic Class for models that are entries in a lookup table (i.e. they are linked to a dataset that will be used to create csv files for ODK media attachments).
 
@@ -33,7 +34,7 @@ class LookupEntry extends Model implements LookupListEntry
     }
 
     // Generic CSV content. Should be overwritten by specific classes when the csv file contents needs to be specific.
-    public function getCsvContentsForOdk(): array
+    public function getCsvContentsForOdk(?WithXlsforms $team = null): array
     {
         return [
             'id' => $this->id,
