@@ -42,7 +42,10 @@ class FarmResource extends Resource
 
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('farmGroup')
+                    ->relationship('farmGroups', 'name')
+                    ->multiple()
+                    ->preload()
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

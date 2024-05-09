@@ -15,6 +15,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\HeadingRowImport;
+use App\Models\SampleFrame\FarmGrouping;
 use App\Models\SampleFrame\LocationLevel;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\CheckboxList;
@@ -39,7 +40,7 @@ class ImportFarmsAction extends ExcelImportAction
 
     protected function getDefaultForm(): array
     {
-        $groups= FarmGroup::all()->pluck('name', 'id')->toArray();
+        $groups= FarmGrouping::all()->pluck('name', 'id')->toArray();
 
         return [
             FileUpload::make('upload')

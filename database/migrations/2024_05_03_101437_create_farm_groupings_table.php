@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('farm_groups', function (Blueprint $table) {
+        Schema::create('farm_groupings', function (Blueprint $table) {
             $table->id();
             $table->nullableMorphs('owner');
-            $table->foreignId('farm_grouping_id')->constrained('farm_groupings')->cascadeOnDelete();
             $table->string('name');
-            $table->string('group_code');
-            $table->string('description')->nullable();
             $table->timestamps();
         });
     }
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('farm_groups');
+        Schema::dropIfExists('farm_groupings');
     }
 };

@@ -2,16 +2,17 @@
 
 namespace App\Filament\App\Resources;
 
-use App\Filament\App\Resources\FarmGroupResource\Pages;
-use App\Filament\App\Resources\FarmGroupResource\RelationManagers;
-use App\Models\SampleFrame\FarmGroup;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use Grouping\Group;
 use Filament\Tables;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use App\Models\SampleFrame\FarmGroup;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\App\Resources\FarmGroupResource\Pages;
+use App\Filament\App\Resources\FarmGroupResource\RelationManagers;
 
 class FarmGroupResource extends Resource
 {
@@ -24,16 +25,34 @@ class FarmGroupResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name'),
+                Forms\Components\Select::make('farm_grouping_id')
+                                    ->relationship(name: 'farmGrouping', titleAttribute: 'name')
+                                    ->required()
+                                    ->label('Select the grouping this group belongs to')
+                                    ->helperText('E.g. grouping \'Farm size\' has groups \'Big\' and \'Small\', grouping \'Beneficiary\' has groups \'Beneficiary\' and \'Non beneficiary\'')
+                                    ->placeholder('Select a grouping')
+                                    ->loadingMessage('Loading groupings...')
+                                    ->createOptionForm([
+                                        Forms\Components\TextInput::make('name')
+                                            ->label('Grouping name')
+                                            ->required()
+                                    ]),
+                Forms\Components\TextInput::make('name')
+                                    ->label('Group name')
+                                    ->required(),
+                Forms\Components\TextInput::make('group_code')
+                                    ->label('Enter the code that will be used to identify this group')
+                                    ->required(),
                 Forms\Components\TextArea::make('description')
-                    ->label('Add a short description for the farm group')
-                    ->maxLength(255),
+                                    ->label('Optional: Add a short description for the group')
+                                    ->maxLength(255),
             ])->columns(1);
     }
 
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultGroup('farmGrouping.name')
             ->columns([
                 Tables\Columns\TextColumn::make('name'),
                 Tables\Columns\TextColumn::make('description')->wrap(),
