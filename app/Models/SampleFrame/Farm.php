@@ -7,6 +7,7 @@ use App\Models\Site;
 use App\Models\SurveyData\CaetAssessment;
 use App\Models\SurveyData\PerformanceAssessment;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\Interfaces\WithXlsforms;
@@ -21,6 +22,11 @@ class Farm extends LookupEntry
     public function owner(): MorphTo
     {
         return $this->morphTo('owner');
+    }
+
+    public function farmGroups(): BelongsToMany
+    {
+        return $this->belongsToMany(FarmGroup::class);
     }
 
     public function caetAssessments(): HasMany

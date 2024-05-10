@@ -59,11 +59,15 @@ class FarmResource extends Resource
                 Tables\Columns\TextColumn::make('team_code')->label('Unique Code')
                     ->sortable()
                     ->searchable(),
+                Tables\Columns\TextColumn::make('farmGroups.name')->listWithLineBreaks()->badge(),
                 ...$idColumns,
                 ...$propertyColumns,
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('farmGroup')
+                    ->relationship('farmGroups', 'name')
+                    ->multiple()
+                    ->preload()
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
