@@ -37,6 +37,9 @@ trait IsLookupListResource
 
     public static function form(Form $form): Form
     {
+
+        $extraFields = static::getExtraFormFields();
+
         return $form
             ->schema([
                 TextInput::make('name')
@@ -52,6 +55,7 @@ trait IsLookupListResource
                     ->required()
                     ->label('Enter a label. This is what enumerators will see in the survey.')
                     ->helperText('At present, this platform only supports additional choice options in English. Multiple language support will come soon!'),
+                ...$extraFields,
             ]);
     }
 
@@ -116,6 +120,12 @@ trait IsLookupListResource
         }
 
         return 'info';
+    }
+
+    // override this in the model if you need to add extra fields to the form
+    private static function getExtraFormFields(): array
+    {
+        return [];
     }
 
 }
