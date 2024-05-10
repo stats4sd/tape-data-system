@@ -27,63 +27,60 @@ class FarmSheetImport implements ShouldQueue, SkipsEmptyRows, ToCollection, With
 
     public function collection(Collection $rows)
     {
-        foreach ($rows as $row) 
-        {
-            $importedFarms = [];
+        $importedFarms = [];
 
-            foreach ($rows as $row) {
-                $headers = $this->data['header_columns'];
+        foreach ($rows as $row) {
+            $headers = $this->data['header_columns'];
 
-                $farmCodeColumn = $headers[$this->data['farm_code_column']];
+            $farmCodeColumn = $headers[$this->data['farm_code_column']];
 
-                $locationLevel = LocationLevel::find($this->data['location_level_id']);
-                $locationCodeColumn = $headers[$this->data['location_code_column']];
-                $location = Location::where('code', $row[$locationCodeColumn])
-                    ->where('location_level_id', $locationLevel->id)
-                    ->first();
-    
-                // Find the identifier columns;
-                $identifierColumns = collect($this->data['farm_identifiers'])->map(fn ($identifier) => $headers[$identifier]);
-                // Get the data from those columns;
-                $identifierData = $identifierColumns->mapWithKeys(fn ($column) => [$column => $row[$column]]);
-    
-                // Find the property columns;
-                $propertyColumns = collect($this->data['farm_properties'])->map(fn ($property) => $headers[$property]);
-                // Get the data from those columns;
-                $propertyData = $propertyColumns->mapWithKeys(fn ($column) => [$column => $row[$column]]);
-    
-                // Create the farm
-                $farm = new Farm([
-                    'owner_id' => $this->data['owner_id'],
-                    'owner_type' => $this->data['owner_type'],
-                    'location_id' => $location->id,
-                    'team_code' => $row[$farmCodeColumn],
-                    'identifiers' => $identifierData,
-                    'properties' => $propertyData,
-                ]);
-                $farm->save();
+            $locationLevel = LocationLevel::find($this->data['location_level_id']);
+            $locationCodeColumn = $headers[$this->data['location_code_column']];
+            $location = Location::where('code', $row[$locationCodeColumn])
+                ->where('location_level_id', $locationLevel->id)
+                ->first();
 
-                // Farm groups
-                foreach ($this->data as $key => $value) {
-                    if (strpos($key, 'grouping_') === 0) {
-                        $farmGrouping = explode('_', $key)[1] ?? null;
-                        $farmGroupingColumn = $headers[$value];
-                
-                        // Find the farm group
-                        $farmGroup = FarmGroup::where('farm_grouping_id', $farmGrouping)->where('code', $row[$farmGroupingColumn])->first();
-                
-                        // // Attach the farm to the farm group
-                        if ($farmGroup) {
-                            $farm->farmGroups()->attach($farmGroup);
-                        }
+            // Find the identifier columns;
+            $identifierColumns = collect($this->data['farm_identifiers'])->map(fn ($identifier) => $headers[$identifier]);
+            // Get the data from those columns;
+            $identifierData = $identifierColumns->mapWithKeys(fn ($column) => [$column => $row[$column]]);
+
+            // Find the property columns;
+            $propertyColumns = collect($this->data['farm_properties'])->map(fn ($property) => $headers[$property]);
+            // Get the data from those columns;
+            $propertyData = $propertyColumns->mapWithKeys(fn ($column) => [$column => $row[$column]]);
+
+            // Create the farm
+            $farm = new Farm([
+                'owner_id' => $this->data['owner_id'],
+                'owner_type' => $this->data['owner_type'],
+                'location_id' => $location->id,
+                'team_code' => $row[$farmCodeColumn],
+                'identifiers' => $identifierData,
+                'properties' => $propertyData,
+            ]);
+            $farm->save();
+
+            // Farm groups
+            foreach ($this->data as $key => $value) {
+                if (strpos($key, 'grouping_') === 0) {
+                    $farmGrouping = explode('_', $key)[1] ?? null;
+                    $farmGroupingColumn = $headers[$value];
+            
+                    // Find the farm group
+                    $farmGroup = FarmGroup::where('farm_grouping_id', $farmGrouping)->where('code', $row[$farmGroupingColumn])->first();
+            
+                    // // Attach the farm to the farm group
+                    if ($farmGroup) {
+                        $farm->farmGroups()->attach($farmGroup);
                     }
                 }
-
-                $importedFarms[] = $farm;
             }
-    
-            return $importedFarms;
+
+            $importedFarms[] = $farm;
         }
+
+        return $importedFarms;
     }
 
     public function rules(): array
