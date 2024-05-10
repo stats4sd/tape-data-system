@@ -7,6 +7,7 @@ use Grouping\Group;
 use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use App\Services\HelperService;
 use Filament\Resources\Resource;
 use App\Models\SampleFrame\FarmGroup;
 use Illuminate\Database\Eloquent\Builder;
@@ -35,7 +36,11 @@ class FarmGroupResource extends Resource
                                     ->createOptionForm([
                                         Forms\Components\TextInput::make('name')
                                             ->label('Grouping name')
-                                            ->required()
+                                            ->required(),
+                                        Forms\Components\Hidden::make('owner_type')
+                                            ->default('App\Models\Team'),
+                                        Forms\Components\Hidden::make('owner_id')
+                                            ->default(HelperService::getSelectedTeam()->id),
                                     ]),
                 Forms\Components\TextInput::make('name')
                                     ->label('Group name')
