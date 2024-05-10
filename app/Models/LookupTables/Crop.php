@@ -11,7 +11,6 @@ class Crop extends LookupEntry
 
     public function getCsvContentsForOdk(?WithXlsforms $team = null): array
     {
-
         if ($team) {
             $isRelevant = $this->isRemoved($team) ? 0 : 1;
         } else {
