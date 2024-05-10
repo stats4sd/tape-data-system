@@ -22,6 +22,17 @@ class Animal extends LookupEntry
             'name' => $this->name,
             'label' => $this->label,
             'is_in_context' => $isRelevant,
+            'raised_max' => $this->raised_max,
+            'breeds_max' => $this->breeds_max,
+            'born_max' => $this->born_max,
+            'died_max' => $this->died_max,
+            'slaughtered_max' => $this->slaughtered_max,
+            'purchased_max' => $this->purchased_max,
+            'sold_max' => $this->sold_max,
+            'farmgate_max' => $this->farmgate_max,
+            'given_max' => $this->given_max,
+            'expenditures_feed_max' => $this->expenditures_feed_max,
+            'expenditures_vet_max' => $this->expenditures_vet_max,
         ];
     }
 }

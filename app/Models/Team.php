@@ -2,17 +2,19 @@
 
 namespace App\Models;
 
-use App\Models\LookupTables\Animal;
-use App\Models\LookupTables\AnimalProduct;
-use App\Models\LookupTables\Crop;
-use App\Models\LookupTables\CropProduct;
 use App\Models\SampleFrame\Farm;
+use App\Models\LookupTables\Crop;
+use App\Models\LookupTables\Animal;
 use App\Models\SampleFrame\Location;
+use App\Models\SampleFrame\FarmGroup;
+use App\Models\LookupTables\CropProduct;
+use App\Models\SampleFrame\FarmGrouping;
 use App\Models\SampleFrame\LocationLevel;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use App\Models\LookupTables\AnimalProduct;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Stats4sd\FilamentOdkLink\Services\OdkLinkService;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Team extends \Stats4sd\FilamentOdkLink\Models\TeamManagement\Team
 {
@@ -59,6 +61,16 @@ class Team extends \Stats4sd\FilamentOdkLink\Models\TeamManagement\Team
     public function farms(): MorphMany
     {
         return $this->morphMany(Farm::class, 'owner');
+    }
+
+    public function farmGroups(): MorphMany
+    {
+        return $this->morphMany(FarmGroup::class, 'owner');
+    }
+
+    public function farmGroupings(): MorphMany
+    {
+        return $this->morphMany(FarmGrouping::class, 'owner');
     }
 
     public function sites(): HasMany

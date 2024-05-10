@@ -39,8 +39,7 @@ class TeamOdkView extends Page implements HasTable, HasInfolists
 
     protected function getHeaderActions(): array
     {
-        return [
-        ];
+        return [];
     }
 
     public function getRecord(): Team
@@ -119,6 +118,9 @@ class TeamOdkView extends Page implements HasTable, HasInfolists
                     ->url(fn (Xlsform $record) => XlsformResource::getUrl('view', ['record' => $record]))
                     ->label('Show Submissions'),
 
+                TableAction::make('monitor survey')
+                    ->url(fn (Xlsform $record) => XlsformResource::getUrl('monitor', ['record' => $record]))
+                    ->label('Monitor Survey'),
 
                 // add Publish button
                 TableAction::make('publish')
@@ -162,36 +164,34 @@ class TeamOdkView extends Page implements HasTable, HasInfolists
                     ->requiresConfirmation()
                     ->modalDescription(new HtmlString('This will publish the latest team data from the platform to be used in the form. Are you sure you want to proceed? <br/><br/><b>NOTE</b>: if this form is live, you may need to tell your enumerators to re-download the form to get the latest version'))
                     ->visible(fn (Xlsform $record) => !$record->has_latest_media)
-                ->action(function (Xlsform $record) {
-                    $record->publishForm(app()->make(OdkLinkService::class));
+                    ->action(function (Xlsform $record) {
+                        $record->publishForm(app()->make(OdkLinkService::class));
 
-                    $record->refresh();
+                        $record->refresh();
 
-                    Notification::make('update_success')
-                        ->title('Success!')
-                        ->body("The form {$record->title} now has the latest lookup data entered into the platform by your team.")
-                        ->color('success')
-                        ->send();
-                })
-//
-//                // add Pull Submissions button
-//                TableAction::make('export')
-//                    ->label('Export')
-//                    ->icon('heroicon-m-document-arrow-down')
-//                    ->action(function (Xlsform $record) {
-//                        $odkLinkService = app()->make(OdkLinkService::class);
-//
-//                        // call API to export data as excel file
-//                        // P.S. use return to trigger file download in browser
-//                        return $odkLinkService->exportAsExcelFile($record);
-//                    }),
-//
-//                ViewAction::make(),
-//                EditAction::make(),
-//                DeleteAction::make(),
+                        Notification::make('update_success')
+                            ->title('Success!')
+                            ->body("The form {$record->title} now has the latest lookup data entered into the platform by your team.")
+                            ->color('success')
+                            ->send();
+                    })
+                //
+                //                // add Pull Submissions button
+                //                TableAction::make('export')
+                //                    ->label('Export')
+                //                    ->icon('heroicon-m-document-arrow-down')
+                //                    ->action(function (Xlsform $record) {
+                //                        $odkLinkService = app()->make(OdkLinkService::class);
+                //
+                //                        // call API to export data as excel file
+                //                        // P.S. use return to trigger file download in browser
+                //                        return $odkLinkService->exportAsExcelFile($record);
+                //                    }),
+                //
+                //                ViewAction::make(),
+                //                EditAction::make(),
+                //                DeleteAction::make(),
             ])
-            ->bulkActions([
-            ]);
+            ->bulkActions([]);
     }
-
 }

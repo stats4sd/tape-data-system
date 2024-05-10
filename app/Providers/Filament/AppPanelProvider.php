@@ -7,6 +7,7 @@ use App\Filament\App\Pages\AccountSettingsPage;
 use App\Filament\App\Pages\RegisterTeam;
 use App\Filament\App\Pages\TeamDashboard;
 use App\Filament\App\Pages\TeamOdkView;
+use App\Filament\App\Resources\FarmGroupResource;
 use App\Filament\App\Resources\FarmResource;
 use App\Filament\App\Resources\ImportResource;
 use App\Filament\App\Resources\LocationLevelResource;
@@ -92,6 +93,7 @@ class AppPanelProvider extends PanelProvider
                         ->icon('heroicon-o-map-pin')
                         ->items([
                             ...LocationLevelResource::getNavigationItems(),
+                            ...FarmGroupResource::getNavigationItems(),
                             ...FarmResource::getNavigationItems(),
                         ]),
                 ])
