@@ -53,7 +53,7 @@ class FarmGroupResource extends Resource
                 Forms\Components\TextInput::make('code')
                                     ->label('Enter the code that will be used to identify this group')
                                     ->required(),
-                Forms\Components\TextArea::make('description')
+                Forms\Components\Textarea::make('description')
                                     ->label('Optional: Add a short description for the group')
                                     ->maxLength(255),
             ])->columns(1);
