@@ -7,6 +7,7 @@ use App\Filament\App\Clusters\LookupTables\Resources\AnimalProductResource\Pages
 use App\Filament\Traits\IsLookupListResource;
 use App\Models\LookupTables\AnimalProduct;
 use Awcodes\Shout\Components\Shout;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 
@@ -23,26 +24,35 @@ class AnimalProductResource extends Resource
 
     protected static ?string $cluster = LookupTables::class;
 
+        public static function canEditGlobalItems(): bool
+    {
+        return true;
+    }
+
     private static function getExtraFormFields(): array
     {
         return [
-            Shout::make('validation_fields')
-                ->content('In these next fields, please enter the highest likely value for the questions given. The values will be used to set "soft" validation checks for the listed question in the ODK survey.'),
-            TextInput::make('total_max')
-                ->integer()
-                ->label('Total quantity produced'),
-            TextInput::make('unit_default')
-                ->label('Unit of measurement (for the total quantity'),
-            TextInput::make('sold_max')
-                ->integer()
-                ->label('Quantity sold'),
-            TextInput::make('farmgate_max')
-                ->numeric()
-                ->label('Farmgate price of this crop (per unit) :'),
-            TextInput::make('given_max')
-                ->integer()
-                ->label('Quantity given for free (gift, present …)'),
-
+            Section::make('Validation - Maximums')
+                ->columnSpanFull()
+                ->columns(1)
+                ->schema([
+                    Shout::make('validation_fields')
+                        ->content('In these next fields, please enter the highest likely value for the questions given. The values will be used to set "soft" validation checks for the listed question in the ODK survey.'),
+                    TextInput::make('total_max')
+                        ->integer()
+                        ->label('Total quantity produced'),
+                    TextInput::make('unit_default')
+                        ->label('Unit of measurement (for the total quantity'),
+                    TextInput::make('sold_max')
+                        ->integer()
+                        ->label('Quantity sold'),
+                    TextInput::make('farmgate_max')
+                        ->numeric()
+                        ->label('Farmgate price of this crop (per unit) :'),
+                    TextInput::make('given_max')
+                        ->integer()
+                        ->label('Quantity given for free (gift, present …)'),
+                ])
         ];
     }
 
