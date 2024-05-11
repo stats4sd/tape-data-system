@@ -5,5 +5,5 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
 use Stats4sd\FilamentOdkLink\Commands\PollForOdkData;
 
-Schedule::call(PurgeTelescopeEntries::class)->daily();
-Schedule::call(PollForOdkData::class)->everyFiveMinutes();
+Schedule::command(PurgeTelescopeEntries::class)->daily();
+Schedule::command(PollForOdkData::class)->everyFiveMinutes();
