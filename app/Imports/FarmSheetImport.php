@@ -34,6 +34,8 @@ class FarmSheetImport implements ShouldQueue, SkipsEmptyRows, ToCollection, With
 
             $farmCodeColumn = $headers[$this->data['farm_code_column']];
 
+            $systemCodeColumn = $headers[$this->data['ag_system_column']] ?? null;
+
             $locationLevel = LocationLevel::find($this->data['location_level_id']);
             $locationCodeColumn = $headers[$this->data['location_code_column']];
             $location = Location::where('code', $row[$locationCodeColumn])
@@ -55,6 +57,7 @@ class FarmSheetImport implements ShouldQueue, SkipsEmptyRows, ToCollection, With
                 'owner_id' => $this->data['owner_id'],
                 'owner_type' => $this->data['owner_type'],
                 'location_id' => $location->id,
+                'ag_system_id' => $row[$systemCodeColumn] ?? null,
                 'team_code' => $row[$farmCodeColumn],
                 'identifiers' => $identifierData,
                 'properties' => $propertyData,

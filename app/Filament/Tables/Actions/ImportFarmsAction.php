@@ -91,12 +91,19 @@ class ImportFarmsAction extends ExcelImportAction
                         }, array_values($groups), array_keys($groups))),
 
             Section::make('Farm Information')
-                ->columns(2)
+                ->columns(1)
                 ->schema([
                     Select::make('farm_code_column')
                         ->label('Which column contains the farm unique code?')
                         ->placeholder('Select a column')
                         ->helperText('e.g. farm_id or farm_code')
+                        ->live()
+                        ->options(fn (Get $get) => $get('header_columns')),
+
+                    Select::make('ag_system_column')
+                        ->label('Which column contains the system unique code?')
+                        ->placeholder('Select a column')
+                        ->helperText('Farms can be linked to a system later if it is not currently known')
                         ->live()
                         ->options(fn (Get $get) => $get('header_columns')),
 
