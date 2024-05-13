@@ -50,8 +50,7 @@ class Farm extends LookupEntry
             'name' => $this->identifiers ? $this->identifiers['name'] : '',
             'sex' => $this->properties ? $this->properties['sex'] : '',
             'year' => $this->properties ? $this->properties['year'] : '',
-            'beneficiary' => $this->properties ? $this->properties['beneficiary'] : 0,
-            'reserve' => $this->identifiers ? $this->identifiers['reserve'] : '',
+            'reserve' => $this->identifiers ? $this->identifiers['reserve'] : '', // value is 0 = beneficiary farm that is not a reserve; 1 = beneficiary farm that is a reserve; '' = non-beneficiary farm.
         ];
     }
 
