@@ -2,23 +2,31 @@
 
 namespace App\Models\LookupTables;
 
-use App\Models\Interfaces\LookupListEntry;
-use App\Models\Team;
-use App\Models\Traits\HasLinkedDataset;
-use App\Models\Traits\IsLookupList;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\Traits\CanBeHiddenFromContext;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\Interfaces\WithXlsforms;
 
 class CropProduct extends LookupEntry
 {
+    use CanBeHiddenFromContext;
 
-
-    public function getCsvContentsForOdk(): array
+    public function getCsvContentsForOdk(?WithXlsforms $team = null): array
     {
+        if ($team) {
+            $isRelevant = $this->isRemoved($team) ? 0 : 1;
+        } else {
+            $isRelevant = null;
+        }
+
         return [
-            'id' => $this->id,
+            'id'  => $this->id,
             'name' => $this->name,
             'label' => $this->label,
+            'is_in_context' => $isRelevant,
+            'total_max' => $this->total_max,
+            'unit_default' => $this->unit_default,
+            'sold_max' => $this->sold_max,
+            'farmgate_max' => $this->farmgate_max,
+            'given_max' => $this->given_max,
         ];
     }
 }

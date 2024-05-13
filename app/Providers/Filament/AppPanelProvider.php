@@ -7,10 +7,12 @@ use App\Filament\App\Pages\AccountSettingsPage;
 use App\Filament\App\Pages\RegisterTeam;
 use App\Filament\App\Pages\TeamDashboard;
 use App\Filament\App\Pages\TeamOdkView;
+use App\Filament\App\Resources\FarmGroupResource;
 use App\Filament\App\Resources\FarmResource;
 use App\Filament\App\Resources\ImportResource;
 use App\Filament\App\Resources\LocationLevelResource;
 use App\Filament\App\Resources\SiteResource;
+use App\Http\Middleware\SetLatestTeamMiddleware;
 use App\Models\Team;
 use BetterFuturesStudio\FilamentLocalLogins\LocalLogins;
 use Filament\Http\Middleware\Authenticate;
@@ -44,6 +46,9 @@ class AppPanelProvider extends PanelProvider
             ->viteTheme('resources/css/filament/app/theme.css')
             ->tenant(Team::class)
             ->tenantRegistration(RegisterTeam::class)
+            ->tenantMiddleware([
+                SetLatestTeamMiddleware::class,
+            ])
             ->login()
             ->passwordReset()
             ->profile() // TODO: Implement more full-featured profile page
@@ -88,6 +93,7 @@ class AppPanelProvider extends PanelProvider
                         ->icon('heroicon-o-map-pin')
                         ->items([
                             ...LocationLevelResource::getNavigationItems(),
+                            ...FarmGroupResource::getNavigationItems(),
                             ...FarmResource::getNavigationItems(),
                         ]),
                 ])

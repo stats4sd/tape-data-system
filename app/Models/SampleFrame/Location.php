@@ -14,12 +14,11 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\LookupTables\LookupEntry;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\Interfaces\WithXlsforms;
 
-class Location extends Model implements LookupListEntry
+class Location extends LookupEntry
 {
-    use HasLinkedDataset;
-    use IsLookupList;
-
     protected $casts = [
         'properties' => 'collection',
     ];
@@ -98,7 +97,7 @@ class Location extends Model implements LookupListEntry
         );
     }
 
-    public function getCsvContentsForOdk(): array
+    public function getCsvContentsForOdk(?WithXlsforms $team = null): array
     {
         return [
             'id' => $this->id,

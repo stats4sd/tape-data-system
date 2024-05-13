@@ -3,6 +3,8 @@
 namespace App\Models\Interfaces;
 
 // The required methods for a model to be used as a source for a csv file that will be published to ODK as a media attachment.
+use Stats4sd\FilamentOdkLink\Models\OdkLink\Interfaces\WithXlsforms;
+
 interface LookupListEntry
 {
     public static function getLinkedDataset(): ?\App\Models\Dataset;
@@ -18,6 +20,6 @@ interface LookupListEntry
     public function owner(): \Illuminate\Database\Eloquent\Relations\MorphTo;
 
     // Defines what goes into the csv file that will be published to ODK
-    public function getCsvContentsForOdk(): array;
+    public function getCsvContentsForOdk(?WithXlsforms $team = null): array;
 
 }

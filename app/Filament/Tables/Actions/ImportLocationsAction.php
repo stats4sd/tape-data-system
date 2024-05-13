@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Storage;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\HeadingRowImport;
+use App\Models\Team;
 
 class ImportLocationsAction extends ExcelImportAction
 {
@@ -109,7 +110,7 @@ class ImportLocationsAction extends ExcelImportAction
             Hidden::make('owner_id')
                 ->default(Filament::getTenant()->id),
             Hidden::make('owner_type')
-            ->default('App\Models\Team'),
+            ->default(Team::class),
         ];
     }
 

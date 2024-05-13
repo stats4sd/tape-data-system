@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Foundation\Inspiring;
+use App\Console\Commands\PurgeTelescopeEntries;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Schedule;
+use Stats4sd\FilamentOdkLink\Commands\PollForOdkData;
 
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote')->hourly();
+Schedule::command(PurgeTelescopeEntries::class)->daily();
+Schedule::command(PollForOdkData::class)->everyFiveMinutes();

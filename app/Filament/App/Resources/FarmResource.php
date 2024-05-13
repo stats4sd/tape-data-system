@@ -4,6 +4,7 @@ namespace App\Filament\App\Resources;
 
 use App\Filament\App\Resources\FarmResource\Pages;
 use App\Models\SampleFrame\Farm;
+use App\Models\SampleFrame\LocationLevel;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -27,22 +28,47 @@ class FarmResource extends Resource
     public static function table(Table $table): Table
     {
 
-        $identifiers = Farm::all()->map(fn (Farm $farm) => $farm->identifiers->keys())
+        $farms = Farm::all();
+
+        $locationLevelColumns = $farms->map(fn (Farm $farm) => $farm->location->locationLevel)
+            ->unique()
+            ->values()
+            ->map(
+                fn (LocationLevel $locationLevel) => Tables\Columns\TextColumn::make("location_{$locationLevel->id}")
+                    ->getStateUsing(fn ($record) => $record->location->location_level_id === $locationLevel->id ? $record->location->name : '')
+                    ->label($locationLevel->name)
+                    ->sortable()
+                    ->searchable()
+            );
+
+
+        $identifiers = $farms->map(fn (Farm $farm) => $farm->identifiers?->keys())
             ->flatten()->unique()->values();
 
-        $idColumns = $identifiers->map(fn ($identifier) => Tables\Columns\TextColumn::make("identifiers.{$identifier}")->label(ucfirst($identifier)));
+        $idColumns = $identifiers->map(fn ($identifier) => Tables\Columns\TextColumn::make("identifiers.{$identifier}")->label(ucfirst($identifier))->sortable()->searchable());
+
+        $properties = $farms->map(fn (Farm $farm) => $farm->properties?->keys())
+            ->flatten()->unique()->values();
+
+        $propertyColumns = $properties->map(fn ($property) => Tables\Columns\TextColumn::make("properties.{$property}")->label(ucfirst($property))->sortable()->searchable());
 
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('site.name'),
-                Tables\Columns\TextColumn::make('location.name'),
+                ...$locationLevelColumns,
                 Tables\Columns\TextColumn::make('agSystem.name'),
-                Tables\Columns\TextColumn::make('team_code')->label('Unique Code'),
+                Tables\Columns\TextColumn::make('team_code')->label('Unique Code')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('farmGroups.name')->listWithLineBreaks()->badge(),
                 ...$idColumns,
-
+                ...$propertyColumns,
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('farmGroup')
+                    ->relationship('farmGroups', 'name')
+                    ->multiple()
+                    ->preload()
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
