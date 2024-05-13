@@ -4,12 +4,15 @@ namespace App\Models\SurveyData;
 
 use Illuminate\Database\Eloquent\Model;
 
-class SimpleFormMain extends Model
+class DrinksFormDrinkRepeat extends Model
 {
-    protected $table = 'simple_form_main';
+    // Specify database table name explicitly
+    protected $table = 'drinks_form_drink_repeat';
 
     /**
      * The attributes that aren't mass assignable.
+     *
+     * P.S. These attributes should not be imported from ODK submission,
      *
      * @var array
      */
