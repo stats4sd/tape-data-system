@@ -50,6 +50,7 @@ class Farm extends LookupEntry
             'name' => $this->identifiers ? $this->identifiers['name'] : '',
             'sex' => $this->properties ? $this->properties['sex'] : '',
             'year' => $this->properties ? $this->properties['year'] : '',
+            'beneficiary' => $this->properties ? $this->properties['beneficiary'] : 0,
             'reserve' => $this->identifiers ? $this->identifiers['reserve'] : '',
         ];
     }
