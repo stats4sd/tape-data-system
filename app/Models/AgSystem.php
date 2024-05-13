@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
-use App\Models\Traits\HasLinkedDataset;
-use App\Models\Traits\HasProperties;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\SampleFrame\Farm;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\MediaLibrary\HasMedia;
+use App\Models\SampleFrame\Location;
+use App\Models\Traits\HasProperties;
+use App\Models\Traits\HasLinkedDataset;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AgSystem extends Model implements HasMedia
 {
@@ -59,6 +62,16 @@ class AgSystem extends Model implements HasMedia
     public function site(): BelongsTo
     {
         return $this->belongsTo(Site::class);
+    }
+
+    public function location(): BelongsTo
+    {
+        return $this->belongsTo(Location::class);
+    }
+
+    public function farms(): HasMany
+    {
+        return $this->hasMany(Farm::class);
     }
 
 }

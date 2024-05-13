@@ -2,12 +2,14 @@
 
 namespace App\Models\SampleFrame;
 
+use App\Models\AgSystem;
 use App\Models\Interfaces\LookupListEntry;
 use App\Models\SurveyData\CaetAssessment;
 use App\Models\SurveyData\PerformanceAssessment;
 use App\Models\Traits\HasLinkedDataset;
 use App\Models\Traits\IsLookupList;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
@@ -24,6 +26,11 @@ class Farm extends Model implements LookupListEntry
     public function owner(): MorphTo
     {
         return $this->morphTo('owner');
+    }
+
+    public function agSystem(): BelongsTo
+    {
+        return $this->belongsTo(AgSystem::class);
     }
 
     public function caetAssessments(): HasMany

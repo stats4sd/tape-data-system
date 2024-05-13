@@ -2,14 +2,18 @@
 
 namespace App\Models\SampleFrame;
 
-use App\Models\Interfaces\LookupListEntry;
-use App\Models\Traits\HasLinkedDataset;
+use App\Models\Site;
+use App\Models\AgSystem;
 use App\Models\Traits\IsLookupList;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Cache;
+use App\Models\Traits\HasLinkedDataset;
+use Illuminate\Database\Eloquent\Model;
+use App\Models\Interfaces\LookupListEntry;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Location extends Model implements LookupListEntry
 {
@@ -27,6 +31,16 @@ class Location extends Model implements LookupListEntry
     public function owner(): MorphTo
     {
         return $this->morphTo('owner');
+    }
+
+    public function site(): HasOne
+    {
+        return $this->hasOne(Site::class);
+    }
+
+    public function systems(): HasMany
+    {
+        return $this->hasMany(AgSystem::class);
     }
 
     public function locationLevel(): BelongsTo

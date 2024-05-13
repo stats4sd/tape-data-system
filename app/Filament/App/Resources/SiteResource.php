@@ -65,7 +65,8 @@ class SiteResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name'),
                 Tables\Columns\TextColumn::make('aeZone.name'),
-                Tables\Columns\TextColumn::make('location')->limit(50),
+                Tables\Columns\TextColumn::make('location.name'),
+                Tables\Columns\TextColumn::make('location')->limit(50)->label('Location Description'),
             ])
             ->filters([
                 //
