@@ -2,29 +2,24 @@
 
 namespace App\Models\SampleFrame;
 
-use App\Models\Interfaces\LookupListEntry;
+use App\Models\LookupTables\LookupEntry;
 use App\Models\Team;
-use App\Models\Traits\HasLinkedDataset;
-use App\Models\Traits\IsLookupList;
 use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\Interfaces\WithXlsforms;
 
-class LocationLevel extends Model implements LookupListEntry
+class LocationLevel extends LookupEntry
 {
-    use HasLinkedDataset;
-    use IsLookupList;
-
     protected static function booted(): void
     {
         static::saving(function (self $locationLevel) {
             $locationLevel->slug = $locationLevel->slug ?? Str::slug($locationLevel->name);
         });
 
-        if(Filament::hasTenancy()) {
+        if(Filament::hasTenancy() && Filament::getTenant() instanceof Team) {
             static::addGlobalScope('team', function ($query) {
                 $query->where('owner_id', Filament::getTenant()->id);
             });
@@ -75,7 +70,7 @@ class LocationLevel extends Model implements LookupListEntry
         );
     }
 
-    public function getCsvContentsForOdk(): array
+    public function getCsvContentsForOdk(?WithXlsforms $team = null): array
     {
         return [
             'id' => $this->id,

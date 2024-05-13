@@ -3,45 +3,84 @@
 namespace App\Imports;
 
 use App\Models\SampleFrame\Farm;
+use Illuminate\Support\Collection;
 use App\Models\SampleFrame\Location;
+use App\Models\SampleFrame\FarmGroup;
 use App\Models\SampleFrame\LocationLevel;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
-use Maatwebsite\Excel\Concerns\ToModel;
-use Maatwebsite\Excel\Concerns\WithBatchInserts;
-use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
-use Maatwebsite\Excel\Concerns\WithChunkReading;
-use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 use Maatwebsite\Excel\Concerns\WithUpserts;
+use Maatwebsite\Excel\Concerns\ToCollection;
+use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
+use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
+use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 
-class FarmSheetImport implements ShouldQueue, SkipsEmptyRows, ToModel, WithBatchInserts, WithCalculatedFormulas, WithChunkReading, WithHeadingRow, WithStrictNullComparison, WithUpserts, WithValidation
+class FarmSheetImport implements ShouldQueue, SkipsEmptyRows, ToCollection, WithBatchInserts, WithCalculatedFormulas, WithChunkReading, WithHeadingRow, WithStrictNullComparison, WithUpserts, WithValidation
 {
     // The $data array is the data that is passed from the ImportFarmsAction form
     public function __construct(public array $data)
     {
     }
 
-    public function model(array $row): Farm
+    public function collection(Collection $rows)
     {
-        $locationLevel = LocationLevel::find($this->data['location_level_id']);
+        $importedFarms = [];
 
-        $headers = $this->data['header_columns'];
+        foreach ($rows as $row) {
+            $headers = $this->data['header_columns'];
 
-        $locationCodeColumn = $headers[$this->data['location_code_column']];
-        $farmCodeColumn = $headers[$this->data['farm_code_column']];
+            $farmCodeColumn = $headers[$this->data['farm_code_column']];
 
-        $location = Location::where('code', $row[$locationCodeColumn])
-            ->where('location_level_id', $locationLevel->id)
-            ->first();
+            $locationLevel = LocationLevel::find($this->data['location_level_id']);
+            $locationCodeColumn = $headers[$this->data['location_code_column']];
+            $location = Location::where('code', $row[$locationCodeColumn])
+                ->where('location_level_id', $locationLevel->id)
+                ->first();
 
-        // TODO: handle Identifiers and Properties
+            // Find the identifier columns;
+            $identifierColumns = collect($this->data['farm_identifiers'])->map(fn ($identifier) => $headers[$identifier]);
+            // Get the data from those columns;
+            $identifierData = $identifierColumns->mapWithKeys(fn ($column) => [$column => $row[$column]]);
 
-        return new Farm([
-            'location_id' => $location->id,
-            'code' => $row[$farmCodeColumn],
-        ]);
+            // Find the property columns;
+            $propertyColumns = collect($this->data['farm_properties'])->map(fn ($property) => $headers[$property]);
+            // Get the data from those columns;
+            $propertyData = $propertyColumns->mapWithKeys(fn ($column) => [$column => $row[$column]]);
+
+            // Create the farm
+            $farm = new Farm([
+                'owner_id' => $this->data['owner_id'],
+                'owner_type' => $this->data['owner_type'],
+                'location_id' => $location->id,
+                'team_code' => $row[$farmCodeColumn],
+                'identifiers' => $identifierData,
+                'properties' => $propertyData,
+            ]);
+            $farm->save();
+
+            // Farm groups
+            foreach ($this->data as $key => $value) {
+                if (strpos($key, 'grouping_') === 0) {
+                    $farmGrouping = explode('_', $key)[1] ?? null;
+                    $farmGroupingColumn = $headers[$value];
+            
+                    // Find the farm group
+                    $farmGroup = FarmGroup::where('farm_grouping_id', $farmGrouping)->where('code', $row[$farmGroupingColumn])->first();
+            
+                    // // Attach the farm to the farm group
+                    if ($farmGroup) {
+                        $farm->farmGroups()->attach($farmGroup);
+                    }
+                }
+            }
+
+            $importedFarms[] = $farm;
+        }
+
+        return $importedFarms;
     }
 
     public function rules(): array

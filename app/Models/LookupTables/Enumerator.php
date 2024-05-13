@@ -2,14 +2,11 @@
 
 namespace App\Models\LookupTables;
 
-use App\Models\Interfaces\LookupListEntry;
-use App\Models\Traits\HasLinkedDataset;
-use App\Models\Traits\IsLookupList;
-use Illuminate\Database\Eloquent\Model;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\Interfaces\WithXlsforms;
 
 class Enumerator extends LookupEntry
 {
-    public function getCsvContentsForOdk(): array
+    public function getCsvContentsForOdk(?WithXlsforms $team = null): array
     {
         return [
             'id'  => $this->id,
