@@ -15,6 +15,7 @@ use App\Services\HelperService;
 use Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use App\Models\SampleFrame\FarmGroup;
+use App\Models\SampleFrame\FarmGrouping;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\App\Resources\FarmGroupResource\Pages;
@@ -32,7 +33,7 @@ class FarmGroupResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Select::make('farm_grouping_id')
-                                    ->relationship(name: 'farmGrouping', titleAttribute: 'name')
+                                    ->options(FarmGrouping::where('owner_id', HelperService::getSelectedTeam()->id)->pluck('name', 'id'))
                                     ->required()
                                     ->label('Select the grouping this group belongs to')
                                     ->helperText('E.g. grouping \'Farm size\' has groups \'Big\' and \'Small\', grouping \'Beneficiary\' has groups \'Beneficiary\' and \'Non beneficiary\'')

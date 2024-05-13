@@ -7,6 +7,7 @@ use App\Models\Import;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Facades\Filament;
+use App\Services\HelperService;
 use App\Models\SampleFrame\Farm;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\SampleFrame\FarmGroup;
@@ -40,7 +41,7 @@ class ImportFarmsAction extends ExcelImportAction
 
     protected function getDefaultForm(): array
     {
-        $groups= FarmGrouping::all()->pluck('name', 'id')->toArray();
+        $groups= FarmGrouping::all()->where('owner_id', HelperService::getSelectedTeam()->id)->pluck('name', 'id')->toArray();
 
         return [
             FileUpload::make('upload')
