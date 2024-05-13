@@ -17,7 +17,8 @@ class SubmissionsRelationManager extends RelationManager
 
     public function isReadOnly(): bool
     {
-        return false;$this->getSelectedTableRecords();
+        return false;
+        $this->getSelectedTableRecords();
     }
 
     public function form(Form $form): Form
@@ -26,7 +27,16 @@ class SubmissionsRelationManager extends RelationManager
             ->schema([
                 Forms\Components\TextInput::make('odk_id')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->columnSpanFull(),
+                Forms\Components\KeyValue::make('content')
+                    ->label('ODK Submission Content')
+                    ->required()
+                    ->columnSpanFull()
+                    ->addable(false)
+                    ->editableKeys(false)
+                    ->keyLabel('Property name')
+                    ->valueLabel('Property value'),
             ]);
     }
 
@@ -39,34 +49,33 @@ class SubmissionsRelationManager extends RelationManager
             ->columns([
                 Tables\Columns\TextColumn::make('odk_id'),
                 Tables\Columns\TextColumn::make('submitted_at'),
-                Tables\Columns\TextColumn::make('enumerator')
-                ->getStateUsing(function ($record) {
-                    $enumeratorId = $record->content['survey_start']['inquirer_choice'];
-                    if($enumeratorId === "77") {
-                        return $record->content['survey_start']['inquirer_text'];
-                    }
-                    return Enumerator::firstWhere('name', $record->content['survey_start']['inquirer_choice']) ?? '~not found~';
-                }),
-                Tables\Columns\TextColumn::make('farm_name')
-                ->getStateUsing(function ($record) {
-                    return $record->content['reg']['farm_name'];
-                }),
-                Tables\Columns\TextColumn::make('respondent_available')
-                ->getStateUsing(function ($record) {
-                    return $record->content['reg']['respondent_check']['respondent_available'];
-                }),
-                Tables\Columns\TextColumn::make('consent')
-                ->getStateUsing(function ($record) {
-                    return $record->content['consent_grp']['consent'] === "1" ? "Yes" : "No";
-                }),
+                // Tables\Columns\TextColumn::make('enumerator')
+                // ->getStateUsing(function ($record) {
+                //     $enumeratorId = $record->content['survey_start']['inquirer_choice'];
+                //     if($enumeratorId === "77") {
+                //         return $record->content['survey_start']['inquirer_text'];
+                //     }
+                //     return Enumerator::firstWhere('name', $record->content['survey_start']['inquirer_choice']) ?? '~not found~';
+                // }),
+                // Tables\Columns\TextColumn::make('farm_name')
+                //     ->getStateUsing(function ($record) {
+                //         return $record->content['reg']['farm_name'];
+                //     }),
+                // Tables\Columns\TextColumn::make('respondent_available')
+                //     ->getStateUsing(function ($record) {
+                //         return $record->content['reg']['respondent_check']['respondent_available'];
+                //     }),
+                // Tables\Columns\TextColumn::make('consent')
+                //     ->getStateUsing(function ($record) {
+                //         return $record->content['consent_grp']['consent'] === "1" ? "Yes" : "No";
+                //     }),
             ])
             ->filters([
                 //
             ])
-            ->headerActions([
-            ])
+            ->headerActions([])
             ->actions([
-                //Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
