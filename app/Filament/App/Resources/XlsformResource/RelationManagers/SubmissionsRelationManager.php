@@ -72,11 +72,16 @@ class SubmissionsRelationManager extends RelationManager
             ])
             ->headerActions([])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()->label('Edit modal'),
 
-                // TODO: Edit button in table, click to show Edit page in a separate page instead of a popup modal
-                // Tables\Actions\EditAction::make()
-                //     ->url(fn (Submission $record): string => SubmissionResource::getUrl('edit', ['record' => $record])),
+                // TODO: Show Edit page in a separaate page instead of a popup modal
+                //
+                // Error occurred for asking "team" relationship in Submission model
+                // I will work on removing previously saved entities, entity_values, custom tables records first, will get back to it later
+                //
+                // Question: If popup modal works fine to edit a submission, why it does not work when we should the Edit page in a separate page...?
+                Tables\Actions\EditAction::make()->label('Edit page')
+                    ->url(fn (Submission $record): string => SubmissionResource::getUrl('edit', ['record' => $record])),
 
                 Tables\Actions\DeleteAction::make(),
             ])
