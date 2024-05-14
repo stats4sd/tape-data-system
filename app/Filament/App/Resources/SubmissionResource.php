@@ -35,12 +35,12 @@ class SubmissionResource extends Resource
                         // Hard coded stuff for TAPE Survey.
                         // NOTE: This will need to be updated whenever the ODK form is updated...
                         Forms\Components\TextInput::make('content.survey_start.inquirer')
-                        ->label('Enumerator'),
+                            ->label('Enumerator'),
 
                         Forms\Components\TextInput::make('content.start')
-                        ->label('Survey Start Time'),
+                            ->label('Survey Start Time'),
                         Forms\Components\TextInput::make('content.start')
-                        ->label('Survey End Time'),
+                            ->label('Survey End Time'),
 
                     ])
 
@@ -79,6 +79,7 @@ class SubmissionResource extends Resource
     {
         return [
             'index' => Pages\ListSubmissions::route('/'),
+            'edit' => Pages\EditSubmission::route('/{record}/edit'),
         ];
     }
 }

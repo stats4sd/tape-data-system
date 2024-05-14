@@ -2,14 +2,17 @@
 
 namespace App\Filament\App\Resources\XlsformResource\RelationManagers;
 
-use App\Models\LookupTables\Enumerator;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use App\Models\LookupTables\Enumerator;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\App\Resources\SubmissionResource;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\Submission;
+use Filament\Resources\RelationManagers\RelationManager;
+use ValentinMorice\FilamentJsonColumn\FilamentJsonColumn;
 
 class SubmissionsRelationManager extends RelationManager
 {
@@ -29,14 +32,8 @@ class SubmissionsRelationManager extends RelationManager
                     ->required()
                     ->maxLength(255)
                     ->columnSpanFull(),
-                Forms\Components\KeyValue::make('content')
-                    ->label('ODK Submission Content')
-                    ->required()
-                    ->columnSpanFull()
-                    ->addable(false)
-                    ->editableKeys(false)
-                    ->keyLabel('Property name')
-                    ->valueLabel('Property value'),
+                FilamentJsonColumn::make('content')
+                    ->columnSpanFull(),
             ]);
     }
 
@@ -76,6 +73,11 @@ class SubmissionsRelationManager extends RelationManager
             ->headerActions([])
             ->actions([
                 Tables\Actions\EditAction::make(),
+
+                // TODO: Edit button in table, click to show Edit page in a separate page instead of a popup modal
+                // Tables\Actions\EditAction::make()
+                //     ->url(fn (Submission $record): string => SubmissionResource::getUrl('edit', ['record' => $record])),
+
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
