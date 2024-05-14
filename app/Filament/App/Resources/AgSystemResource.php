@@ -2,16 +2,17 @@
 
 namespace App\Filament\App\Resources;
 
-use App\Models\AgSystem;
-use Filament\Facades\Filament;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
-use Filament\Support\Enums\VerticalAlignment;
+use App\Models\Site;
 use Filament\Tables;
+use App\Models\AgSystem;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
+use Filament\Facades\Filament;
+use Filament\Resources\Resource;
+use Illuminate\Database\Eloquent\Builder;
+use Filament\Support\Enums\VerticalAlignment;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\DatasetVariable;
 
 class AgSystemResource extends Resource
@@ -51,7 +52,7 @@ class AgSystemResource extends Resource
                             ->maxLength(255),
                         Forms\Components\Select::make('site_id')
                             ->label('Geographic Site')
-                            ->relationship('site', 'name')
+                            ->options(Site::join('locations', 'sites.location_id', '=', 'locations.id')->pluck('locations.name', 'sites.id')->toArray())
                             ->disabled()
                             ->required(),
                     ]),

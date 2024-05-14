@@ -22,7 +22,7 @@ class Team extends \Stats4sd\FilamentOdkLink\Models\TeamManagement\Team
     protected static function booted(): void
     {
 
-        // when the model is created; automatically create an associated project on ODK Central;
+        // when the model is created; automatically create an associated project on ODK Central and a top location level;
         static::created(static function ($owner) {
 
             // check if we are in local-only (no-ODK link) mode
@@ -43,6 +43,7 @@ class Team extends \Stats4sd\FilamentOdkLink\Models\TeamManagement\Team
 
             $owner->caetInterpretations()->createMany($interpretations);
 
+            $owner->locationLevels()->create(['name' => 'Site level - click edit to rename', 'has_farms' => 0, 'top_level' => 1]);
 
         });
 

@@ -17,18 +17,17 @@ class SiteResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?string $navigationLabel = 'Sites & Systems';
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\Section::make('Identifying Information')
                     ->schema([
-
-                        Forms\Components\TextInput::make('name')
-                            ->label('Enter an identifiable name for the site.')
-                            ->required()
-                            ->maxLength(255),
-                        Forms\Components\Textarea::make('location')
+                        Forms\Components\Placeholder::make('name')
+                            ->content(fn (Site $record): string => $record->location->name),
+                        Forms\Components\Textarea::make('location_description')
                             ->label('Describe the geographic location of the survey site. (e.g., which administrative zone(s) does it cover, what are the boundaries, etc?)'),
                     ]),
                 Forms\Components\Section::make('Agroecological Zone')
@@ -63,10 +62,9 @@ class SiteResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name'),
+                Tables\Columns\TextColumn::make('location.name')->label('Name'),
                 Tables\Columns\TextColumn::make('aeZone.name'),
-                Tables\Columns\TextColumn::make('location.name'),
-                Tables\Columns\TextColumn::make('location')->limit(50)->label('Location Description'),
+                Tables\Columns\TextColumn::make('location_description')->limit(50)->label('Location Description'),
             ])
             ->filters([
                 //

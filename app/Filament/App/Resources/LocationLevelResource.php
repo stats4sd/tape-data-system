@@ -70,9 +70,9 @@ class LocationLevelResource extends Resource
             ->schema([
                 Select::make('parent_id')
                     ->label('Is this location level a sub-level of another level?')
-                    ->helperText('E.g. "Village" may be a sub-level of "District", and "District" may be a sub-level of "Province". Select None if this is the top level in your sample frame.')
-                    ->placeholder('None')
-                    ->relationship('parent', 'name'),
+                    ->helperText('E.g. "Village" may be a sub-level of "District", and "District" may be a sub-level of "Province".')
+                    ->relationship('parent', 'name')
+                    ->hidden(fn(?LocationLevel $record) => $record && $record->top_level === 1),
                 TextInput::make('name')
                     ->required()
                     ->maxLength(255),
@@ -83,6 +83,9 @@ class LocationLevelResource extends Resource
                 ->default(fn () => HelperService::getSelectedTeam()->id),
                 Hidden::make('owner_type')
                 ->default('App\Models\Team'),
+                Hidden::make('top_level')
+                ->when(fn ($record) => !isset($record->top_level))
+                ->default(0)
             ])->columns(1);
     }
 
@@ -95,7 +98,8 @@ class LocationLevelResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('parent.name')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->placeholder('Top Level'),
                 Tables\Columns\TextColumn::make('locations_count')
                     ->counts('locations')
                     ->label('No. of Entries')
@@ -124,7 +128,7 @@ class LocationLevelResource extends Resource
             \Filament\Infolists\Components\Section::make('Key Details')
                 ->schema([
                     TextEntry::make('name')->label('Level'),
-                    TextEntry::make('parent.name')->label('Parent Level'),
+                    TextEntry::make('parent.name')->label('Parent Level')->hidden(fn(LocationLevel $record) => $record->top_level === 1),
                 ]),
         ])
             ->columns(2);
