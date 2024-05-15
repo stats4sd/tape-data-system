@@ -43,7 +43,7 @@ class Team extends \Stats4sd\FilamentOdkLink\Models\TeamManagement\Team
 
             $owner->caetInterpretations()->createMany($interpretations);
 
-            $owner->locationLevels()->create(['name' => 'Site level - click edit to rename', 'has_farms' => 0, 'top_level' => 1]);
+            $owner->locationLevels()->create(['name' => 'Site level - click edit to rename', 'has_farms' => 0, 'top_level' => 1, 'slug' =>'site-level']);
 
         });
 
