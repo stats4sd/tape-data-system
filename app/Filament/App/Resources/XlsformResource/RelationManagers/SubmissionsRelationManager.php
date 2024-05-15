@@ -4,12 +4,11 @@ namespace App\Filament\App\Resources\XlsformResource\RelationManagers;
 
 use App\Models\LookupTables\Enumerator;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Resources\RelationManagers\RelationManager;
+use ValentinMorice\FilamentJsonColumn\FilamentJsonColumn;
 
 class SubmissionsRelationManager extends RelationManager
 {
@@ -17,16 +16,24 @@ class SubmissionsRelationManager extends RelationManager
 
     public function isReadOnly(): bool
     {
-        return false;$this->getSelectedTableRecords();
+        return false;
     }
 
     public function form(Form $form): Form
     {
         return $form
             ->schema([
+                // odk_id is for identification purpose, disable it to avoid user updating it accidentally
                 Forms\Components\TextInput::make('odk_id')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->disabled()
+                    ->columnSpanFull(),
+                // hide viewer and show editor, to reduce number of clicks required
+                FilamentJsonColumn::make('content')
+                    ->columnSpanFull()
+                    ->editorOnly()
+                    ->editorHeight(500),
             ]);
     }
 
@@ -39,34 +46,33 @@ class SubmissionsRelationManager extends RelationManager
             ->columns([
                 Tables\Columns\TextColumn::make('odk_id'),
                 Tables\Columns\TextColumn::make('submitted_at'),
-                Tables\Columns\TextColumn::make('enumerator')
-                ->getStateUsing(function ($record) {
-                    $enumeratorId = $record->content['survey_start']['inquirer_choice'];
-                    if($enumeratorId === "77") {
-                        return $record->content['survey_start']['inquirer_text'];
-                    }
-                    return Enumerator::firstWhere('name', $record->content['survey_start']['inquirer_choice']) ?? '~not found~';
-                }),
-                Tables\Columns\TextColumn::make('farm_name')
-                ->getStateUsing(function ($record) {
-                    return $record->content['reg']['farm_name'];
-                }),
-                Tables\Columns\TextColumn::make('respondent_available')
-                ->getStateUsing(function ($record) {
-                    return $record->content['reg']['respondent_check']['respondent_available'];
-                }),
-                Tables\Columns\TextColumn::make('consent')
-                ->getStateUsing(function ($record) {
-                    return $record->content['consent_grp']['consent'] === "1" ? "Yes" : "No";
-                }),
+                 Tables\Columns\TextColumn::make('enumerator')
+                 ->getStateUsing(function ($record) {
+                     $enumeratorId = $record->content['survey_start']['inquirer_choice'];
+                     if($enumeratorId === "77") {
+                         return $record->content['survey_start']['inquirer_text'];
+                     }
+                     return Enumerator::firstWhere('name', $record->content['survey_start']['inquirer_choice']) ?? '~not found~';
+                 }),
+                 Tables\Columns\TextColumn::make('farm_name')
+                     ->getStateUsing(function ($record) {
+                         return $record->content['reg']['farm_name'];
+                     }),
+                 Tables\Columns\TextColumn::make('respondent_available')
+                     ->getStateUsing(function ($record) {
+                         return $record->content['reg']['respondent_check']['respondent_available'];
+                     }),
+                 Tables\Columns\TextColumn::make('consent')
+                     ->getStateUsing(function ($record) {
+                         return $record->content['consent_grp']['consent'] === "1" ? "Yes" : "No";
+                     }),
             ])
             ->filters([
                 //
             ])
-            ->headerActions([
-            ])
+            ->headerActions([])
             ->actions([
-                //Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()->label('Edit'),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
