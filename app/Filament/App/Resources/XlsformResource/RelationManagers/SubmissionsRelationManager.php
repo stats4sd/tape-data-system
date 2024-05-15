@@ -6,11 +6,6 @@ use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
-use App\Models\LookupTables\Enumerator;
-use Illuminate\Database\Eloquent\Builder;
-use App\Filament\App\Resources\SubmissionResource;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Stats4sd\FilamentOdkLink\Models\OdkLink\Submission;
 use Filament\Resources\RelationManagers\RelationManager;
 use ValentinMorice\FilamentJsonColumn\FilamentJsonColumn;
 
@@ -28,12 +23,17 @@ class SubmissionsRelationManager extends RelationManager
     {
         return $form
             ->schema([
+                // odk_id is for identification purpose, disable it to avoid user updating it accidentally
                 Forms\Components\TextInput::make('odk_id')
                     ->required()
                     ->maxLength(255)
+                    ->disabled()
                     ->columnSpanFull(),
+                // hide viewer and show editor, to reduce number of clicks required
                 FilamentJsonColumn::make('content')
-                    ->columnSpanFull(),
+                    ->columnSpanFull()
+                    ->editorOnly()
+                    ->editorHeight(500),
             ]);
     }
 
@@ -72,17 +72,7 @@ class SubmissionsRelationManager extends RelationManager
             ])
             ->headerActions([])
             ->actions([
-                Tables\Actions\EditAction::make()->label('Edit modal'),
-
-                // TODO: Show Edit page in a separaate page instead of a popup modal
-                //
-                // Error occurred for asking "team" relationship in Submission model
-                // I will work on removing previously saved entities, entity_values, custom tables records first, will get back to it later
-                //
-                // Question: If popup modal works fine to edit a submission, why it does not work when we show the Edit page in a separate page...?
-                Tables\Actions\EditAction::make()->label('Edit page')
-                    ->url(fn (Submission $record): string => SubmissionResource::getUrl('edit', ['record' => $record])),
-
+                Tables\Actions\EditAction::make()->label('Edit'),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
