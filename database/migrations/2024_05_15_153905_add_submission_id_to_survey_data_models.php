@@ -67,8 +67,6 @@ return new class () extends Migration {
      */
     public function down(): void
     {
-        Schema::table('survey_data_models', function (Blueprint $table) {
-            //
-        });
+
     }
 };
