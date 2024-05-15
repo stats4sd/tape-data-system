@@ -29,7 +29,7 @@ class FarmResource extends Resource
     public static function table(Table $table): Table
     {
 
-        $farms = Farm::all()->where('owner_id', HelperService::getSelectedTeam());
+        $farms = Farm::all()->where('owner_id', HelperService::getSelectedTeam()->id);
 
         $locationLevelColumns = $farms->map(fn (Farm $farm) => $farm->location->locationLevel)
             ->unique()
