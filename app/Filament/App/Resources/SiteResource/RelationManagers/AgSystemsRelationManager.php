@@ -40,7 +40,10 @@ class AgSystemsRelationManager extends RelationManager
             ->recordTitleAttribute('name')
             ->columns([
                 Tables\Columns\TextColumn::make('name'),
-                Tables\Columns\IconColumn::make('is_complete')
+                Tables\Columns\IconColumn::make('is_complete'),
+                Tables\Columns\TextColumn::make('farms_count')
+                    ->label('# of Farms')
+                    ->counts('farms'),
             ])
             ->filters([
                 //
