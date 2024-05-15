@@ -16,7 +16,6 @@ class SubmissionsRelationManager extends RelationManager
     public function isReadOnly(): bool
     {
         return false;
-        $this->getSelectedTableRecords();
     }
 
     public function form(Form $form): Form
