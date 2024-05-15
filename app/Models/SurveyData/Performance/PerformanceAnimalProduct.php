@@ -2,14 +2,20 @@
 
 namespace App\Models\SurveyData\Performance;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\SurveyData\MainSurvey;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\Submission;
 
 class PerformanceAnimalProduct extends Model
 {
-        public function performanceAssessment(): BelongsTo
+    public function mainSurvey(): BelongsTo
     {
-        return $this->belongsTo(PerformanceAssessment::class);
+        return $this->belongsTo(MainSurvey::class);
+    }
+
+    public function submission(): BelongsTo
+    {
+        return $this->belongsTo(Submission::class, 'submission_id', 'id');
     }
 }

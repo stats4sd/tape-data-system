@@ -6,6 +6,9 @@ use App\Models\SampleFrame\Farm;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * NOT CURRENTLY IN USE - until we work out how to auto-link different form sections at the same 'level' to different datasets
+ */
 class CaetAssessment extends Model
 {
     protected $table = 'caets';

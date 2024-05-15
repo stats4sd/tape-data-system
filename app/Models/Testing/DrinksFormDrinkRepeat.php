@@ -1,13 +1,16 @@
 <?php
 
-namespace App\Models\SurveyData;
+namespace App\Models\Testing;
 
 use Illuminate\Database\Eloquent\Model;
 
-class DrinksFormMain extends Model
+/*
+ * FOR TESTING ONLY
+ */
+class DrinksFormDrinkRepeat extends Model
 {
     // Specify database table name explicitly
-    protected $table = 'drinks_form_main';
+    protected $table = 'drinks_form_drink_repeat';
 
     /**
      * The attributes that aren't mass assignable.
