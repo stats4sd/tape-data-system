@@ -101,8 +101,8 @@ class ImportFarmsAction extends ExcelImportAction
                         ->live()
                         ->options(fn (Get $get) => $get('header_columns')),
 
-                    Select::make('ag_system_column')
-                        ->label('Which column contains the system unique code?')
+                    Select::make('ag_system_code_column')
+                        ->label('Which column contains the agricultural system unique code?')
                         ->placeholder('Select a column')
                         ->helperText('Farms can be linked to a system later if it is not currently known')
                         ->live()

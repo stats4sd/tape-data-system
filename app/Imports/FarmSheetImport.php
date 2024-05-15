@@ -2,6 +2,7 @@
 
 namespace App\Imports;
 
+use App\Models\AgSystem;
 use App\Models\SampleFrame\Farm;
 use Illuminate\Support\Collection;
 use App\Models\SampleFrame\Location;
@@ -34,7 +35,10 @@ class FarmSheetImport implements ShouldQueue, SkipsEmptyRows, ToCollection, With
 
             $farmCodeColumn = $headers[$this->data['farm_code_column']];
 
-            $systemCodeColumn = $headers[$this->data['ag_system_column']] ?? null;
+            $agSystemCodeColumn = $headers[$this->data['ag_system_code_column']] ?? null;
+            if($agSystemCodeColumn) {
+                $agSystem = AgSystem::where('code', $row[$agSystemCodeColumn])->first();
+            }
 
             $locationLevel = LocationLevel::find($this->data['location_level_id']);
             $locationCodeColumn = $headers[$this->data['location_code_column']];
@@ -57,7 +61,7 @@ class FarmSheetImport implements ShouldQueue, SkipsEmptyRows, ToCollection, With
                 'owner_id' => $this->data['owner_id'],
                 'owner_type' => $this->data['owner_type'],
                 'location_id' => $location->id,
-                'ag_system_id' => $row[$systemCodeColumn] ?? null,
+                'ag_system_id' => $agSystem->id ?? null,
                 'team_code' => $row[$farmCodeColumn],
                 'identifiers' => $identifierData,
                 'properties' => $propertyData,

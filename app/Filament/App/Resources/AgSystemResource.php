@@ -50,6 +50,9 @@ class AgSystemResource extends Resource
                         Forms\Components\TextInput::make('name')
                             ->label('Add a short, descriptive name for the system')
                             ->maxLength(255),
+                        Forms\Components\TextInput::make('code')
+                            ->label('Enter the code that will be used to identify this Agricultural System')
+                            ->required(),
                         Forms\Components\Select::make('site_id')
                             ->label('Geographic Site')
                             ->options(Site::join('locations', 'sites.location_id', '=', 'locations.id')->pluck('locations.name', 'sites.id')->toArray())

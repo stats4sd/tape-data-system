@@ -57,7 +57,7 @@ class FarmResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('site.name'),
                 ...$locationLevelColumns,
-                Tables\Columns\TextColumn::make('agSystem.name')->label('System'),
+                Tables\Columns\TextColumn::make('agSystem.name')->label('Agricultural System'),
                 Tables\Columns\TextColumn::make('team_code')->label('Unique Code')
                     ->sortable()
                     ->searchable(),
