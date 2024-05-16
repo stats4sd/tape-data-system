@@ -55,7 +55,7 @@ class FarmResource extends Resource
 
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('site.name'),
+                Tables\Columns\TextColumn::make('agSystem.site.location.name')->label('Site'),
                 ...$locationLevelColumns,
                 Tables\Columns\TextColumn::make('agSystem.name')->label('Agricultural System'),
                 Tables\Columns\TextColumn::make('team_code')->label('Unique Code')

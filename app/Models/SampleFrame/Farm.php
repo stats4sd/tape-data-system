@@ -68,8 +68,4 @@ class Farm extends LookupEntry
         return $this->belongsTo(Location::class);
     }
 
-    public function site(): BelongsTo
-    {
-        return $this->belongsTo(Site::class);
-    }
 }
