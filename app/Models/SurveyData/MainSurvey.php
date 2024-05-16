@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Models\SurveyData\Performance;
+namespace App\Models\SurveyData;
 
-use App\Models\SurveyData\MainSurvey;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\Submission;
 
-class PerformanceCropProduct extends Model
+class MainSurvey extends Model
 {
-    public function mainSurvey(): BelongsTo
-    {
-        return $this->belongsTo(MainSurvey::class);
-    }
+    protected $table = 'main_surveys';
+
+    protected $guarded = ['id', 'created_at', 'updated_at', 'deleted_at'];
+
 
     public function submission(): BelongsTo
     {
         return $this->belongsTo(Submission::class, 'submission_id', 'id');
     }
+
 }
