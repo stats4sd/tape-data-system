@@ -8,7 +8,6 @@ use App\Models\Traits\HasLinkedDataset;
 use App\Models\Traits\IsLookupList;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\LookupTables\LookupEntry;
-use App\Models\Site;
 use App\Models\SurveyData\CaetAssessment;
 use App\Models\SurveyData\PerformanceAssessment;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

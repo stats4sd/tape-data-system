@@ -3,7 +3,6 @@
 namespace App\Models\SampleFrame;
 
 use App\Models\Site;
-use App\Models\AgSystem;
 use App\Models\Traits\IsLookupList;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Cache;
@@ -35,11 +34,6 @@ class Location extends LookupEntry
     public function site(): HasOne
     {
         return $this->hasOne(Site::class);
-    }
-
-    public function systems(): HasMany
-    {
-        return $this->hasMany(AgSystem::class);
     }
 
     public function locationLevel(): BelongsTo

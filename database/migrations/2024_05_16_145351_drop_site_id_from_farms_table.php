@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('ag_systems', function (Blueprint $table) {
-            $table->foreignId('location_id')->after('site_id')->nullable()->constrained('locations')->nullOnDelete();
+        Schema::table('farms', function (Blueprint $table) {
+            $table->dropForeign(['site_id']);
+            $table->dropColumn('site_id');
         });
     }
 
@@ -21,8 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('ag_systems', function (Blueprint $table) {
-            //
-        });
+        //
     }
 };
