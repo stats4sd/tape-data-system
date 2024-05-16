@@ -4,12 +4,12 @@ namespace App\Filament\App\Resources\XlsformResource\Pages;
 
 use App\Filament\App\Resources\XlsformResource;
 use App\Http\Controllers\SurveyMonitoringController;
-use Filament\Actions;
 use Filament\Actions\Action;
+use Filament\Infolists\Components\Tabs;
+use Filament\Infolists\Components\ViewEntry;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
 use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Http;
 use Stats4sd\FilamentOdkLink\Services\OdkLinkService;
 
 class ViewXlsform extends ViewRecord
@@ -17,6 +17,33 @@ class ViewXlsform extends ViewRecord
     protected static string $resource = XlsformResource::class;
 
     protected static string $view = 'filament.app.resources.xlsform-resource.pages.view-xlsform';
+
+    public function hasCombinedRelationManagerTabsWithContent(): bool
+    {
+        return true;
+    }
+
+    public function getContentTabLabel(): ?string
+    {
+        return 'Summary';
+    }
+
+    public function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist->schema([
+            Tabs::make()
+                ->columnSpanFull()
+                ->tabs([
+                    Tabs\Tab::make('Summary'),
+                    Tabs\Tab::make('Per Location')
+                    ->schema([
+                        ViewEntry::make('locations')
+                        ->view('infolists.components.locations-view-wrapper')
+                    ]),
+                    Tabs\Tab::make('Per Enumerator'),
+                ]),
+        ]);
+    }
 
     public function getHeading(): string|Htmlable
     {

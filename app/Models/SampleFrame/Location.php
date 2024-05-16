@@ -3,6 +3,7 @@
 namespace App\Models\SampleFrame;
 
 use App\Models\LookupTables\LookupEntry;
+use App\Models\Submission;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -43,6 +44,11 @@ class Location extends LookupEntry
     public function farms()
     {
         return $this->hasMany(Farm::class);
+    }
+
+    public function submissions()
+    {
+        return $this->hasMany(Submission::class);
     }
 
     // Only the lower level locations have sample units (in this case, farms). E.g. A "district" may not have farms directly attached. But a "village" might.

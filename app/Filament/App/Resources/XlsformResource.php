@@ -8,7 +8,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Stats4sd\FilamentOdkLink\Models\OdkLink\Xlsform;
+use App\Models\Xlsform;
 
 class XlsformResource extends Resource
 {
@@ -16,7 +16,6 @@ class XlsformResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $tenantOwnershipRelationshipName = 'owner';
-
 
     public static function form(Form $form): Form
     {
@@ -48,7 +47,7 @@ class XlsformResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\SubmissionsRelationManager::class,
+            RelationManagers\SubmissionEditingRelationManager::class,
         ];
     }
 

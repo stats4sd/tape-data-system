@@ -73,6 +73,12 @@ class PullSubmissionsFromXlsformQuietly implements ShouldQueue
                 'submitted_at' => (new Carbon($entry['__system']['submissionDate']))->toDateTimeString(),
                 'submitted_by' => $entry['__system']['submitterName'],
                 'content' => $entry,
+                'enumerator' => $entry['survey_start']['inquirer'],
+                'deviceid' => $entry['deviceid'],
+                'farm_id' => $entry['reg']['farm_id'],
+                'location_id' => $entry['reg']['final_location_id'],
+                'consent' => $entry['consent_grp']['consent'],
+                'respondent_available' =>  $entry['respondent_check']['respondent_available'] ?? null,
             ]);
 
         }

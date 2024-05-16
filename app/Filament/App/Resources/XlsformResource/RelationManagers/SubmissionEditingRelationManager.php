@@ -10,9 +10,10 @@ use Filament\Tables\Table;
 use Filament\Resources\RelationManagers\RelationManager;
 use ValentinMorice\FilamentJsonColumn\FilamentJsonColumn;
 
-class SubmissionsRelationManager extends RelationManager
+class SubmissionEditingRelationManager extends RelationManager
 {
     protected static string $relationship = 'submissions';
+    protected static ?string $title = 'All Submissions';
 
     public function isReadOnly(): bool
     {
@@ -41,7 +42,7 @@ class SubmissionsRelationManager extends RelationManager
     {
         return $table
             ->heading('')
-            ->emptyStateDescription('Submissions will appear here once they have been submitted through ODK Collct and synced with the server.')
+            ->emptyStateDescription('Submissions will appear here once they have been submitted through ODK Collect and synced with the server.')
             ->recordTitleAttribute('odk_id')
             ->columns([
                 Tables\Columns\TextColumn::make('odk_id'),
