@@ -6,6 +6,8 @@
     ])
 >
     @php
+        $summary = $this->getSummary();
+        $record = $this->getRecord();
         $relationManagers = $this->getRelationManagers();
         $hasCombinedRelationManagerTabsWithContent = $this->hasCombinedRelationManagerTabsWithContent();
     @endphp
@@ -27,15 +29,15 @@
             <b>Live Submissions</b>
         </x-slot>
         <p>
-            <b>Number of Live Submissions:</b> {{ $this->getSummary()['count'] }}
+            <b>Number of Live Submissions:</b> {{ $summary['count'] }}
         </p>
         <br />
         <p>
-            <b>Latest Submission:</b> {{ $this->getSummary()['latestSubmissionDate'] }}
+            <b>Latest Submission:</b> {{ $summary['latestSubmissionDate'] }}
         </p>
         <br />
         <p>
-            <b>Submissions In Local Database:</b> {{ count($this->getRecord()->submissions) }}
+            <b>Submissions In Local Database:</b> {{ count($record->submissions) }}
             <br />
             <small>The Live Submissions count above is updated in real time. The number of submissions in the local database may not be fully up to date due to the time it takes to sync with the ODK System.</small>
         </p>

@@ -4,14 +4,10 @@ namespace App\Filament\App\Resources;
 
 use App\Filament\App\Resources\XlsformResource\Pages;
 use App\Filament\App\Resources\XlsformResource\RelationManagers;
-use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\Xlsform;
 
 class XlsformResource extends Resource
@@ -61,7 +57,6 @@ class XlsformResource extends Resource
         return [
             'index' => Pages\ListXlsforms::route('/'),
             'view' => Pages\ViewXlsform::route('/{record}'),
-            'monitor' => Pages\MonitorXlsform::route('/{record}/monitor'),
         ];
     }
 }

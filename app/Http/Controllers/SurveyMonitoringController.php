@@ -3,19 +3,14 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
-use App\Models\Farm;
 use App\Models\Team;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Spatie\MediaLibrary\Support\MediaStream;
-use Stats4sd\FilamentOdkLink\Exports\SurveyExport;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\Xlsform;
 use Stats4sd\FilamentOdkLink\Services\OdkLinkService;
 
 class SurveyMonitoringController extends Controller
 {
-
     /**
      * @param Team $team - the team to get the submission summary for
      * @param string $isTest - whether to get the submission summary for the test form or the live form (test/live) - NOTE: In this setup, it is assumed there are *only* 2 forms per team - one that is marked as test and one that is marked as live.
@@ -34,10 +29,15 @@ class SurveyMonitoringController extends Controller
             ->json();
 
 
+        // Temporary Survey Monitoring...
+
         $count = count($results);
         $latestSubmission = collect($results)
             ->sort(fn ($submission) => $submission['createdAt'])
             ->last();
+
+        ray($results);
+
 
         if($count === 0) {
             return [
