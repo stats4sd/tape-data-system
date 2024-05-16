@@ -12,8 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('main_surveys', function (Blueprint $table) {
+            $table->decimal('averself-, 20, 2suff-empowerment', 20, 2)->nullable()->change();
             $table->renameColumn('averself-, 20, 2suff-empowerment', 'averself-suff-empowerment');
+
         });
+
+
     }
 
     /**
