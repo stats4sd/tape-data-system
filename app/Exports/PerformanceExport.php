@@ -17,7 +17,7 @@ class PerformanceExport implements FromQuery, WithTitle, WithHeadings, WithMappi
 
     public function __construct(
         public PerformanceRepeatModel $model,
-        public array $excludedColumns = ['id', 'created_at', 'updated_at'],
+        public array $excludedColumns = ['id', 'created_at', 'updated_at', 'main_survey_id'],
     ) {
         $tableName = (new $model())->getTable();
 
@@ -46,6 +46,7 @@ class PerformanceExport implements FromQuery, WithTitle, WithHeadings, WithMappi
         $headings = $headings->prepend('farm_code');
         $headings = $headings->prepend('team');
         $headings = $headings->prepend('farm_id');
+        $headings = $headings->prepend('main_survey_id');
 
         return $headings->toArray();
     }
@@ -55,9 +56,10 @@ class PerformanceExport implements FromQuery, WithTitle, WithHeadings, WithMappi
         $map = collect($this->fields)
             ->map(fn ($field) => $row[$field]);
 
-        $map = $map->prepend($row->performance->farm->team_code);
-        $map = $map->prepend($row->performance->farm->team->name);
-        $map = $map->prepend($row->performance->farm_id);
+        $map = $map->prepend($row->mainSurvey->farm->team_code);
+        $map = $map->prepend($row->mainSurvey->farm->team->name);
+        $map = $map->prepend($row->mainSurvey->farm_id);
+        $map = $map->prepend($row->main_survey_id);
 
         return $map->toArray();
     }

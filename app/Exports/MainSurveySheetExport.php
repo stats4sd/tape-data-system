@@ -20,7 +20,14 @@ class MainSurveySheetExport implements FromCollection, WithHeadings, WithTitle, 
         $mainSurveyTable = (new MainSurvey())->getTable();
 
         $this->mainSurveyFields = array_diff(DB::getSchemaBuilder()
-            ->getColumnListing($mainSurveyTable), ['id', 'created_at', 'updated_at']);
+            ->getColumnListing($mainSurveyTable), [
+                'id',
+                'created_at',
+                'updated_at',
+                'yeswomenhh', // not needed in output
+                'farm_id', // manually added into the start of the output
+                'final_location_id', // manually added into the start of the output
+            ]);
     }
 
     public function collection(): Collection

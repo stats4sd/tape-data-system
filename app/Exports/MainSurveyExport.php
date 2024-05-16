@@ -21,8 +21,8 @@ class MainSurveyExport implements WithMultipleSheets
     {
         $sheets = [];
 
-        // $sheets[] = new DataDictionaryExport();
-        // $sheets[] = new ChoiceListExport();
+        $sheets[] = new DataDictionaryExport();
+        $sheets[] = new ChoiceListExport();
 
         //  $sheets[] = new CalculatedIndicatorExport();
         $sheets[] = new MainSurveySheetExport();

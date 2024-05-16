@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\TempSubmissionController;
+use App\Models\SurveyData\TempSubmissionController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', static function () {
