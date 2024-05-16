@@ -59,6 +59,9 @@ class AgSystemsRelationManager extends RelationManager
                     ->successRedirectUrl(fn ($record) => AgSystemResource::getUrl('edit', ['record' => $record])),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make()
+                    ->link()
+                    ->url(fn ($record) => AgSystemResource::getUrl('view', ['record' => $record])),
                 Tables\Actions\Action::make('Edit')
                     ->icon('heroicon-o-pencil')
                     ->link()

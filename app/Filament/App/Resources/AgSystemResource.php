@@ -86,7 +86,7 @@ class AgSystemResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            \App\Filament\App\Resources\AgSystemResource\RelationManagers\FarmsRelationManager::class,
         ];
     }
 
@@ -96,6 +96,7 @@ class AgSystemResource extends Resource
             'index' => \App\Filament\App\Resources\AgSystemResource\Pages\ListAgSystems::route('/'),
             'create' => \App\Filament\App\Resources\AgSystemResource\Pages\CreateAgSystem::route('/create'),
             'edit' => \App\Filament\App\Resources\AgSystemResource\Pages\EditAgSystem::route('/{record}/edit'),
+            'view' => \App\Filament\App\Resources\AgSystemResource\Pages\ViewAgSystem::route('/{record}')
         ];
     }
 
@@ -129,6 +130,7 @@ class AgSystemResource extends Resource
             ->iconColor(fn ($record) => $record->propertyIsCompleted($name) ? 'success' : 'warning')
             ->headerActions([
             ])
-            ->collapsible();
+            ->collapsible()
+            ->hiddenOn('view');
     }
 }
