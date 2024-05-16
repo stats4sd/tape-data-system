@@ -2,12 +2,13 @@
 
 namespace App\Models\SurveyData\Performance;
 
+use App\Models\Interfaces\PerformanceRepeatModel;
 use App\Models\SurveyData\MainSurvey;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\Submission;
 
-class PerformanceOrganicPesticide extends Model
+class PerformanceOrganicPesticide extends Model implements PerformanceRepeatModel
 {
     public function mainSurvey(): BelongsTo
     {
