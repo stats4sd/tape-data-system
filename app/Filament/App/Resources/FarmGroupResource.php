@@ -30,10 +30,12 @@ class FarmGroupResource extends Resource
 
     public static function form(Form $form): Form
     {
+        $team_id = HelperService::getSelectedTeam()->id;
+
         return $form
             ->schema([
                 Forms\Components\Select::make('farm_grouping_id')
-                                    ->options(FarmGrouping::where('owner_id', HelperService::getSelectedTeam()->id)->pluck('name', 'id'))
+                                    ->options(FarmGrouping::where('owner_id', $team_id)->pluck('name', 'id'))
                                     ->required()
                                     ->label('Select the grouping this group belongs to')
                                     ->helperText('E.g. grouping \'Farm size\' has groups \'Big\' and \'Small\', grouping \'Beneficiary\' has groups \'Beneficiary\' and \'Non beneficiary\'')
@@ -46,8 +48,16 @@ class FarmGroupResource extends Resource
                                         Forms\Components\Hidden::make('owner_type')
                                             ->default('App\Models\Team'),
                                         Forms\Components\Hidden::make('owner_id')
-                                            ->default(HelperService::getSelectedTeam()->id),
-                                    ]),
+                                            ->default($team_id),
+                                    ])
+                                    ->createOptionUsing(function (array $data){
+                                        $record = FarmGrouping::create([
+                                            'name' => $data['name'],
+                                            'owner_type' => $data['owner_type'],
+                                            'owner_id' => $data['owner_id'],
+                                        ]);
+                                        return [$record->id, $record->name];
+                                    }),
                 Forms\Components\TextInput::make('name')
                                     ->label('Group name')
                                     ->required(),
