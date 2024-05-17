@@ -33,6 +33,15 @@ class LookupEntry extends Model implements LookupListEntry
         return false;
     }
 
+    /**
+     * Function to generate any extra rows that are always required for the csv lookup file (e.g. "other", "none", etc)
+     * When using search(), these rows are usually specified in the XLSform itself, but when using select_*_from_file all the entries must be in the file)
+     */
+    public function getExtraCsvRows(): ?array
+    {
+        return null;
+    }
+
     // Generic CSV content. Should be overwritten by specific classes when the csv file contents needs to be specific.
     public function getCsvContentsForOdk(?WithXlsforms $team = null): array
     {

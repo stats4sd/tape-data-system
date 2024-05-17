@@ -9,6 +9,31 @@ class AnimalProduct extends LookupEntry
 {
     use CanBeHiddenFromContext;
 
+        public function getExtraCsvRows(): array
+    {
+        return [
+            [
+                'id' => null,
+                'name' => 77,
+                'label' => 'Other',
+                'is_in_context' => 1,
+            ],
+            [
+                'id' => null,
+                'name' => -97,
+                'label' => 'None',
+                'is_in_context' => 1,
+            ],
+            [
+                'id' => null,
+                'name' => 77,
+                'label' => 'Other',
+                'is_in_context' => 0,
+            ],
+        ];
+    }
+
+
     public function getCsvContentsForOdk(?WithXlsforms $team = null): array
     {
         if ($team) {
