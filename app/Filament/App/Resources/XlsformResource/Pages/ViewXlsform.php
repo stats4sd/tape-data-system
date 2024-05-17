@@ -3,17 +3,23 @@
 namespace App\Filament\App\Resources\XlsformResource\Pages;
 
 use App\Filament\App\Resources\XlsformResource;
+use App\Filament\Infolists\Components\TableEntry;
 use App\Http\Controllers\SurveyMonitoringController;
+use App\Models\SampleFrame\Location;
 use Filament\Actions\Action;
 use Filament\Infolists\Components\Tabs;
-use Filament\Infolists\Components\ViewEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Concerns\InteractsWithTable;
+use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
 use Stats4sd\FilamentOdkLink\Services\OdkLinkService;
 
 class ViewXlsform extends ViewRecord
 {
+    //use InteractsWithTable;
+
     protected static string $resource = XlsformResource::class;
 
     protected static string $view = 'filament.app.resources.xlsform-resource.pages.view-xlsform';
@@ -36,10 +42,9 @@ class ViewXlsform extends ViewRecord
                 ->tabs([
                     Tabs\Tab::make('Summary'),
                     Tabs\Tab::make('Per Location')
-                    ->schema([
-                        ViewEntry::make('locations')
-                        ->view('infolists.components.locations-view-wrapper')
-                    ]),
+                        ->schema([
+                            TableEntry::make('locations'),
+                        ]),
                     Tabs\Tab::make('Per Enumerator'),
                 ]),
         ]);

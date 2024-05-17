@@ -4,11 +4,10 @@ namespace App\Filament\App\Resources;
 
 use App\Filament\App\Resources\XlsformResource\Pages;
 use App\Filament\App\Resources\XlsformResource\RelationManagers;
-use Filament\Forms\Form;
+use App\Models\Xlsform;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use App\Models\Xlsform;
 
 class XlsformResource extends Resource
 {
@@ -16,14 +15,6 @@ class XlsformResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $tenantOwnershipRelationshipName = 'owner';
-
-    public static function form(Form $form): Form
-    {
-        return $form
-            ->schema([
-                //
-            ]);
-    }
 
     public static function table(Table $table): Table
     {
