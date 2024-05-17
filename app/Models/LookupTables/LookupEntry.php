@@ -37,7 +37,7 @@ class LookupEntry extends Model implements LookupListEntry
      * Function to generate any extra rows that are always required for the csv lookup file (e.g. "other", "none", etc)
      * When using search(), these rows are usually specified in the XLSform itself, but when using select_*_from_file all the entries must be in the file)
      */
-    public function getExtraCsvRows(): ?array
+    public static function getExtraCsvRows(): ?array
     {
         return null;
     }

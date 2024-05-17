@@ -39,7 +39,7 @@ class Farm extends LookupEntry
         return $this->hasMany(PerformanceAssessment::class);
     }
 
-    public function getExtraCsvRows(): array
+    public static function getExtraCsvRows(): array
     {
         return [
             [

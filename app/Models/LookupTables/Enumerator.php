@@ -6,7 +6,7 @@ use Stats4sd\FilamentOdkLink\Models\OdkLink\Interfaces\WithXlsforms;
 
 class Enumerator extends LookupEntry
 {
-        public function getExtraCsvRows(): array
+    public static function getExtraCsvRows(): array
     {
         return [
             [

@@ -9,7 +9,7 @@ class Animal extends LookupEntry
 {
     use CanBeHiddenFromContext;
 
-    public function getExtraCsvRows(): array
+    public static function getExtraCsvRows(): array
     {
         return [
             [
