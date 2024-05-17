@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('sites', function (Blueprint $table) {
-            $table->foreignId('location_id')->after('ae_zone_id')->nullable()->constrained('locations')->nullOnDelete();
+            $table->foreignId('location_id')->after('ae_zone_id')->constrained('locations')->cascadeOnDelete();
+
+            $table->unique('location_id');
         });
     }
 

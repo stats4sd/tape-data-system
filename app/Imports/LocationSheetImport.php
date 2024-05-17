@@ -2,17 +2,18 @@
 
 namespace App\Imports;
 
+use App\Models\Site;
+use Illuminate\Support\Collection;
 use App\Models\SampleFrame\Location;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Support\Collection;
-use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
-use Maatwebsite\Excel\Concerns\ToCollection;
-use Maatwebsite\Excel\Concerns\WithBatchInserts;
-use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
-use Maatwebsite\Excel\Concerns\WithChunkReading;
-use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 use Maatwebsite\Excel\Concerns\WithUpserts;
+use Maatwebsite\Excel\Concerns\ToCollection;
+use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
+use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
+use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 
 class LocationSheetImport implements ShouldQueue, SkipsEmptyRows, ToCollection, WithBatchInserts, WithCalculatedFormulas, WithChunkReading, WithHeadingRow, WithStrictNullComparison, WithUpserts
 {
@@ -63,33 +64,58 @@ class LocationSheetImport implements ShouldQueue, SkipsEmptyRows, ToCollection, 
                 );
 
                 $currentParent = Location::where('code', $row[$this->data["parent_{$parentId}_code_column"]])->first();
+
+                // When the location is top level, create the site if it doesn't already exist
+                if($currentParent->locationLevel->top_level === 1) {
+
+                    Site::upsert(
+                        values: [
+                            'team_id' => $currentParent->owner_id,
+                            'location_id' => $currentParent->id
+                        ],
+                        uniqueBy: 'location_id'
+                    );
+                    
+                }
             }
 
-            // Create the location
-            $location = new Location([
-                'owner_id' => $this->data['owner_id'],
-                'owner_type' => $this->data['owner_type'],
-                'location_level_id' => $locationLevel->id,
-                'parent_id' => $currentParent?->id ?? null,
-                'code' => $row[$this->data['code_column']],
-                'name' => $row[$this->data['name_column']],
-            ]);
-            $location->save();
+            // Create the location if it doesn't already exist
+            Location::upsert(
+                values: [
+                    'owner_id' => $this->data['owner_id'],
+                    'owner_type' => $this->data['owner_type'],
+                    'location_level_id' => $locationLevel->id,
+                    'parent_id' => $currentParent?->id ?? null,
+                    'code' => $row[$this->data['code_column']],
+                    'name' => $row[$this->data['name_column']],
+                ],
+                uniqueBy: 'code'
+            );
 
-            // Create the site when the location is top level
-            if($location->locationLevel->top_level === 1) {
-                $location->site()->create(['team_id' => $location->owner_id]);
+            $currentLocation = Location::where('code', $row[$this->data["code_column"]])->first();
+
+            //  When the location is top level, create the site if it doesn't already exist
+            if($currentLocation->locationLevel->top_level === 1) {
+
+                Site::upsert(
+                    values: [
+                        'team_id' => $currentLocation->owner_id,
+                        'location_id' => $currentLocation->id
+                    ],
+                    uniqueBy: 'location_id'
+                );
+                
             }
 
-            $importedLocations[] = $location;
+            $importedLocations[] = $currentLocation;
         }
 
         return $importedLocations;
     }
 
-    public function uniqueBy(): string
+    public function uniqueBy(): array
     {
-        return 'code';
+        return ['code', 'location_id'];
     }
 
     public function batchSize(): int
