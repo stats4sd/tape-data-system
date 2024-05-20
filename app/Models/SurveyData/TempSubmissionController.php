@@ -1,8 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Models\SurveyData;
 
+use App\Exports\MainSurveyExport;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
+use Maatwebsite\Excel\Facades\Excel;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\Xlsform;
 use Stats4sd\FilamentOdkLink\Services\OdkLinkService;
 
@@ -28,7 +31,15 @@ class TempSubmissionController extends Controller
             'Content-Type' => 'application/zip',
             'Content-Disposition' => 'attachment; filename="submissions.csv.zip"',
         ]);
+    }
 
-
+    /*
+     * Function to download the processed data. The processed data are the data that have been cleaned and transformed into a format that is ready for analysis.
+     */
+    public function downloadProcessedData(Xlsform $xlsform): \Symfony\Component\HttpFoundation\BinaryFileResponse
+    {
+        $today = now()->format('Y-m-d');
+        $filename = "TAPE_survey_ethiopia_{$today}.xlsx";
+        return Excel::download(new MainSurveyExport($xlsform), $filename);
     }
 }

@@ -23,6 +23,9 @@ class DatabaseSeeder extends Seeder
             require_once $file;
             $class = pathinfo($file, PATHINFO_FILENAME);
             $this->call("Database\Seeders\DatasetSeeders\\$class");
+            $this->call(DataDictionaryEntriesTableSeeder::class);
+            $this->call(XlsformChoiceListsTableSeeder::class);
+            $this->call(XlsformChoicesTableSeeder::class);
         }
 
         $this->call(TapeDatasetSeeders::class);
