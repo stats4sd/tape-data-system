@@ -52,7 +52,7 @@ class SubmissionsRelationManager extends RelationManager
                      if($enumeratorId === "77") {
                          return $record->content['survey_start']['inquirer_text'];
                      }
-                     return Enumerator::firstWhere('name', $record->content['survey_start']['inquirer_choice']) ?? '~not found~';
+                     return Enumerator::firstWhere('name', $record->content['survey_start']['inquirer_choice'])->name ?? '~not found~';
                  }),
                  Tables\Columns\TextColumn::make('farm_name')
                      ->getStateUsing(function ($record) {
