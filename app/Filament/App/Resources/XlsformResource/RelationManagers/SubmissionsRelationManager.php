@@ -74,7 +74,7 @@ class SubmissionsRelationManager extends RelationManager
             ])
             ->headerActions([])
             ->actions([
-                Tables\Actions\Action::make('edit-via-enketo')
+                Action::make('edit-via-enketo')
                     ->url(function ($record): string {
 
                         return url('submissions/' . $record->id . '/edit');
