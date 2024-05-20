@@ -3,10 +3,8 @@
 namespace App\Models\SurveyData;
 
 use App\Models\SampleFrame\Farm;
-<<<<<<< HEAD
+
 use App\Models\SampleFrame\Location;
-=======
->>>>>>> dev
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -24,9 +22,6 @@ class MainSurvey extends Model
         return $this->belongsTo(Submission::class, 'submission_id', 'id');
     }
 
-<<<<<<< HEAD
-    public function farm(): BelongsTo
-=======
     // Link to repeat groups
     public function performanceActivities(): HasMany
     {
@@ -84,17 +79,15 @@ class MainSurvey extends Model
     }
 
     public function farm()
->>>>>>> dev
+
     {
         return $this->belongsTo(Farm::class, 'farm_id', 'id');
     }
 
-<<<<<<< HEAD
+
     public function location(): BelongsTo
     {
         return $this->belongsTo(Location::class, 'final_location_id', 'id');
     }
 
-=======
->>>>>>> dev
 }
