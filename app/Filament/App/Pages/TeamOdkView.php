@@ -118,10 +118,6 @@ class TeamOdkView extends Page implements HasTable, HasInfolists
                     ->url(fn (Xlsform $record) => XlsformResource::getUrl('view', ['record' => $record]))
                     ->label('Show Submissions'),
 
-                TableAction::make('monitor survey')
-                    ->url(fn (Xlsform $record) => XlsformResource::getUrl('monitor', ['record' => $record]))
-                    ->label('Monitor Survey'),
-
                 // add Publish button
                 TableAction::make('publish')
                     ->label('Publish')
