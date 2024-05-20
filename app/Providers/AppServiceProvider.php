@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Validation\Rules\Password;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,5 +22,11 @@ class AppServiceProvider extends ServiceProvider
     {
         // unguard all models
         \Eloquent::unguard();
+
+        // set default password requirement to 10 characters to match ODK Central's default
+        \Illuminate\Validation\Rules\Password::defaults(static function () {
+            return Password::min(10);
+        });
+
     }
 }
