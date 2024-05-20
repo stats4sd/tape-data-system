@@ -31,7 +31,7 @@ class PerformanceExport implements FromQuery, WithTitle, WithHeadings, WithMappi
     {
         // add performance ID into the query so we can correctly get the related data;
         return $this->model::query()->select(array_merge($this->fields))
-            ->with('mainSurvey.farm.team');
+            ->with('mainSurvey.farm');
     }
 
     public function title(): string
@@ -44,7 +44,6 @@ class PerformanceExport implements FromQuery, WithTitle, WithHeadings, WithMappi
         $headings = collect($this->fields);
 
         $headings = $headings->prepend('farm_code');
-        $headings = $headings->prepend('team');
         $headings = $headings->prepend('farm_id');
         $headings = $headings->prepend('main_survey_id');
 
@@ -57,7 +56,6 @@ class PerformanceExport implements FromQuery, WithTitle, WithHeadings, WithMappi
             ->map(fn ($field) => $row[$field]);
 
         $map = $map->prepend($row->mainSurvey->farm->team_code);
-        $map = $map->prepend($row->mainSurvey->farm->team->name);
         $map = $map->prepend($row->mainSurvey->farm_id);
         $map = $map->prepend($row->main_survey_id);
 

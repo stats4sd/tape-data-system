@@ -2,6 +2,7 @@
 
 namespace App\Models\SurveyData;
 
+use App\Models\SampleFrame\Farm;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -73,6 +74,11 @@ class MainSurvey extends Model
     public function performanceYouthMales(): HasMany
     {
         return $this->hasMany(Performance\PerformanceYouthMale::class, 'main_survey_id', 'id');
+    }
+
+    public function farm()
+    {
+        return $this->belongsTo(Farm::class, 'farm_id', 'id');
     }
 
 }

@@ -12,7 +12,7 @@ class PerformanceCrop extends Model implements PerformanceRepeatModel
 {
     public function mainSurvey(): BelongsTo
     {
-        return $this->belongsTo(MainSurvey::class);
+        return $this->belongsTo(MainSurvey::class, 'submission_id', 'submission_id');
     }
 
     public function submission(): BelongsTo

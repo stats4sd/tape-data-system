@@ -33,8 +33,8 @@ class MainSurveySheetExport implements FromCollection, WithHeadings, WithTitle, 
     public function collection(): Collection
     {
         return MainSurvey::with([
-            'farm.team',
-            'farm.location.location_level',
+            'farm',
+            'farm.location.locationLevel',
         ])->get();
     }
 
@@ -43,7 +43,7 @@ class MainSurveySheetExport implements FromCollection, WithHeadings, WithTitle, 
         $data = [
             $row->farm_id,
             $row->farm->team_code,
-            $row->farm->location->location_level->name,
+            $row->farm->location->locationLevel->name,
             $row->farm->location->name,
         ];
 
