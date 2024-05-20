@@ -15,7 +15,7 @@ use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
 use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 
-class LocationSheetImport implements ShouldQueue, SkipsEmptyRows, ToCollection, WithBatchInserts, WithCalculatedFormulas, WithChunkReading, WithHeadingRow, WithStrictNullComparison, WithUpserts
+class LocationSheetImport implements ShouldQueue, SkipsEmptyRows, ToCollection, WithCalculatedFormulas, WithChunkReading, WithHeadingRow, WithStrictNullComparison
 {
     protected Collection $parentIds;
 
@@ -75,7 +75,7 @@ class LocationSheetImport implements ShouldQueue, SkipsEmptyRows, ToCollection, 
                         ],
                         uniqueBy: 'location_id'
                     );
-                    
+
                 }
             }
 
@@ -104,23 +104,13 @@ class LocationSheetImport implements ShouldQueue, SkipsEmptyRows, ToCollection, 
                     ],
                     uniqueBy: 'location_id'
                 );
-                
+
             }
 
             $importedLocations[] = $currentLocation;
         }
 
         return $importedLocations;
-    }
-
-    public function uniqueBy(): array
-    {
-        return ['code', 'location_id'];
-    }
-
-    public function batchSize(): int
-    {
-        return 1000;
     }
 
     public function chunkSize(): int
