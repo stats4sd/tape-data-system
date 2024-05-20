@@ -20,7 +20,7 @@
         "laravel/tinker": "^2.9",
         "maatwebsite/excel": "^3.1",
         "novadaemon/filament-pretty-json": "^2.1",
-        "stats4sd/filament-odk-link": "dev-datasets-with-models",
+        "stats4sd/filament-odk-link": "dev-handle-gps",
         "symfony/http-client": "^7.0",
         "symfony/mailgun-mailer": "^7.0",
         "valentin-morice/filament-json-column": "*"
