@@ -80,6 +80,7 @@ class AppPanelProvider extends PanelProvider
             ->plugins([
                 // new LocalLogins(), hide until it works in Laravel 11
                 BreezyCore::make()
+                    ->passwordUpdateRules('min:10')
                     ->myProfile(
                         shouldRegisterNavigation: true,
                         hasAvatars: true,
