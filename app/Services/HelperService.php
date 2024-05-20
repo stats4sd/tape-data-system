@@ -89,10 +89,29 @@ class HelperService
     // useful because it always returns a Team::class (or null), so you can use it in a type hint.
     public static function getSelectedTeam(): Team|Model|null
     {
-        if(Filament::hasTenancy() && Filament::getTenant() instanceof Team) {
+        if (Filament::hasTenancy() && Filament::getTenant() instanceof Team) {
             return Filament::getTenant();
         }
 
+        return null;
+    }
+
+    // helper function to get model by table name
+    public static function getModelByTablename($tableName)
+    {
+        // get all models
+        $classes = HelperService::getModels();
+
+        foreach ($classes as $class) {
+            $model = new $class;
+
+            if ($model->getTable() == $tableName) {
+                // found a matched model
+                return $model;
+            }
+        }
+
+        // cannot find a matched model
         return null;
     }
 }
