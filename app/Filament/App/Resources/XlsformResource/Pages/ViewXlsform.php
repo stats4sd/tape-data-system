@@ -48,8 +48,7 @@ class ViewXlsform extends ViewRecord
         return [
             Action::make('download raw survey data')
                 ->label('Download Raw Survey Data')
-                ->url(url('/resources/xlsform-resource/' . $this->record->id . '/download-data-direct-from-odk'))
-            ->openUrlInNewTab(),
+                ->url(url('/resources/xlsform-resource/' . $this->record->id . '/download-data-direct-from-odk')),
             ExportDataAction::Make('download-processed')
             ->label('Export Processed Data'),
         ];
