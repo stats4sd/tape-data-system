@@ -4,14 +4,12 @@ namespace App\Filament\App\Resources;
 
 use App\Filament\App\Resources\XlsformResource\Pages;
 use App\Filament\App\Resources\XlsformResource\RelationManagers;
-use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\ViewEntry;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\Xlsform;
 
 class XlsformResource extends Resource
@@ -21,6 +19,16 @@ class XlsformResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $tenantOwnershipRelationshipName = 'owner';
 
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                ViewEntry::make('submission_summary')
+                ->view('submission_summary_wrapper')
+                ->columnSpanFull()
+            ]);
+    }
 
     public static function form(Form $form): Form
     {

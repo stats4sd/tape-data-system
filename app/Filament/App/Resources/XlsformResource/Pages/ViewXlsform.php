@@ -4,12 +4,9 @@ namespace App\Filament\App\Resources\XlsformResource\Pages;
 
 use App\Filament\App\Resources\XlsformResource;
 use App\Http\Controllers\SurveyMonitoringController;
-use Filament\Actions;
 use Filament\Actions\Action;
 use Filament\Resources\Pages\ViewRecord;
 use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Http;
 use Stats4sd\FilamentOdkLink\Services\OdkLinkService;
 
 class ViewXlsform extends ViewRecord
@@ -21,6 +18,16 @@ class ViewXlsform extends ViewRecord
     public function getHeading(): string|Htmlable
     {
         return 'Submissions for form: ' . $this->record->title;
+    }
+
+    public function hasCombinedRelationManagerTabsWithContent(): bool
+    {
+        return true;
+    }
+
+    public function getContentTabLabel(): ?string
+    {
+        return 'Summary';
     }
 
     // Question: This function is being called twice now...
