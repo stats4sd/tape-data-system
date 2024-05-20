@@ -19,7 +19,7 @@ use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
 use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 
-class FarmSheetImport implements ShouldQueue, SkipsEmptyRows, ToCollection, WithBatchInserts, WithCalculatedFormulas, WithChunkReading, WithHeadingRow, WithStrictNullComparison, WithUpserts, WithValidation
+class FarmSheetImport implements ShouldQueue, SkipsEmptyRows, ToCollection, WithCalculatedFormulas, WithChunkReading, WithHeadingRow, WithStrictNullComparison, WithValidation
 {
     // The $data array is the data that is passed from the ImportFarmsAction form
     public function __construct(public array $data)
@@ -73,10 +73,10 @@ class FarmSheetImport implements ShouldQueue, SkipsEmptyRows, ToCollection, With
                 if (strpos($key, 'grouping_') === 0) {
                     $farmGrouping = explode('_', $key)[1] ?? null;
                     $farmGroupingColumn = $headers[$value];
-            
+
                     // Find the farm group
                     $farmGroup = FarmGroup::where('farm_grouping_id', $farmGrouping)->where('code', $row[$farmGroupingColumn])->first();
-            
+
                     // // Attach the farm to the farm group
                     if ($farmGroup) {
                         $farm->farmGroups()->attach($farmGroup);
@@ -114,18 +114,9 @@ class FarmSheetImport implements ShouldQueue, SkipsEmptyRows, ToCollection, With
         ];
     }
 
-    public function batchSize(): int
-    {
-        return 1000;
-    }
-
     public function chunkSize(): int
     {
         return 1000;
     }
 
-    public function uniqueBy(): array
-    {
-        return ['code'];
-    }
 }
