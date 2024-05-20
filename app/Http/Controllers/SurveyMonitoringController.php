@@ -2,20 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
-use App\Models\Farm;
 use App\Models\Team;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 use Spatie\MediaLibrary\Support\MediaStream;
-use Stats4sd\FilamentOdkLink\Exports\SurveyExport;
-use Stats4sd\FilamentOdkLink\Models\OdkLink\Xlsform;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\Submission;
 use Stats4sd\FilamentOdkLink\Services\OdkLinkService;
 
 class SurveyMonitoringController extends Controller
 {
-
     /**
      * @param Team $team - the team to get the submission summary for
      * @param string $isTest - whether to get the submission summary for the test form or the live form (test/live) - NOTE: In this setup, it is assumed there are *only* 2 forms per team - one that is marked as test and one that is marked as live.
@@ -23,7 +18,7 @@ class SurveyMonitoringController extends Controller
      */
     public function getSubmissionSummary(Team $team, string $isTest)
     {
-        list($xlsform, $odkLinkService) = $this->getFormAndLinkService($team, $isTest === 'test');
+        [$xlsform, $odkLinkService] = $this->getFormAndLinkService($team, $isTest === 'test');
 
         $token = $odkLinkService->authenticate();
         $endpoint = config('filament-odk-link.odk.base_endpoint');
@@ -46,9 +41,29 @@ class SurveyMonitoringController extends Controller
             ];
         }
 
+        // Submission Summary based on pulled data
+        $submissions = Submission::all();
+
+        $successfulSurveys = $submissions->filter(fn (Submission $submission) => $submission->content['reg']['respondent_check']['respondent_available'] === "1" &&
+            $submission->content['consent_grp']['consent'] === "1");
+
+        $surveysWithoutRespondentPresent = $submissions->filter(fn (Submission $submission) => $submission->content['reg']['respondent_check']['respondent_available'] === "0")->count();
+
+        $surveysWithNonConsentingRespondent = $submissions->filter(fn (Submission $submission) => $submission->content['consent_grp']['consent'] === "0")->count();
+
+        $beneficiaryFarmsSurveyed = $successfulSurveys->filter(fn (Submission $submission) => $submission->content['reg']['farm_id'] !== "-99")->count();
+        $nonBeneficiaryFarmsSurveyed = $successfulSurveys->filter(fn (Submission $submission) => $submission->content['reg']['farm_id'] === "-99")->count();
+
+
         return [
             'count' => $count,
             'latestSubmissionDate' => (new Carbon($latestSubmission['createdAt']))->format('Y-m-d H:i:s'),
+            'successfulSurveys' => $successfulSurveys->count(),
+            'beneficiaryFarmsSurveyed' => $beneficiaryFarmsSurveyed,
+            'nonBeneficiaryFarmsSurveyed' => $nonBeneficiaryFarmsSurveyed,
+            'surveysWithoutRespondentPresent' => $surveysWithoutRespondentPresent,
+            'surveysWithNonConsentingRespondent' => $surveysWithNonConsentingRespondent,
+
         ];
     }
 
@@ -61,7 +76,7 @@ class SurveyMonitoringController extends Controller
      */
     public function downloadData(Team $team, string $isTest)
     {
-        list($xlsform, $odkLinkService) = $this->getFormAndLinkService($team, $isTest === 'test');
+        [$xlsform, $odkLinkService] = $this->getFormAndLinkService($team, $isTest === 'test');
         $token = $odkLinkService->authenticate();
         $endpoint = config('odk-link.odk.base_endpoint');
 
@@ -97,7 +112,7 @@ class SurveyMonitoringController extends Controller
      */
     public function downloadAttachedMedia(Team $team, string $isTest)
     {
-        list($xlsform, $odkLinkService) = $this->getFormAndLinkService($team, $isTest === 'test');
+        [$xlsform, $odkLinkService] = $this->getFormAndLinkService($team, $isTest === 'test');
 
         $downloads = [];
 
