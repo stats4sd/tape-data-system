@@ -7,6 +7,7 @@ use App\Models\Import;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Facades\Filament;
+use App\Services\HelperService;
 use App\Models\SampleFrame\Farm;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\SampleFrame\FarmGroup;
@@ -40,7 +41,7 @@ class ImportFarmsAction extends ExcelImportAction
 
     protected function getDefaultForm(): array
     {
-        $groups= FarmGrouping::all()->pluck('name', 'id')->toArray();
+        $groups= FarmGrouping::all()->where('owner_id', HelperService::getSelectedTeam()->id)->pluck('name', 'id')->toArray();
 
         return [
             FileUpload::make('upload')
@@ -91,12 +92,19 @@ class ImportFarmsAction extends ExcelImportAction
                         }, array_values($groups), array_keys($groups))),
 
             Section::make('Farm Information')
-                ->columns(2)
+                ->columns(1)
                 ->schema([
                     Select::make('farm_code_column')
                         ->label('Which column contains the farm unique code?')
                         ->placeholder('Select a column')
                         ->helperText('e.g. farm_id or farm_code')
+                        ->live()
+                        ->options(fn (Get $get) => $get('header_columns')),
+
+                    Select::make('ag_system_code_column')
+                        ->label('Which column contains the agricultural system unique code?')
+                        ->placeholder('Select a column')
+                        ->helperText('Farms can be linked to a system later if it is not currently known')
                         ->live()
                         ->options(fn (Get $get) => $get('header_columns')),
 

@@ -15,6 +15,7 @@ use App\Services\HelperService;
 use Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use App\Models\SampleFrame\FarmGroup;
+use App\Models\SampleFrame\FarmGrouping;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\App\Resources\FarmGroupResource\Pages;
@@ -29,10 +30,12 @@ class FarmGroupResource extends Resource
 
     public static function form(Form $form): Form
     {
+        $team_id = HelperService::getSelectedTeam()->id;
+
         return $form
             ->schema([
                 Forms\Components\Select::make('farm_grouping_id')
-                                    ->relationship(name: 'farmGrouping', titleAttribute: 'name')
+                                    ->options(FarmGrouping::where('owner_id', $team_id)->pluck('name', 'id'))
                                     ->required()
                                     ->label('Select the grouping this group belongs to')
                                     ->helperText('E.g. grouping \'Farm size\' has groups \'Big\' and \'Small\', grouping \'Beneficiary\' has groups \'Beneficiary\' and \'Non beneficiary\'')
@@ -45,8 +48,16 @@ class FarmGroupResource extends Resource
                                         Forms\Components\Hidden::make('owner_type')
                                             ->default('App\Models\Team'),
                                         Forms\Components\Hidden::make('owner_id')
-                                            ->default(HelperService::getSelectedTeam()->id),
-                                    ]),
+                                            ->default($team_id),
+                                    ])
+                                    ->createOptionUsing(function (array $data){
+                                        $record = FarmGrouping::create([
+                                            'name' => $data['name'],
+                                            'owner_type' => $data['owner_type'],
+                                            'owner_id' => $data['owner_id'],
+                                        ]);
+                                        return [$record->id, $record->name];
+                                    }),
                 Forms\Components\TextInput::make('name')
                                     ->label('Group name')
                                     ->required(),

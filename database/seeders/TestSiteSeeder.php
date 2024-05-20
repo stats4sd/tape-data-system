@@ -14,12 +14,13 @@ class TestSiteSeeder extends Seeder
     public function run(): void
     {
         Team::first()->sites()->create([
-            'name' => 'Test Site',
-            'location' => 'Test Location',
+            'location_id' => 1, 
+            'location_description' => 'Optional description of the location'
         ]);
 
         Site::first()->agSystems()->create([
             'name' => 'Test Ag System',
+            'code' => 'ag_sys_1'
         ]);
 
     }

@@ -2,8 +2,12 @@
 
 namespace App\Models\SampleFrame;
 
+use App\Models\AgSystem;
+use App\Models\Interfaces\LookupListEntry;
+use App\Models\Traits\HasLinkedDataset;
+use App\Models\Traits\IsLookupList;
+use Illuminate\Database\Eloquent\Model;
 use App\Models\LookupTables\LookupEntry;
-use App\Models\Site;
 use App\Models\SurveyData\CaetAssessment;
 use App\Models\SurveyData\PerformanceAssessment;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -24,6 +28,11 @@ class Farm extends LookupEntry
         return $this->morphTo('owner');
     }
 
+    public function agSystem(): BelongsTo
+    {
+        return $this->belongsTo(AgSystem::class);
+    }
+    
     public function farmGroups(): BelongsToMany
     {
         return $this->belongsToMany(FarmGroup::class);
@@ -59,8 +68,4 @@ class Farm extends LookupEntry
         return $this->belongsTo(Location::class);
     }
 
-    public function site(): BelongsTo
-    {
-        return $this->belongsTo(Site::class);
-    }
 }

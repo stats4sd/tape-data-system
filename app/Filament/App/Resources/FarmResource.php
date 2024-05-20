@@ -5,6 +5,7 @@ namespace App\Filament\App\Resources;
 use App\Filament\App\Resources\FarmResource\Pages;
 use App\Models\SampleFrame\Farm;
 use App\Models\SampleFrame\LocationLevel;
+use App\Services\HelperService;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -28,7 +29,7 @@ class FarmResource extends Resource
     public static function table(Table $table): Table
     {
 
-        $farms = Farm::all();
+        $farms = Farm::all()->where('owner_id', HelperService::getSelectedTeam()->id);
 
         $locationLevelColumns = $farms->map(fn (Farm $farm) => $farm->location->locationLevel)
             ->unique()
@@ -54,8 +55,9 @@ class FarmResource extends Resource
 
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('site.name'),
+                Tables\Columns\TextColumn::make('agSystem.site.location.name')->label('Site'),
                 ...$locationLevelColumns,
+                Tables\Columns\TextColumn::make('agSystem.name')->label('Agricultural System'),
                 Tables\Columns\TextColumn::make('team_code')->label('Unique Code')
                     ->sortable()
                     ->searchable(),

@@ -26,10 +26,13 @@ class AgSystemsRelationManager extends RelationManager
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
-                    ->label('Enter an identifiable name for the Agricultural System.')
+                    ->label('Enter an identifiable name for the Agricultural System')
                     ->required()
                     ->maxLength(255),
-            ]);
+                Forms\Components\TextInput::make('code')
+                    ->label('Enter the code that will be used to identify this Agricultural System')
+                    ->required(),
+            ])->columns(1);
     }
 
     public function table(Table $table): Table
@@ -40,7 +43,11 @@ class AgSystemsRelationManager extends RelationManager
             ->recordTitleAttribute('name')
             ->columns([
                 Tables\Columns\TextColumn::make('name'),
-                Tables\Columns\IconColumn::make('is_complete')
+                Tables\Columns\TextColumn::make('code'),
+                Tables\Columns\IconColumn::make('is_complete'),
+                Tables\Columns\TextColumn::make('farms_count')
+                    ->label('# of Farms')
+                    ->counts('farms'),
             ])
             ->filters([
                 //
@@ -52,6 +59,9 @@ class AgSystemsRelationManager extends RelationManager
                     ->successRedirectUrl(fn ($record) => AgSystemResource::getUrl('edit', ['record' => $record])),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make()
+                    ->link()
+                    ->url(fn ($record) => AgSystemResource::getUrl('view', ['record' => $record])),
                 Tables\Actions\Action::make('Edit')
                     ->icon('heroicon-o-pencil')
                     ->link()
