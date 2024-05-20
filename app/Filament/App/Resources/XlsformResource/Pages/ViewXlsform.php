@@ -48,7 +48,6 @@ class ViewXlsform extends ViewRecord
         return [
             Action::make('download raw survey data')
                 ->label('Download Raw Survey Data')
-                // url instead of action because the downloadDataDirect function expects a full page reload instead of a livewire request. TODO - fix or remove this entire section when the proper downloads are ready.
                 ->url(url('/resources/xlsform-resource/' . $this->record->id . '/download-data-direct-from-odk')),
             ExportDataAction::Make('download-processed')
             ->label('Export Processed Data'),

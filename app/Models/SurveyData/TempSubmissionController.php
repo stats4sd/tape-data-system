@@ -24,7 +24,7 @@ class TempSubmissionController extends Controller
 
 
         $results = Http::withToken($token)
-            ->get("{$endpoint}/projects/{$xlsform->owner->odkProject->id}/forms/{$xlsform->odk_id}/submissions.csv.zip")
+            ->get("{$endpoint}/projects/{$xlsform->owner->odkProject->id}/forms/{$xlsform->odk_id}/submissions.csv.zip?groupPaths=false")
             ->throw();
 
         return response($results->body(), 200, [
