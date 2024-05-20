@@ -4,10 +4,12 @@ namespace App\Filament\App\Resources\XlsformResource\RelationManagers;
 
 use App\Models\LookupTables\Enumerator;
 use Filament\Forms;
-use Filament\Tables;
 use Filament\Forms\Form;
-use Filament\Tables\Table;
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Tables;
+use Filament\Tables\Table;
+use Illuminate\Support\HtmlString;
+use Stats4sd\FilamentOdkLink\Services\OdkLinkService;
 use ValentinMorice\FilamentJsonColumn\FilamentJsonColumn;
 
 class SubmissionsRelationManager extends RelationManager
@@ -72,7 +74,13 @@ class SubmissionsRelationManager extends RelationManager
             ])
             ->headerActions([])
             ->actions([
-                Tables\Actions\EditAction::make()->label('Edit'),
+                Tables\Actions\Action::make('edit-via-enketo')
+                    ->url(function ($record): string {
+
+                        return url('submissions/' . $record->id . '/edit');
+
+
+                    }),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([

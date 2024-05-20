@@ -14,3 +14,6 @@ Route::get('/login', static function () {
 
 Route::get('/resources/xlsform-resource/{xlsform}/download-data-direct-from-odk', [TempSubmissionController::class, 'downloadDataDirectFromOdk'])->name('resources.xlsform-resource.download-data-direct-from-odk')
 ->middleware('auth:web');
+
+
+Route::get('/submissions/{submission}/edit', [TempSubmissionController::class, 'edit'])->name('submissions.edit');

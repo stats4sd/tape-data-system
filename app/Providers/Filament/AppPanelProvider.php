@@ -4,6 +4,7 @@ namespace App\Providers\Filament;
 
 use App\Filament\App\Clusters\LookupTables;
 use App\Filament\App\Pages\AccountSettingsPage;
+use App\Filament\App\Pages\LoginWithCentralPage;
 use App\Filament\App\Pages\RegisterTeam;
 use App\Filament\App\Pages\TeamDashboard;
 use App\Filament\App\Pages\TeamOdkView;
@@ -49,7 +50,7 @@ class AppPanelProvider extends PanelProvider
             ->tenantMiddleware([
                 SetLatestTeamMiddleware::class,
             ])
-            ->login()
+            ->login(LoginWithCentralPage::class)
             ->passwordReset()
             ->profile() // TODO: Implement more full-featured profile page
             ->darkMode(false)

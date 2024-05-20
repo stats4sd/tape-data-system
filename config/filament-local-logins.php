@@ -1,5 +1,7 @@
 <?php
 
+use App\Filament\App\Pages\LoginWithCentralPage;
+
 return [
     'panels' => [
         'app' => [
@@ -8,6 +10,7 @@ return [
                 'admin@example.com',
                 'test@example.com',
             ],
+            'login_page' => LoginWithCentralPage::class
         ],
     ],
 ];

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Http;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\Submission;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\Xlsform;
 use Stats4sd\FilamentOdkLink\Services\OdkLinkService;
 
@@ -29,6 +30,24 @@ class TempSubmissionController extends Controller
             'Content-Disposition' => 'attachment; filename="submissions.csv.zip"',
         ]);
 
+
+    }
+
+    public function edit(Submission $submission)
+    {
+        $token = app()->make(OdkLinkService::class)->authenticate();
+
+        $baseUrl = config('filament-odk-link.odk.base_endpoint');
+        $projectId = $submission->xlsformVersion->xlsform->owner->odkProject->id;
+        $xlsformId = $submission->xlsformVersion->xlsform->odk_id;
+
+        $url = "{$baseUrl}/projects/{$projectId}/forms/{$xlsformId}/submissions/{$submission->odk_id}/edit";
+
+        $response = Http::withToken($token)
+            ->get($url)
+            ->throw();
+
+        return redirect($response->transferStats->getHandlerStat('url'));
 
     }
 }
