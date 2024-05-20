@@ -108,8 +108,8 @@ return new class () extends Migration {
 
         Schema::table('performance_youth_males', function (Blueprint $table) {
             $table->foreignId('main_survey_id')->nullable()->change();
-        }});
-
+        });
+    }
 
     /**
      * Reverse the migrations.
