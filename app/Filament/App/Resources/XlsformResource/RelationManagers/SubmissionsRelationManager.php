@@ -80,7 +80,8 @@ class SubmissionsRelationManager extends RelationManager
                         return url('submissions/' . $record->id . '/edit');
 
 
-                    }),
+                    })
+                ->openUrlInNewTab(),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
