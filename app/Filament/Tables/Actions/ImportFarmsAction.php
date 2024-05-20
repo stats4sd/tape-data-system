@@ -7,9 +7,9 @@ use App\Models\Import;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Facades\Filament;
+use App\Services\HelperService;
 use App\Models\SampleFrame\Farm;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Models\SampleFrame\FarmGroup;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
@@ -40,7 +40,7 @@ class ImportFarmsAction extends ExcelImportAction
 
     protected function getDefaultForm(): array
     {
-        $groups= FarmGrouping::all()->pluck('name', 'id')->toArray();
+        $groups = FarmGrouping::all()->where('owner_id', HelperService::getSelectedTeam()->id)->pluck('name', 'id')->toArray();
 
         return [
             FileUpload::make('upload')
@@ -88,46 +88,53 @@ class ImportFarmsAction extends ExcelImportAction
                                 ->label("Which column indicates the farm grouping $name?")
                                 ->placeholder('Select a column')
                                 ->options(fn (Get $get) => $get('header_columns'));
-                        }, array_values($groups), array_keys($groups))),
+                }, array_values($groups), array_keys($groups))),
 
             Section::make('Farm Information')
-                ->columns(2)
+                ->columns(1)
                 ->schema([
                     Select::make('farm_code_column')
-                        ->label('Which column contains the farm unique code?')
-                        ->placeholder('Select a column')
-                        ->helperText('e.g. farm_id or farm_code')
-                        ->live()
-                        ->options(fn (Get $get) => $get('header_columns')),
+                ->label('Which column contains the farm unique code?')
+                ->placeholder('Select a column')
+                ->helperText('e.g. farm_id or farm_code')
+                ->live()
+                ->options(fn (Get $get) => $get('header_columns')),
+
+                    Select::make('ag_system_code_column')
+                ->label('Which column contains the agricultural system unique code?')
+                ->placeholder('Select a column')
+                ->helperText('Farms can be linked to a system later if it is not currently known')
+                ->live()
+                ->options(fn (Get $get) => $get('header_columns')),
 
                     CheckboxList::make('farm_identifiers')
-                        ->label('Are there any additional columns that contain identifiers for the farm? Tick all that apply.')
-                        ->helperText('For example: family name, farm name, telephone numbers, etc. These are columns that can be useful for enumerators or project team members to identify the farm, but that should not be shared outside the project for data protection purposes.')
-                        ->options(fn (Get $get): array => $get('header_columns'))
-                        ->disableOptionWhen(
-                            fn (string $value, Get $get): bool => $value === (string)$get('farm_code_column') ||
-                                collect($get('farm_properties'))->contains($value) ||
-                                $value === 'na'
-                        )
-                        ->live()
-                        ->columnSpanFull(),
+                ->label('Are there any additional columns that contain identifiers for the farm? Tick all that apply.')
+                ->helperText('For example: family name, farm name, telephone numbers, etc. These are columns that can be useful for enumerators or project team members to identify the farm, but that should not be shared outside the project for data protection purposes.')
+                ->options(fn (Get $get): array => $get('header_columns'))
+                ->disableOptionWhen(
+                    fn (string $value, Get $get): bool => $value === (string)$get('farm_code_column') ||
+                        collect($get('farm_properties'))->contains($value) ||
+                        $value === 'na'
+                )
+                ->live()
+                ->columnSpanFull(),
 
                     CheckboxList::make('farm_properties')
-                        ->label('Are there any additional columns that contain properties of the farm? Tick all that apply.')
-                        ->helperText('These are not identifiers, but are properties of the farm that are useful for analysis. For example: size of the farm, year of first engagement, etc. These are columns that can potentially be shared outside the project for analysis purposes.')
-                        ->options(fn (Get $get) => $get('header_columns'))
-                        ->disableOptionWhen(
-                            fn (string $value, Get $get): bool => $value === (string)$get('farm_code_column') ||
-                                collect($get('farm_identifiers'))->contains($value) ||
-                                $value === 'na'
-                        )
-                        ->live()
-                        ->columnSpanFull(),
+                ->label('Are there any additional columns that contain properties of the farm? Tick all that apply.')
+                ->helperText('These are not identifiers, but are properties of the farm that are useful for analysis. For example: size of the farm, year of first engagement, etc. These are columns that can potentially be shared outside the project for analysis purposes.')
+                ->options(fn (Get $get) => $get('header_columns'))
+                ->disableOptionWhen(
+                    fn (string $value, Get $get): bool => $value === (string)$get('farm_code_column') ||
+                        collect($get('farm_identifiers'))->contains($value) ||
+                        $value === 'na'
+                )
+                ->live()
+                ->columnSpanFull(),
 
                     Hidden::make('owner_id')
-                        ->default(Filament::getTenant()->id),
+                ->default(Filament::getTenant()->id),
                     Hidden::make('owner_type')
-                        ->default('App\Models\Team'),
+                ->default('App\Models\Team'),
 
                 ]),
 

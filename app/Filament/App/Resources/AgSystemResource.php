@@ -2,16 +2,17 @@
 
 namespace App\Filament\App\Resources;
 
-use App\Models\AgSystem;
-use Filament\Facades\Filament;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
-use Filament\Support\Enums\VerticalAlignment;
+use App\Models\Site;
 use Filament\Tables;
+use App\Models\AgSystem;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
+use Filament\Facades\Filament;
+use Filament\Resources\Resource;
+use Illuminate\Database\Eloquent\Builder;
+use Filament\Support\Enums\VerticalAlignment;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\DatasetVariable;
 
 class AgSystemResource extends Resource
@@ -49,9 +50,12 @@ class AgSystemResource extends Resource
                         Forms\Components\TextInput::make('name')
                             ->label('Add a short, descriptive name for the system')
                             ->maxLength(255),
+                        Forms\Components\TextInput::make('code')
+                            ->label('Enter the code that will be used to identify this Agricultural System')
+                            ->required(),
                         Forms\Components\Select::make('site_id')
                             ->label('Geographic Site')
-                            ->relationship('site', 'name')
+                            ->options(Site::join('locations', 'sites.location_id', '=', 'locations.id')->pluck('locations.name', 'sites.id')->toArray())
                             ->disabled()
                             ->required(),
                     ]),
@@ -82,7 +86,7 @@ class AgSystemResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            \App\Filament\App\Resources\AgSystemResource\RelationManagers\FarmsRelationManager::class,
         ];
     }
 
@@ -92,6 +96,7 @@ class AgSystemResource extends Resource
             'index' => \App\Filament\App\Resources\AgSystemResource\Pages\ListAgSystems::route('/'),
             'create' => \App\Filament\App\Resources\AgSystemResource\Pages\CreateAgSystem::route('/create'),
             'edit' => \App\Filament\App\Resources\AgSystemResource\Pages\EditAgSystem::route('/{record}/edit'),
+            'view' => \App\Filament\App\Resources\AgSystemResource\Pages\ViewAgSystem::route('/{record}')
         ];
     }
 
@@ -125,6 +130,7 @@ class AgSystemResource extends Resource
             ->iconColor(fn ($record) => $record->propertyIsCompleted($name) ? 'success' : 'warning')
             ->headerActions([
             ])
-            ->collapsible();
+            ->collapsible()
+            ->hiddenOn('view');
     }
 }

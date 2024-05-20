@@ -10,9 +10,8 @@ return new class () extends Migration {
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('odk_central_email')->nullable();
-            $table->integer('odk_central_user_id')->nullable();
+        Schema::table('ag_systems', function (Blueprint $table) {
+            $table->string('code')->after('name');
         });
     }
 
@@ -21,8 +20,8 @@ return new class () extends Migration {
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('odk_central_email');
+        Schema::table('ag_systems', function (Blueprint $table) {
+            //
         });
     }
 };

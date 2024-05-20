@@ -2,12 +2,14 @@
 
 namespace App\Models\SampleFrame;
 
-use App\Models\LookupTables\LookupEntry;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
+use App\Models\Site;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\LookupTables\LookupEntry;
 use Stats4sd\FilamentOdkLink\Models\OdkLink\Interfaces\WithXlsforms;
 
 class Location extends LookupEntry
@@ -23,6 +25,11 @@ class Location extends LookupEntry
     public function owner(): MorphTo
     {
         return $this->morphTo('owner');
+    }
+
+    public function site(): HasOne
+    {
+        return $this->hasOne(Site::class);
     }
 
     public function locationLevel(): BelongsTo

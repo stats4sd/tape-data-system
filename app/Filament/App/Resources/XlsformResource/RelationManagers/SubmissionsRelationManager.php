@@ -8,8 +8,6 @@ use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Support\HtmlString;
-use Stats4sd\FilamentOdkLink\Services\OdkLinkService;
 use ValentinMorice\FilamentJsonColumn\FilamentJsonColumn;
 
 class SubmissionsRelationManager extends RelationManager
@@ -47,14 +45,15 @@ class SubmissionsRelationManager extends RelationManager
             ->recordTitleAttribute('odk_id')
             ->columns([
                 Tables\Columns\TextColumn::make('odk_id'),
-                Tables\Columns\TextColumn::make('submitted_at'),
+                Tables\Columns\TextColumn::make('submitted_at')
+                ->sortable(),
                  Tables\Columns\TextColumn::make('enumerator')
                  ->getStateUsing(function ($record) {
                      $enumeratorId = $record->content['survey_start']['inquirer_choice'];
                      if($enumeratorId === "77") {
                          return $record->content['survey_start']['inquirer_text'];
                      }
-                     return Enumerator::firstWhere('name', $record->content['survey_start']['inquirer_choice'])->name ?? '~not found~';
+                     return Enumerator::firstWhere('name', $record->content['survey_start']['inquirer_choice'])->label ?? '~not found~';
                  }),
                  Tables\Columns\TextColumn::make('farm_name')
                      ->getStateUsing(function ($record) {

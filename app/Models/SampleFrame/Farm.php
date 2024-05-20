@@ -2,8 +2,8 @@
 
 namespace App\Models\SampleFrame;
 
+use App\Models\AgSystem;
 use App\Models\LookupTables\LookupEntry;
-use App\Models\Site;
 use App\Models\SurveyData\CaetAssessment;
 use App\Models\SurveyData\PerformanceAssessment;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -22,6 +22,11 @@ class Farm extends LookupEntry
     public function owner(): MorphTo
     {
         return $this->morphTo('owner');
+    }
+
+    public function agSystem(): BelongsTo
+    {
+        return $this->belongsTo(AgSystem::class);
     }
 
     public function farmGroups(): BelongsToMany
@@ -59,8 +64,4 @@ class Farm extends LookupEntry
         return $this->belongsTo(Location::class);
     }
 
-    public function site(): BelongsTo
-    {
-        return $this->belongsTo(Site::class);
-    }
 }

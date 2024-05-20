@@ -2,7 +2,9 @@
 
 namespace App\Filament\App\Resources\SiteResource\Pages;
 
+use App\Filament\App\Resources\LocationLevelResource;
 use App\Filament\App\Resources\SiteResource;
+use App\Models\SampleFrame\LocationLevel;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
@@ -17,8 +19,9 @@ class ListSites extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make()
-                ->label('Add Site'),
+            Actions\Action::make('link_to_locations')
+                ->label('Add Site(s)')
+                ->url(LocationLevelResource::getUrl('view', ['record' => LocationLevel::where('parent_id', null)->first()])),
         ];
     }
 }

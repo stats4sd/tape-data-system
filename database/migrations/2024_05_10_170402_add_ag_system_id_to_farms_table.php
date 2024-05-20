@@ -10,9 +10,8 @@ return new class () extends Migration {
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('odk_central_email')->nullable();
-            $table->integer('odk_central_user_id')->nullable();
+        Schema::table('farms', function (Blueprint $table) {
+            $table->foreignId('ag_system_id')->after('site_id')->nullable()->constrained('ag_systems')->nullOnDelete();
         });
     }
 
@@ -21,8 +20,8 @@ return new class () extends Migration {
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('odk_central_email');
+        Schema::table('farms', function (Blueprint $table) {
+            //
         });
     }
 };

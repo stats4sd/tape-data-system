@@ -9,12 +9,11 @@ use Filament\Actions\Action;
 use Filament\Facades\Filament;
 use Filament\Http\Responses\Auth\LoginResponse;
 use Filament\Models\Contracts\FilamentUser;
-use Filament\Pages\Auth\Login;
 use Illuminate\Support\Facades\Notification;
+use Jeffgreco13\FilamentBreezy\Pages\MyProfilePage;
 
-class LoginWithCentralPage extends Login
+class ProfileWithCentralPage extends MyProfilePage
 {
-    use HasLocalLogins;
 
     protected function getAuthenticateFormAction(): Action
     {

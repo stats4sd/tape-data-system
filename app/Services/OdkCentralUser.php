@@ -59,8 +59,18 @@ class OdkCentralUser
     }
 
     // update password if the user's password is ever updated...
-    public function update(User $user)
+    public function update(User $user, string $password, string $newPassword)
     {
+        $token = app()->make(OdkLinkService::class)->authenticate();
+
+        $response = Http::withToken($token)
+            ->put(config('filament-odk-link.odk.base_endpoint') . '/users/' . $user->odk_central_id . '/password', [
+                'new' => $this->padPassword($newPassword),
+                'old' => $this->padPassword($password),
+            ])
+        ->throw();
+
+        return $response->ok();
 
     }
 

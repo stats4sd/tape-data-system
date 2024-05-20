@@ -20,10 +20,11 @@ class TestLocationsSeeder extends Seeder
         }
 
 
-        $districtLevel = $team->locationLevels()->create(['name' => 'District']);
-        $subDistrictLevel = $team->locationLevels()->create(['name' => 'Sub-District', 'parent_id' => $districtLevel->id]);
-        $villageLevel = $team->locationLevels()->create(['name' => 'Village', 'has_farms' => 1, 'parent_id' => $subDistrictLevel->id]);
+        $districtLevel = $team->locationLevels()->create(['name' => 'District', 'parent_id' => 1, 'top_level' => 0]);
+        $villageLevel = $team->locationLevels()->create(['name' => 'Village', 'has_farms' => 1, 'parent_id' => $districtLevel->id, 'top_level' => 0]);
 
         $this->command->info('Location levels seeded');
+
+        $topLevelLocation = $team->locations()->create(['location_level_id' => 1, 'code' => 'location_234', 'name' => 'Top level location 1']);
     }
 }

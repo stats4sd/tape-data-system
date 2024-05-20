@@ -85,6 +85,7 @@ class AppPanelProvider extends PanelProvider
                         shouldRegisterNavigation: true,
                         hasAvatars: true,
                     )
+                    ->withoutMyProfileComponents(['update_password'])
                     ->customMyProfilePage(AccountSettingsPage::class),
                 new LocalLogins(),
             ])
