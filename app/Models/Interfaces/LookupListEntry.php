@@ -19,6 +19,12 @@ interface LookupListEntry
 
     public function owner(): \Illuminate\Database\Eloquent\Relations\MorphTo;
 
+    /**
+     * Function to generate any extra rows that are always required for the csv lookup file (e.g. "other", "none", etc)
+     * When using search(), these rows are usually specified in the XLSform itself, but when using select_*_from_file all the entries must be in the file)
+     */
+    public static function getExtraCsvRows(): ?array;
+
     // Defines what goes into the csv file that will be published to ODK
     public function getCsvContentsForOdk(?WithXlsforms $team = null): array;
 

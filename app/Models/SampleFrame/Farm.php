@@ -48,6 +48,34 @@ class Farm extends LookupEntry
         return $this->hasMany(PerformanceAssessment::class);
     }
 
+    public static function getExtraCsvRows(): array
+    {
+        return [
+            [
+                'id' => -99,
+                'location_id' => null,
+                'location_name' => null,
+                'team_code' => null,
+                'team_code_name' => 'Farm not displayed in list',
+                'name' => null,
+                'sex' => null,
+                'year' => null,
+                'reserve' => 0,
+            ],
+            [
+                'id' => -98,
+                'location_id' => null,
+                'location_name' => null,
+                'team_code' => null,
+                'team_code_name' => 'HHs in list not available for interview',
+                'name' => null,
+                'sex' => null,
+                'year' => null,
+                'reserve' => 0,
+            ],
+        ];
+    }
+
     public function getCsvContentsForOdk(?WithXlsforms $team = null): array
     {
         return [
