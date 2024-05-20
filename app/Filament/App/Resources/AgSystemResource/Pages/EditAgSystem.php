@@ -4,7 +4,9 @@ namespace App\Filament\App\Resources\AgSystemResource\Pages;
 
 use App\Filament\App\Resources\AgSystemResource;
 use App\Models\AgSystem;
+use App\Services\HelperService;
 use Filament\Actions;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Model;
@@ -19,7 +21,20 @@ class EditAgSystem extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            Actions\Action::make('delete_agystem')
+                ->label('Delete agricultural system')
+                ->action(function (): void {
+                    $this->record->delete();
+                    $this->redirectRoute(
+                        'filament.app.resources.sites.view',
+                        ['tenant' => HelperService::getSelectedTeam()->id, 'record' => $this->record->site_id]
+                    );
+                })
+                ->successNotification(
+                   Notification::make()
+                        ->success()
+                        ->title('Agricultural system deleted')
+                )
         ];
     }
 
@@ -42,6 +57,26 @@ class EditAgSystem extends EditRecord
 
         return $record;
 
+    }
+
+    public function getBreadcrumbs(): array
+    {
+        $breadcrumbs = [];
+
+        $site = $this->record->site;
+
+        $tenant = HelperService::getSelectedTeam()->id;
+
+        $breadcrumbs[route('filament.app.resources.sites.view', ['tenant' => $tenant, 'record' => $site->id])] = 'Site';
+
+        $breadcrumbs[route('filament.app.resources.ag-systems.edit', ['tenant' => $tenant, 'record' => $this->record->id])] = 'Edit Agricultural System';
+
+        return $breadcrumbs;
+    }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('view', ['record' => $this->record->id]);
     }
 
 }
