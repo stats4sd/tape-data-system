@@ -32,7 +32,7 @@ class Farm extends LookupEntry
     {
         return $this->belongsTo(AgSystem::class);
     }
-    
+
     public function farmGroups(): BelongsToMany
     {
         return $this->belongsToMany(FarmGroup::class);
@@ -59,7 +59,7 @@ class Farm extends LookupEntry
             'name' => $this->identifiers ? $this->identifiers['name'] : '',
             'sex' => $this->properties ? $this->properties['sex'] : '',
             'year' => $this->properties ? $this->properties['year'] : '',
-            'reserve' => $this->identifiers && array_key_exists('reserve', $this->identifiers ) ? $this->identifiers['reserve'] : '', // value is 0 = beneficiary farm that is not a reserve; 1 = beneficiary farm that is a reserve; '' = non-beneficiary farm.
+            'reserve' => $this->identifiers && $this->identifiers->has('reserve') ? $this->identifiers['reserve'] : '', // value is 0 = beneficiary farm that is not a reserve; 1 = beneficiary farm that is a reserve; '' = non-beneficiary farm.
         ];
     }
 
