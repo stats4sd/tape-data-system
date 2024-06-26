@@ -9,8 +9,9 @@ use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithTitle;
+use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 
-class PerformanceExport implements FromQuery, WithTitle, WithHeadings, WithMapping
+class PerformanceExport implements FromQuery, WithTitle, WithHeadings, WithMapping, WithStrictNullComparison
 {
     public string $title;
     public array $fields;
