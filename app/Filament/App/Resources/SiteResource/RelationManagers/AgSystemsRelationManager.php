@@ -54,7 +54,7 @@ class AgSystemsRelationManager extends RelationManager
             ])
             ->headerActions([
                 Tables\Actions\CreateAction::make()
-                    ->label('Add new Entry')
+                    ->label('Add new agricultural system')
                     // Redirect the user to the edit page after creating a new record
                     ->successRedirectUrl(fn ($record) => AgSystemResource::getUrl('edit', ['record' => $record])),
             ])
