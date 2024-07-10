@@ -30,6 +30,10 @@ return [
 
     'disks' => [
 
+        'data_extraction' => [
+            'driver' => 'local',
+            'root' => storage_path('data_extraction'),
+        ],
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app'),

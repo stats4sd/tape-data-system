@@ -2,6 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Exports\ExcelExport;
+use Carbon\Carbon;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Console\Command;
 use App\Imports\ExcelSheetImport;
@@ -27,6 +31,8 @@ class AddNewColumnsForSelectMultiple extends Command
      */
     public function handle()
     {
+
+
         // Steps:
         // 1. Read data extraction excel file into array
         // 2. Handle each excel sheet in array, scan for select_multiple column names in first row
@@ -34,52 +40,18 @@ class AddNewColumnsForSelectMultiple extends Command
         // 4. For each data row, fill in 0 or 1 for newly added select_multiple columns
         // 5. When all excel sheets are processed, export the handled array to a new excel file
 
-
-        // define select_multiple column name for each excel sheet
-        $selectMultipleColumnNames = [
-            [''],
-            [],
-            ['prod_output', 'cropsnum', 'animnum', 'anprodnum'],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-        ];
-
-        // assume all ODK variables are unique in all excel sheets
-        $selectMultipleColumnValues = array(
-            'prod_output' => '1,2,3,4,5,6',
-            'cropsnum' => '515,572,14,15',
-            'animnum' => '1,2,3,4,5',
-            'anprodnum' => '1,2,3,4,5,6',
-        );
-
         $this->info('start');
 
         // ********** //
         // 1. Read data extraction excel file into array
         // ********** //
 
-        // out of memory issue occurred when running on Dan's computer, may need to read and handle each excel sheet individually
-        // error:
-        // PHP Fatal error:  Allowed memory size of 2147483648 bytes exhausted (tried to allocate 4096 bytes) in C:\public\tape-data-system\vendor\laravel\framework\src\Illuminate\Container\Container.php on line 979
-        // PHP Fatal error:  Allowed memory size of 2147483648 bytes exhausted (tried to allocate 32768 bytes) in C:\public\tape-data-system\vendor\sentry\sentry\src\EventHint.php on line 1
-
-        // $inputFilename = 'storage/data_extraction/tape_data_export.xlsx';
-        $inputFilename = 'storage/data_extraction/test.xlsx';
-        $outputFilename = 'storage/data_extraction/tape_data_export_handled.xlsx';
+        $inputFilename = 'tape_data_export_5.xlsx';
+        $outputFilename = 'tape_data_export_handled.xlsx';
 
         $this->comment('Reading excel file into memory, it will take a while...');
-        $sheets = Excel::toArray(new ExcelSheetImport, $inputFilename);
+        $sheets = Excel::toCollection(new ExcelSheetImport, Storage::disk('data_extraction')->path($inputFilename));
         $this->comment('Reading excel file completed');
-
 
         // ********** //
         // 2. Handle each excel sheet in array, scan for select_multiple column names in first row
@@ -87,99 +59,87 @@ class AddNewColumnsForSelectMultiple extends Command
 
         // handle Main_Survey sheet
 
-
         $index = 2;
 
-        $columnNames = $selectMultipleColumnNames[$index];
-        $sheet = $sheets[$index];
-        $headers = $sheet[0];
+        $mainSurveySheet = $sheets[$index]->map(function (Collection $row) {
 
-        $newSheet = [];
-        $newHeaders = [];
-        $selectMultipleColumnIndexes = [];
+            $options = [
+                'prod_output' => [1, 2, 3, 4, 5, 77],
+                'cropsnum' => [221, 711, 515, 526, 226, 366, 367, 572, 203, 486, 44, 558, 552, 216, 181, 89, 358, 101, 461, 426, 217, 591, 125, 378, 265, 393, 220, 191, 459, 693, 512, 698, 661, 249, 813, 554, 397, 550, 577, 754, 176, 689, 195, 403, 187, 399, 569, 773, 94, 619, 463, 542, 406, 720, 549, 507, 560, 414, 401, 656, 446, 402, 417, 242, 225, 777, 336, 677, 277, 780, 310, 592, 224, 407, 420, 497, 201, 372, 333, 210, 56, 571, 809, 671, 568, 299, 79, 103, 449, 292, 836, 702, 234, 75, 254, 430, 260, 490, 600, 534, 521, 687, 748, 587, 197, 574, 223, 489, 536, 296, 116, 211, 394, 523, 92, 788, 270, 547, 27, 71, 280, 328, 289, 263, 789, 83, 530, 236, 723, 373541, 544, 423, 157, 156, 267, 531, 122, 305, 495, 136, 667, 388, 97, 603, 275, 826, 692, 205, 222, 567, 15, 137, 135, 'teff'],
+                'cfpnum' => [11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 281, 282, 29, 30, 31, 32, 33, 34, 35],
+                'animnum' => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
+                'anprodnum' => [11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31],
+                'essential_rev' => [1, 2, 3, 4, 5, 77],
+                'mitig' => [1, 2, 3, 4, 5, 6, 77, 8],
+                'ecoman' => [1, 2, 3, 4, 5, 77, 7],
+            ];
 
-        // handle column headers
-        for ($i = 0; $i < count($headers); $i++) {
-            array_push($newHeaders, $headers[$i]);
+            $this->info('handling farm_id ' . $row['farm_id']);
 
-            // add new column for select_multiple
-            if (in_array($headers[$i], $columnNames)) {
-                array_push($selectMultipleColumnIndexes, $i);
-                $values = $selectMultipleColumnValues[$headers[$i]];
-                $options = str_getcsv($values);
+            foreach ($options as $key => $value) {
+                $output = collect(str_getcsv($row[$key], separator: ' '));
 
-                foreach ($options as $option) {
-                    array_push($newHeaders, $headers[$i] . '_' . $option);
-                }
-            }
-        }
-
-        array_push($newSheet, $newHeaders);
-
-
-        // ********** //
-        // 3. When select_multiple column name found, add new columns for all possible values
-        // 4. For each data row, fill in 0 or 1 for newly added select_multiple columns
-        // ********** //
-
-        // handle data rows
-        // for ($i = 1; $i < count($sheet); $i++) {
-
-        // try one row for testing
-        for ($i = 1; $i < 2; $i++) {
-            $row = $sheet[$i];
-            $newRow = [];
-
-            // handle each cell
-            for ($j = 0; $j < count($row); $j++) {
-                dump($row[$j]);
-                array_push($newRow, $row[$j]);
-
-                if (in_array($j, $selectMultipleColumnIndexes)) {
-                    dump('handling required here');
-
-                    // get select_multiple column name
-                    $columnName = $headers[$j];
-                    dump($columnName);
-
-                    // get select_multiple options
-                    $values = $selectMultipleColumnValues[$columnName];
-                    $options = str_getcsv($values);
-                    dump($options);
-
-                    $userSelectedValues = str_getcsv($row[$j], ' ');
-                    dump($userSelectedValues);
-
-                    // determine 0 or 1 for each option
-                    foreach ($options as $option) {
-                        if (in_array($option, $userSelectedValues)) {
-                            array_push($newRow, 1);
-                        } else {
-                            array_push($newRow, 0);
-                        }
+                foreach ($value as $option) {
+                    if ($output->contains($option)) {
+                        $row["{$key}_{$option}"] = 1;
+                    } else {
+                        $row["{$key}_{$option}"] = 0;
                     }
                 }
             }
 
-            dump($newRow);
-            array_push($newSheet, $newRow);
-        }
-
-        dump('======');
-        dump($selectMultipleColumnIndexes);
-        dump($sheet);
-        dump($newSheet);
-        dump('======');
+            return $row;
+        });
 
 
-        // ********** //
-        // 5. When all excel sheets are processed, export the handled array to a new excel file
-        // ********** //
+        $performancesChemicalPesticides = $sheets[9]->map(function (Collection $row) {
+            $cpcropOptions = [221, 711, 515, 526, 226, 366, 367, 572, 203, 486, 44, 558, 552, 216, 181, 89, 358, 101, 461, 426, 217, 591, 125, 378, 265, 393, 220, 191, 459, 693, 512, 698, 661, 249, 813, 554, 397, 550, 577, 754, 176, 689, 195, 403, 187, 399, 569, 773, 94, 619, 463, 542, 406, 720, 549, 507, 560, 414, 401, 656, 446, 402, 417, 242, 225, 777, 336, 677, 277, 780, 310, 592, 224, 407, 420, 497, 201, 372, 333, 210, 56, 571, 809, 671, 568, 299, 79, 103, 449, 292, 836, 702, 234, 75, 254, 430, 260, 490, 600, 534, 521, 687, 748, 587, 197, 574, 223, 489, 536, 296, 116, 211, 394, 523, 92, 788, 270, 547, 27, 71, 280, 328, 289, 263, 789, 83, 530, 236, 723, 373, 541, 544, 423, 157, 156, 267, 531, 122, 305, 495, 136, 667, 388, 97, 603, 275, 826, 692, 205, 222, 567, 15, 137, 135, 'teff'];
 
+            $this->info('handling farm_id ' . $row['farm_id']);
 
-        // TODO: export $newSheets to a new excel file
+            $output = collect(str_getcsv($row['cpcrop'], separator: ' '));
+
+            foreach ($cpcropOptions as $option) {
+                if ($output->contains($option)) {
+                    $row["cpcrop_{$option}"] = 1;
+                } else {
+                    $row["cpcrop_{$option}"] = 0;
+                }
+            }
+
+            return $row;
+        });
+
+        $performancesYouthEmigrants = $sheets[11]->map(function(Collection $row) {
+
+            $yEmigWhyOptions = [1, 2, 3, 4, 77];
+
+            $this->info('handling farm_id ' . $row['farm_id']);
+
+            $output = collect(str_getcsv($row['y_emig_why'], separator: ' '));
+
+            foreach($yEmigWhyOptions as $option) {
+                if($output->contains($option)) {
+                    $row["y_emig_why_{$option}"] = 1;
+                } else {
+                    $row["y_emig_why_{$option}"] = 0;
+                }
+            }
+
+            return $row;
+        });
+
+        $newSheets = collect([
+            'Main_Survey' => $mainSurveySheet,
+            'Performances_Chemical_Pesticides' => $performancesChemicalPesticides,
+            'Performances_Youth_Emigrants' => $performancesYouthEmigrants,
+        ]);
+
+        Excel::store(new ExcelExport($newSheets), $outputFilename, disk: 'data_extraction');
 
 
         $this->info('done!');
     }
+
+
 }
