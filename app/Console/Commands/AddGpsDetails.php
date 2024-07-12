@@ -56,7 +56,7 @@ class AddGpsDetails extends Command
             $mainSurvey->longitude = $longitude;
             $mainSurvey->altitude = $altitude;
             $mainSurvey->accuracy = $accuracy;
-            // $mainSurvey->save();
+            $mainSurvey->save();
 
             $this->comment($mainSurvey->respondent_name . ' main survey updated');
 
@@ -75,7 +75,7 @@ class AddGpsDetails extends Command
             $farm->longitude = $longitude;
             $farm->altitude = $altitude;
             $farm->accuracy = $accuracy;
-            // $farm->save();
+            $farm->save();
         }
 
         $this->info(count($mainSurveys) . ' main survey records processed');
