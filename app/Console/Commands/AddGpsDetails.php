@@ -31,7 +31,7 @@ class AddGpsDetails extends Command
         $this->info('start');
 
         // find all main surveys records
-        $mainSurveys = MainS6urvey::all();
+        $mainSurveys = MainSurvey::all();
 
         $this->info('Processing ' . count($mainSurveys) . ' main survey records...');
 
@@ -56,7 +56,7 @@ class AddGpsDetails extends Command
             $mainSurvey->longitude = $longitude;
             $mainSurvey->altitude = $altitude;
             $mainSurvey->accuracy = $accuracy;
-            $mainSurvey->save();
+            // $mainSurvey->save();
 
             $this->comment($mainSurvey->respondent_name . ' main survey updated');
 
@@ -75,10 +75,11 @@ class AddGpsDetails extends Command
             $farm->longitude = $longitude;
             $farm->altitude = $altitude;
             $farm->accuracy = $accuracy;
-            $farm->save();
+            // $farm->save();
         }
 
         $this->info(count($mainSurveys) . ' main survey records processed');
+        $this->info($countMissing . ' farms NOT FOUND');
 
         $this->info('end');
     }
