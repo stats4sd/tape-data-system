@@ -31,9 +31,11 @@ class AddGpsDetails extends Command
         $this->info('start');
 
         // find all main surveys records
-        $mainSurveys = MainSurvey::all();
+        $mainSurveys = MainS6urvey::all();
 
         $this->info('Processing ' . count($mainSurveys) . ' main survey records...');
+
+        $countMissing = 0;
 
         // handle all main survey records one by one
         foreach ($mainSurveys as $mainSurvey) {
@@ -59,10 +61,11 @@ class AddGpsDetails extends Command
             $this->comment($mainSurvey->respondent_name . ' main survey updated');
 
             // find the corresponding farms record
-            $farm = Farm::where('identifiers->name', $mainSurvey->respondent_name)->first();
+            $farm = $mainSurvey->farm;
 
             if (!$farm) {
                 $this->comment('*** ' . $mainSurvey->respondent_name . ' FARM NOT FOUND');
+                $countMissing++;
                 continue;
             }
 
