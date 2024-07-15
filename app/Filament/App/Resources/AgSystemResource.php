@@ -64,25 +64,6 @@ class AgSystemResource extends Resource
             ]);
     }
 
-    public static function table(Table $table): Table
-    {
-        return $table
-            ->columns([
-                //
-            ])
-            ->filters([
-                //
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
-    }
-
     public static function getRelations(): array
     {
         return [
@@ -93,8 +74,6 @@ class AgSystemResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => \App\Filament\App\Resources\AgSystemResource\Pages\ListAgSystems::route('/'),
-            'create' => \App\Filament\App\Resources\AgSystemResource\Pages\CreateAgSystem::route('/create'),
             'edit' => \App\Filament\App\Resources\AgSystemResource\Pages\EditAgSystem::route('/{record}/edit'),
             'view' => \App\Filament\App\Resources\AgSystemResource\Pages\ViewAgSystem::route('/{record}')
         ];
