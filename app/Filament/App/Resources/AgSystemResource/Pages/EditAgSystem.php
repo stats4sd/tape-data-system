@@ -21,7 +21,7 @@ class EditAgSystem extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\Action::make('delete_agystem')
+            Actions\Action::make('delete_agsystem')
                 ->label('Delete agricultural system')
                 ->action(function (): void {
                     $this->record->delete();
