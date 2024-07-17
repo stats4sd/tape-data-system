@@ -46,8 +46,8 @@ class AddGpsDetails extends Command
             $data = $submission->content;
 
             // find GPS details from ODK submission JSON content
-            $latitude = $data['farm_info']['gps_loc']['coordinates'][0];
-            $longitude = $data['farm_info']['gps_loc']['coordinates'][1];
+            $latitude = $data['farm_info']['gps_loc']['coordinates'][1];
+            $longitude = $data['farm_info']['gps_loc']['coordinates'][0];
             $altitude = $data['farm_info']['gps_loc']['coordinates'][2];
             $accuracy = $data['farm_info']['gps_loc']['properties']['accuracy'];
 
