@@ -40,7 +40,6 @@ class AppPanelProvider extends PanelProvider
         // test
         return $panel
             ->default()
-            ->registration()
             ->id('app')
             ->path('app')
             ->viteTheme('resources/css/filament/app/theme.css')
@@ -60,8 +59,7 @@ class AppPanelProvider extends PanelProvider
             ->discoverClusters(in: app_path('Filament/App/Clusters'), for: 'App\\Filament\\App\\Clusters')
             ->discoverResources(in: app_path('Filament/App/Resources'), for: 'App\\Filament\\App\\Resources')
             ->discoverPages(in: app_path('Filament/App/Pages'), for: 'App\\Filament\\App\\Pages')
-            ->pages([
-            ])
+            ->pages([])
             ->discoverWidgets(in: app_path('Filament/App/Widgets/'), for: 'App\\Filament\\App\\Widgets')
             ->middleware([
                 EncryptCookies::class,
