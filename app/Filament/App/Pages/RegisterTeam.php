@@ -2,10 +2,10 @@
 
 namespace App\Filament\App\Pages;
 
+use App\Models\Team;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Pages\Tenancy\RegisterTenant;
-use App\Models\Team;
 
 class RegisterTeam extends RegisterTenant
 {
@@ -21,7 +21,7 @@ class RegisterTeam extends RegisterTenant
         return $form
             ->schema([
                 TextInput::make('name')
-                ->label('Enter a name for the team'),
+                    ->label('Enter a name for the team'),
             ]);
     }
 

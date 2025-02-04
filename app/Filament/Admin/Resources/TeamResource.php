@@ -10,9 +10,9 @@ use Filament\Infolists\Infolist;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Stats4sd\FilamentOdkLink\Filament\Resources\TeamResource\RelationManagers\XlsformsRelationManager;
+use Stats4sd\FilamentTeamManagement\Filament\App\Resources\TeamResource\RelationManagers\XlsformsRelationManager;
 
-class TeamResource extends \Stats4sd\FilamentOdkLink\Filament\Resources\TeamResource
+class TeamResource extends \Stats4sd\FilamentTeamManagement\Filament\App\Resources\TeamResource
 {
     protected static ?string $model = Team::class;
 

@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Stats4sd\FilamentOdkLink\Services\OdkLinkService;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Team extends \Stats4sd\FilamentOdkLink\Models\TeamManagement\Team
+class Team extends \Stats4sd\FilamentTeamManagement\Models\Team
 {
     // TODO: I think this overrides the booted method on HasXlsForms - ideally we wouldn't need to copy the package stuff here...
     protected static function booted(): void
@@ -34,7 +34,7 @@ class Team extends \Stats4sd\FilamentOdkLink\Models\TeamManagement\Team
             // create empty interpretation entries for the team:
             // TODO: this probably is not great, and we should not require a bunch of empty entries!
 
-            $interpretations = CaetIndex::all()->map(fn ($index) => [
+            $interpretations = CaetIndex::all()->map(fn($index) => [
                 'owner_id' => $owner->id,
                 'owner_type' => static::class,
                 'caet_index_id' => $index->id,
@@ -43,7 +43,7 @@ class Team extends \Stats4sd\FilamentOdkLink\Models\TeamManagement\Team
 
             $owner->caetInterpretations()->createMany($interpretations);
 
-            $owner->locationLevels()->create(['name' => 'Top level (rename)', 'has_farms' => 0, 'top_level' => 1, 'slug' =>'site-level']);
+            $owner->locationLevels()->create(['name' => 'Top level (rename)', 'has_farms' => 0, 'top_level' => 1, 'slug' => 'site-level']);
 
         });
 

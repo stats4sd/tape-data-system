@@ -21,7 +21,8 @@
         "maatwebsite/excel": "^3.1",
         "novadaemon/filament-pretty-json": "^2.1",
         "sentry/sentry-laravel": "^4.5",
-        "stats4sd/filament-odk-link": "dev-handle-gps",
+        "stats4sd/filament-odk-link": "*",
+        "stats4sd/filament-team-management": "*",
         "symfony/http-client": "^7.0",
         "symfony/mailgun-mailer": "^7.0",
         "valentin-morice/filament-json-column": "*"
@@ -82,7 +83,7 @@
             "php-http/discovery": true
         }
     },
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "prefer-stable": true,
     "repositories": {
         "stats4sd/filament-odk-link": {
