@@ -13,11 +13,16 @@ use App\Models\SampleFrame\LocationLevel;
 use App\Models\LookupTables\AnimalProduct;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\Interfaces\WithXlsforms;
+use Stats4sd\FilamentOdkLink\Models\OdkLink\Traits\HasXlsforms;
 use Stats4sd\FilamentOdkLink\Services\OdkLinkService;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Team extends \Stats4sd\FilamentTeamManagement\Models\Team
+class Team extends \Stats4sd\FilamentTeamManagement\Models\Team implements WithXlsforms
 {
+
+    use HasXlsforms;
+
     // TODO: I think this overrides the booted method on HasXlsForms - ideally we wouldn't need to copy the package stuff here...
     protected static function booted(): void
     {

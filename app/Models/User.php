@@ -18,15 +18,13 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
-use Stats4sd\FilamentOdkLink\Models\TeamManagement\Traits\HasTeamMemberships;
 
-class User extends Authenticatable implements FilamentUser, HasAvatar, HasTenants, HasDefaultTenant
+class User extends \Stats4sd\FilamentTeamManagement\Models\User implements FilamentUser, HasAvatar, HasTenants, HasDefaultTenant
 {
     use HasApiTokens;
     use HasFactory;
     use Notifiable;
     use HasRoles;
-    use HasTeamMemberships;
 
     protected $hidden = [
         'password',

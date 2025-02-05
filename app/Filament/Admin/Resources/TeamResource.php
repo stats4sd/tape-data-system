@@ -7,14 +7,18 @@ use App\Filament\Admin\Resources\TeamResource\RelationManagers\UsersRelationMana
 use App\Models\Team;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
+use Filament\Resources\Resource;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Stats4sd\FilamentTeamManagement\Filament\App\Resources\TeamResource\RelationManagers\XlsformsRelationManager;
 
-class TeamResource extends \Stats4sd\FilamentTeamManagement\Filament\App\Resources\TeamResource
+class TeamResource extends Resource
 {
     protected static ?string $model = Team::class;
+
+    protected static ?string $navigationIcon = 'heroicon-o-building-office-2';
+    protected static ?string $navigationGroup = 'Settings';
 
     public static function getRelations(): array
     {
